@@ -620,9 +620,354 @@
       font-size: 0.75rem;
       color: var(--text-muted);
     }
+
+    /* =========================================================================
+       [huyml.co & awwwards] ATELIER SARTORIAL PRELOADER STYLING
+       ========================================================================= */
+    #atelier-preloader {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      background: #0B0A0E;
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: clamp(20px, 4vw, 40px);
+      overflow: hidden;
+      will-change: transform;
+      user-select: none;
+    }
+    #atelier-preloader.preloader-exit {
+      transform: translateY(-100%);
+      transition: transform 850ms cubic-bezier(0.77, 0, 0.175, 1);
+      pointer-events: none;
+    }
+    .preloader-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        radial-gradient(circle at center, rgba(173, 142, 235, 0.08) 0, transparent 70%),
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.018) 0, rgba(255, 255, 255, 0.018) 1px, transparent 1px, transparent 40px),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.018) 0, rgba(255, 255, 255, 0.018) 1px, transparent 1px, transparent 40px);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .preloader-top-bar, .preloader-bottom-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .preloader-center {
+      position: relative;
+      z-index: 2;
+      max-width: 640px;
+      margin: 0 auto;
+      width: 100%;
+      text-align: center;
+    }
+    .preloader-sewing-stage {
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto 16px;
+    }
+    .preloader-sewing-svg {
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+    .preloader-counter-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 12px;
+      line-height: 1;
+    }
+    .preloader-counter-val {
+      font-size: clamp(3.2rem, 8vw, 6.2rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(180deg, #FFFFFF 30%, #C4B5FD 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .preloader-percent-sign {
+      font-family: 'Newsreader', Georgia, serif;
+      font-style: italic;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      color: #F391EC;
+      opacity: 0.9;
+    }
+    .preloader-phase-text {
+      font-size: clamp(0.85rem, 1.6vw, 1rem);
+      color: #E2D4F0;
+      font-weight: 500;
+      margin-bottom: 24px;
+      min-height: 28px;
+      letter-spacing: 0.02em;
+      transition: opacity 200ms ease;
+    }
+    .preloader-tape-wrapper {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .preloader-tape-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #F391EC, #AD8EEB, #FFFFFF);
+      border-radius: 999px;
+      transition: width 80ms linear;
+      box-shadow: 0 0 12px #AD8EEB;
+    }
+    .preloader-tape-ticks {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: #8C809E;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .preloader-skip-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #E2D4F0;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 200ms ease;
+    }
+    .preloader-skip-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: #F391EC;
+      color: #FFFFFF;
+    }
+
+    /* =========================================================================
+       [huyml.co] SENI MENJAHIT SCROLL TECHNIQUES:
+       1. Top Chainstitch Seam
+       2. Vertical Seam Rail & Floating Needle
+       ========================================================================= */
+    .header-chainstitch-track {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(173, 142, 235, 0.15);
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .header-chainstitch-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #F391EC, #6E387A, #AD8EEB);
+      background-size: 16px 100%;
+      transition: width 100ms linear;
+      position: relative;
+    }
+    .header-chainstitch-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 6px;
+      height: 3px;
+      background: #FFFFFF;
+      box-shadow: 0 0 6px #F391EC;
+    }
+
+    .atelier-seam-rail {
+      position: fixed;
+      right: 18px;
+      top: 130px;
+      bottom: 110px;
+      width: 28px;
+      z-index: 45;
+      pointer-events: none;
+      display: none;
+    }
+    @media (min-width: 1100px) {
+      .atelier-seam-rail {
+        display: block;
+      }
+    }
+    .seam-tape-marks {
+      position: absolute;
+      right: 22px;
+      top: 0;
+      bottom: 0;
+      width: 30px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      opacity: 0.45;
+    }
+    .seam-tape-marks span {
+      position: absolute;
+      right: 0;
+      transform: translateY(-50%);
+      white-space: nowrap;
+    }
+    .seam-thread-track {
+      position: absolute;
+      left: 14px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: repeating-linear-gradient(to bottom, rgba(173, 142, 235, 0.25) 0, rgba(173, 142, 235, 0.25) 4px, transparent 4px, transparent 8px);
+    }
+    .seam-thread-stitched {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2px;
+      background: repeating-linear-gradient(to bottom, var(--accent) 0, var(--accent) 5px, #F391EC 5px, #F391EC 8px);
+      box-shadow: 0 0 6px rgba(110, 56, 122, 0.4);
+      transition: height 120ms linear;
+    }
+    .floating-seam-needle {
+      position: absolute;
+      left: 15px;
+      pointer-events: auto;
+      cursor: grab;
+      transition: top 120ms cubic-bezier(0.16, 1, 0.3, 1), transform 200ms ease;
+    }
+    .needle-depth-badge {
+      position: absolute;
+      right: 32px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      color: var(--text);
+      opacity: 0.85;
+      transition: opacity 150ms ease;
+    }
+    .floating-seam-needle:hover .needle-depth-badge {
+      opacity: 1;
+    }
   </style>
 </head>
 <body x-data="globalLandingTracker()" x-init="initTracker()">
+
+  <!-- [huyml.co & awwwards] ATELIER SARTORIAL PRELOADER (SENI MENJAHIT) -->
+  <div id="atelier-preloader"
+       x-data="atelierPreloader()"
+       x-show="!finished"
+       :class="{ 'preloader-exit': exiting }"
+       role="dialog"
+       aria-modal="true"
+       aria-label="Atelier Loading Screen">
+    
+    <!-- Fine Tailor Canvas Watermark Lines -->
+    <div class="preloader-grid" aria-hidden="true"></div>
+
+    <!-- Top Metadata Bar -->
+    <div class="preloader-top-bar">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#F391EC;box-shadow:0 0 8px #F391EC;"></span>
+        <span style="font-size:0.75rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#E2D4F0;">
+          PT CAHAYA BINAR BERLIAN &bull; ATELIER ORINAMIA
+        </span>
+      </div>
+      <div style="font-size:0.75rem;font-family:'JetBrains Mono',monospace;color:#A99AB8;">
+        KALIBRASI JAHITAN ISO 4915 &bull; <span x-text="clockText">08:00:00 WIB</span>
+      </div>
+    </div>
+
+    <!-- Centerpiece: Artisan Needle & Animated Thread Seam -->
+    <div class="preloader-center">
+      
+      <!-- Needle & Thread SVG Graphic Animation -->
+      <div class="preloader-sewing-stage">
+        <svg viewBox="0 0 400 120" fill="none" class="preloader-sewing-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Animasi Jarum dan Benang Menjahit">
+          <!-- Fabric Seam Line (Background Dash) -->
+          <path d="M20 60 Q110 20, 200 60 T380 60" stroke="rgba(255,255,255,0.12)" stroke-width="2" stroke-dasharray="4 6"/>
+          
+          <!-- Animated Stitched Thread (Draws as progress increases) -->
+          <path id="preloader-thread-path" d="M20 60 Q110 20, 200 60 T380 60" 
+                stroke="url(#preloaderThreadGrad)" stroke-width="3" stroke-linecap="round" stroke-dasharray="400"
+                :stroke-dashoffset="400 - (progress * 4)"/>
+
+          <!-- Puncture Needle Marks Along Path -->
+          <circle cx="20" cy="60" r="3" fill="#F391EC" :opacity="progress >= 5 ? 1 : 0.2"/>
+          <circle cx="110" cy="35" r="3" fill="#F391EC" :opacity="progress >= 30 ? 1 : 0.2"/>
+          <circle cx="200" cy="60" r="3" fill="#F391EC" :opacity="progress >= 55 ? 1 : 0.2"/>
+          <circle cx="290" cy="85" r="3" fill="#F391EC" :opacity="progress >= 80 ? 1 : 0.2"/>
+          <circle cx="380" cy="60" r="3" fill="#F391EC" :opacity="progress >= 98 ? 1 : 0.2"/>
+
+          <!-- Moving Tailor's Needle following the thread -->
+          <g :transform="'translate(' + (20 + (progress * 3.6)) + ', ' + (60 - Math.sin((progress/100) * Math.PI * 2) * 25) + ') rotate(' + (-15 + Math.sin((progress/100) * Math.PI * 4) * 20) + ')'">
+            <path d="M0 -22 L3 -8 L1 18 L0 24 L-1 18 L-3 -8 Z" fill="url(#needleShine)"/>
+            <ellipse cx="0" cy="-14" rx="0.8" ry="2.4" fill="#0B0A0E"/>
+            <path d="M0 -14 Q6 -22, 12 -16" stroke="#F391EC" stroke-width="1.2" stroke-linecap="round"/>
+          </g>
+
+          <defs>
+            <linearGradient id="preloaderThreadGrad" x1="0" y1="0" x2="400" y2="0" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#F391EC"/>
+              <stop offset="0.5" stop-color="#AD8EEB"/>
+              <stop offset="1" stop-color="#FFFFFF"/>
+            </linearGradient>
+            <linearGradient id="needleShine" x1="-3" y1="-22" x2="3" y2="24" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#FFFFFF"/>
+              <stop offset="0.5" stop-color="#D1C4E9"/>
+              <stop offset="1" stop-color="#7E57C2"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
+      <!-- Large Editorial Percentage Display -->
+      <div class="preloader-counter-row">
+        <span class="font-num preloader-counter-val" x-text="formattedProgress">00</span>
+        <span class="preloader-percent-sign">%</span>
+      </div>
+
+      <!-- Craftsmanship Phase Ticker -->
+      <div class="preloader-phase-text" x-text="currentPhase"></div>
+
+      <!-- Tailor Tape Ruler Track (Pita Meteran Kemajuan Jahit) -->
+      <div class="preloader-tape-wrapper">
+        <div class="preloader-tape-fill" :style="'width: ' + progress + '%'"></div>
+      </div>
+      <div class="preloader-tape-ticks">
+        <span>00 cm &bull; Pola</span>
+        <span>25 cm &bull; Serat</span>
+        <span>50 cm &bull; 12 SPI</span>
+        <span>75 cm &bull; Bar-Tack</span>
+        <span>100 cm &bull; Selesai</span>
+      </div>
+
+    </div>
+
+    <!-- Bottom Skip / Dismiss Action -->
+    <div class="preloader-bottom-bar">
+      <button type="button" @click="dismissImmediately()" class="preloader-skip-btn">
+        Lewati Animasi Intro &rarr;
+      </button>
+      <div style="font-size:0.75rem;color:#7E728C;font-family:'JetBrains Mono',monospace;">
+        KERAJINAN TANGAN &bull; KARAWACI, TANGERANG
+      </div>
+    </div>
+  </div>
 
   <!-- Scroll Progress Bar (Awwwards Style) -->
   <div id="scroll-progress" :style="'width: ' + scrollPercent + '%'" aria-hidden="true"></div>
@@ -673,13 +1018,10 @@
         </div>
       </a>
 
-      <!-- Desktop Links -->
+      <!-- Desktop Links (Slicing Removed from Navbar) -->
       <nav style="display:none;align-items:center;gap:22px;" class="desktop-menu" aria-label="Navigasi Utama">
         <a href="#tentang" style="text-decoration:none;color:var(--text-muted);font-size:0.875rem;font-weight:500;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Tentang Kami</a>
-        <a href="#slicing" style="text-decoration:none;color:var(--accent);font-size:0.875rem;font-weight:700;display:inline-flex;align-items:center;gap:4px;" onmouseover="this.style.color='var(--lavender)'" onmouseout="this.style.color='var(--accent)'">
-          <span style="font-size:0.75rem;">✦</span> Slicing Presisi
-        </a>
-        <a href="#layanan" style="text-decoration:none;color:var(--text-muted);font-size:0.875rem;font-weight:500;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Koleksi & Produk</a>
+        <a href="#layanan" style="text-decoration:none;color:var(--text-muted);font-size:0.875rem;font-weight:500;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Koleksi &amp; Produk</a>
         <a href="#medis" style="text-decoration:none;color:var(--text-muted);font-size:0.875rem;font-weight:500;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Seragam OKA</a>
         <a href="#klien" style="text-decoration:none;color:var(--text-muted);font-size:0.875rem;font-weight:500;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Klien Kami</a>
         <a href="#alur" style="text-decoration:none;color:var(--text-muted);font-size:0.875rem;font-weight:500;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Alur Kerjasama</a>
@@ -721,11 +1063,15 @@
       </div>
     </div>
 
+    <!-- Tailor's Chainstitch Seam Scroll Line (Seni Menjahit) -->
+    <div class="header-chainstitch-track" aria-hidden="true">
+      <div class="header-chainstitch-fill" :style="'width: ' + scrollPercent + '%'"></div>
+    </div>
+
     <!-- Mobile Dropdown Menu -->
     <div x-show="mobileMenu" x-transition style="border-top:1px solid var(--border);padding:16px 24px;display:flex;flex-direction:column;gap:12px;background:var(--surface);">
       <a href="#tentang" @click="mobileMenu = false" style="text-decoration:none;color:var(--text);font-weight:600;">Tentang Kami</a>
-      <a href="#slicing" @click="mobileMenu = false" style="text-decoration:none;color:var(--accent);font-weight:700;">✦ Slicing Komparasi Presisi</a>
-      <a href="#layanan" @click="mobileMenu = false" style="text-decoration:none;color:var(--text);font-weight:600;">Koleksi & Produk</a>
+      <a href="#layanan" @click="mobileMenu = false" style="text-decoration:none;color:var(--text);font-weight:600;">Koleksi &amp; Produk</a>
       <a href="#medis" @click="mobileMenu = false" style="text-decoration:none;color:var(--text);font-weight:600;">Seragam Medis OKA</a>
       <a href="#klien" @click="mobileMenu = false" style="text-decoration:none;color:var(--text);font-weight:600;">Klien Kami</a>
       <a href="#alur" @click="mobileMenu = false" style="text-decoration:none;color:var(--text);font-weight:600;">Alur Kerjasama</a>
@@ -922,30 +1268,30 @@
     </div>
   </div>
 
-  <!-- [lafys.com, curated.design & awwwards.com] THE INTERACTIVE SLICING SECTION -->
+  <!-- [lafys.com, curated.design & awwwards.com] THE INTERACTIVE QUALITY & STITCH CRAFTSMANSHIP SECTION -->
   <section id="slicing" style="padding:90px 24px 80px;border-bottom:1px solid var(--border);position:relative;background:var(--bg);"
            x-data="interactiveSlicer()">
     <div style="max-width:1160px;margin:0 auto;">
       
-      <!-- Slicing Section Header -->
+      <!-- Quality Section Header -->
       <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:20px;margin-bottom:28px;">
         <div style="max-width:680px;">
           <div style="display:inline-flex;align-items:center;gap:8px;padding:4px 14px;background:var(--surface);border:1px solid var(--border);border-radius:999px;margin-bottom:12px;">
             <span style="width:7px;height:7px;border-radius:50%;background:#AD8EEB;"></span>
-            <span style="font-size:0.75rem;font-weight:700;letter-spacing:0.08em;color:var(--accent);text-transform:uppercase;">Interactive Slicing Studio &bull; Huyml &amp; Lafys Inspired</span>
+            <span style="font-size:0.75rem;font-weight:700;letter-spacing:0.08em;color:var(--accent);text-transform:uppercase;">Studio Rekayasa Mutu &amp; Anatomi Tekstil &bull; Standar ISO 4915</span>
           </div>
           <h2 class="font-editorial" style="font-size:clamp(1.9rem, 3.4vw, 2.8rem);font-weight:500;line-height:1.2;color:var(--text);margin-bottom:10px;">
-            Anatomi Kualitas: Slicing Komparasi Presisi Jahitan
+            Bedah Rekayasa Mutu: Komparasi Presisi Jahitan Garmen
           </h2>
           <p style="color:var(--text-muted);font-size:0.95rem;line-height:1.65;">
-            Bandingkan langsung standar jahitan atelier PT Cahaya Binar Berlian dengan konveksi pasaran melalui 3 instrumen: Slider Slicing, Uji Pembesaran Serat 10x, dan Klasifikasi Standar ISO 4915.
+            Bandingkan langsung standar jahitan atelier PT Cahaya Binar Berlian dengan konveksi pasaran melalui 3 instrumen: Slider Komparasi Mutu, Uji Pembesaran Serat 10x, dan Klasifikasi Standar ISO 4915.
           </p>
         </div>
 
         <!-- Mode Sub-Tabs (Huyml / ReactBits style) -->
         <div style="display:flex;gap:8px;flex-wrap:wrap;padding:4px;background:var(--surface-tint);border-radius:10px;border:1px solid var(--border);">
           <button type="button" class="btn-slicing-preset" :class="{ 'active': slicingSubTab === 'slicer' }" @click="slicingSubTab = 'slicer'">
-            ✦ Slicing Komparasi
+            ✦ Komparasi Mutu Jahitan
           </button>
           <button type="button" class="btn-slicing-preset" :class="{ 'active': slicingSubTab === 'macro' }" @click="slicingSubTab = 'macro'">
             🔬 Pembesaran Serat 10x
@@ -2808,11 +3154,126 @@
     </a>
   </div>
 
+  <!-- [huyml.co & awwwards] TAILOR'S BASTING SEAM & FLOATING NEEDLE SCROLL TRACKER -->
+  <aside class="atelier-seam-rail" aria-label="Indikator Jelujur Jahitan">
+    <!-- Soft Tailor's Tape Marks (Pita Meteran Kain) -->
+    <div class="seam-tape-marks" aria-hidden="true">
+      <span style="top:5%;">10cm</span>
+      <span style="top:25%;">30cm</span>
+      <span style="top:50%;">60cm</span>
+      <span style="top:75%;">90cm</span>
+      <span style="top:95%;">120cm</span>
+    </div>
+
+    <!-- Dashed Basting Thread Guide -->
+    <div class="seam-thread-track" aria-hidden="true">
+      <div class="seam-thread-stitched" :style="'height: ' + scrollPercent + '%'"></div>
+    </div>
+
+    <!-- The Floating Artisan Tailor's Needle -->
+    <div class="floating-seam-needle"
+         :style="'top: ' + Math.min(96, Math.max(2, scrollPercent)) + '%; transform: translate(-50%, -50%) rotate(' + (isScrollingDown ? '-18deg' : '14deg') + ');'"
+         title="Indikator Kedalaman Pola Jahitan"
+         role="status">
+      <!-- Realistic Golden/Lavender Needle SVG -->
+      <svg width="22" height="34" viewBox="0 0 24 38" fill="none" class="needle-svg" filter="drop-shadow(0 2px 4px rgba(110,56,122,0.3))">
+        <!-- Needle Body -->
+        <path d="M12 0 L15 12 L14 34 L12 38 L10 34 L9 12 Z" fill="url(#railNeedleGrad)"/>
+        <!-- Needle Eye -->
+        <ellipse cx="12" cy="7" rx="1.2" ry="3.5" fill="#1E1926"/>
+        <!-- Silk Thread Passing Through Eye -->
+        <path d="M12 7 C16 4, 20 8, 23 3" stroke="#F391EC" stroke-width="1.5" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="railNeedleGrad" x1="9" y1="0" x2="15" y2="38" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FFFFFF"/>
+            <stop offset="0.3" stop-color="#E2D4F0"/>
+            <stop offset="0.7" stop-color="#9A78B8"/>
+            <stop offset="1" stop-color="#552F66"/>
+          </linearGradient>
+        </defs>
+      </svg>
+
+      <!-- Needle Hover / Active Craftsmanship Depth Pill -->
+      <div class="needle-depth-badge font-num">
+        <span style="color:#F391EC;">12 SPI</span> &bull; <span x-text="Math.round(scrollPercent) + '% Pola'"></span>
+      </div>
+    </div>
+  </aside>
+
   <!-- Alpine.js Components & Anime.js Interactions -->
   <script>
+    function atelierPreloader() {
+      return {
+        progress: 0,
+        finished: false,
+        exiting: false,
+        clockText: '08:00:00 WIB',
+        phases: [
+          { min: 0, max: 25, text: '[FASE 01] Membentang Pola Ukur Ergonomis Busana Medis & Industri...' },
+          { min: 26, max: 55, text: '[FASE 02] Menyeleksi Serat Katun Toyobo Fodu 210 GSM Grade-A...' },
+          { min: 56, max: 82, text: '[FASE 03] Mengkalibrasi Kerapatan 12-14 SPI & Kunci Double Bar-Tack...' },
+          { min: 83, max: 100, text: '[FASE 04] Atelier Siap &bull; Membuka Arsip Rekayasa Busana' }
+        ],
+        get formattedProgress() {
+          return String(Math.round(this.progress)).padStart(2, '0');
+        },
+        get currentPhase() {
+          const p = this.phases.find(item => this.progress >= item.min && this.progress <= item.max);
+          return p ? p.text : '[ATELIER SIAP] Selamat Datang';
+        },
+        init() {
+          const updateClock = () => {
+            const now = new Date();
+            const wib = new Date(now.getTime() + (7 * 3600000) + (now.getTimezoneOffset() * 60000));
+            const hh = String(wib.getHours()).padStart(2, '0');
+            const mm = String(wib.getMinutes()).padStart(2, '0');
+            const ss = String(wib.getSeconds()).padStart(2, '0');
+            this.clockText = `${hh}:${mm}:${ss} WIB`;
+          };
+          updateClock();
+          const clockInterval = setInterval(updateClock, 1000);
+
+          const startTime = performance.now();
+          const duration = 1800;
+
+          const tick = (now) => {
+            const elapsed = now - startTime;
+            const rawProgress = Math.min(100, (elapsed / duration) * 100);
+            
+            this.progress = rawProgress < 75 
+              ? (rawProgress * 1.05) 
+              : 75 + ((rawProgress - 75) * 1);
+            
+            if (this.progress < 100 && !this.finished) {
+              requestAnimationFrame(tick);
+            } else {
+              this.progress = 100;
+              clearInterval(clockInterval);
+              setTimeout(() => {
+                this.exiting = true;
+                setTimeout(() => {
+                  this.finished = true;
+                }, 850);
+              }, 250);
+            }
+          };
+          requestAnimationFrame(tick);
+        },
+        dismissImmediately() {
+          this.progress = 100;
+          this.exiting = true;
+          setTimeout(() => {
+            this.finished = true;
+          }, 350);
+        }
+      };
+    }
+
     function globalLandingTracker() {
       return {
         scrollPercent: 0,
+        lastScrollY: 0,
+        isScrollingDown: true,
         liveTime: '',
         catalogView: 'archive',
         archiveVol: 'all',
@@ -3020,6 +3481,8 @@
             const scrollTop = window.scrollY || document.documentElement.scrollTop;
             const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
             this.scrollPercent = scrollHeight > 0 ? Math.min(100, Math.max(0, (scrollTop / scrollHeight) * 100)) : 0;
+            this.isScrollingDown = scrollTop >= this.lastScrollY;
+            this.lastScrollY = scrollTop;
           };
           window.addEventListener('scroll', updateScroll, { passive: true });
           updateScroll();
@@ -3114,7 +3577,7 @@
           card.style.setProperty('--mouse-y', `${y}px`);
         });
       });
-
+        
       if (typeof anime !== 'undefined') {
         // 2. [animejs.com] Staggered Entrance
         anime({
