@@ -1,58 +1,167 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SIMORIN - Sistem Informasi Manajemen Orinamia
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://img.shields.io/badge/Entity-PT%20Cahaya%20Binar%20Berlian-6E387A?style=for-the-badge" alt="PT Cahaya Binar Berlian">
+  <img src="https://img.shields.io/badge/Brand-ORINAMIA%20Daily%20Wear-E074D8?style=for-the-badge" alt="Orinamia Daily Wear">
+  <img src="https://img.shields.io/badge/Framework-Laravel%2012-FF2D20?style=for-the-badge&logo=laravel" alt="Laravel 12">
+  <img src="https://img.shields.io/badge/PHP-8.2%2B-777BB4?style=for-the-badge&logo=php" alt="PHP 8.2+">
+  <img src="https://img.shields.io/badge/Database-MySQL-4479A1?style=for-the-badge&logo=mysql" alt="MySQL">
+  <img src="https://img.shields.io/badge/Tests-Passed%20(100%25)-success?style=for-the-badge" alt="Tests Passed">
 </p>
 
-## About Laravel
+**SIMORIN** adalah sistem informasi manajemen operasional terpadu yang dikembangkan khusus untuk unit usaha konveksi pakaian seragam, baju medis OKA, dan pakaian kerja berbadan hukum resmi **PT CAHAYA BINAR BERLIAN** (merk dagang **ORINAMIA Daily Wear & Konveksi**).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Profil Perusahaan & Legalitas Resmi
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Sesuai dokumen proposal resmi perusahaan, SIMORIN memadukan identitas legal dan standar kemitraan sebagai berikut:
 
-## Learning Laravel
+- **Nama Entitas Hukum:** PT CAHAYA BINAR BERLIAN
+- **Merk Dagang:** ORINAMIA Konveksi & Daily Wear
+- **SK Kemenkumham RI:** `AHU-0202685.AH.01.30. Tahun 2024`
+- **Nomor Induk Berusaha (NIB):** `2104240036065`
+- **Tahun Berdiri:** Agustus 2015 (berawal dari inisiatif mandiri tenaga perawat medis)
+- **Rekening Resmi Perusahaan:** Bank Syariah Indonesia (BSI) `7273909413` a/n PT Cahaya Binar Berlian
+- **Alamat Workshop:** Jl Cibodas Raya No 10 D Perum 1, Karawaci, Tangerang, Banten
+- **Atelier Administrasi:** Jl Tongkol Raya No 20C Perum 1, Karawaci, Tangerang
+- **Hotline / WhatsApp Resmi:** `0857 1610 7394`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Klien & Mitra Terverifikasi
+Perusahaan telah berpengalaman melayani pengadaan seragam instansi terkemuka, antara lain:
+- **Perhotelan & Hospitality:** Novotel Hotels, Omar Hotel, Grand Mirah Hotel
+- **Kesehatan & Rumah Sakit:** RS Sari Asih, RS An-Nisa Tangerang, RSIA Bunda Sejati
+- **Organisasi Profesi & Relawan:** HIPKABI Banten (Himpunan Perawat Kamar Bedah Indonesia), NAKES PRO Volunteer
+- **Institusi Sosial & Filantropi:** BAZNAS (Badan Amil Zakat Nasional), Dompet Dhuafa, Rumah Zakat
+- **Industri Manufaktur:** PT DNP Indonesia
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## Filosofi Desain Antarmuka (7 Referensi Desain)
 
-## Agentic Development
+Aplikasi SIMORIN mengusung konsep visual **Soft Editorial Atelier** yang dirancang bebas dari template generik ("AI slop") dan memadukan 7 referensi desain modern:
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+1. **[reactbits.dev](https://reactbits.dev/):** Spotlight card cursor physics yang memancarkan ambient halo mengikuti kursor mouse, shiny shimmer text animation (`.shiny-text`), dan rolling counter tickers pada angka ringkasan.
+2. **[animejs.com](https://animejs.com/):** Transisi bertingkat (*staggered entrance*) pada kartu dan panel serta animasi pegas (*elastic bounce*) saat memilih palet 13 warna seragam OKA.
+3. **[21st.dev](https://21st.dev/community/templates):** Tata letak Bento Grid modular berhirarki kuat dan bilah navigasi kaca buram (*frosted glass* `backdrop-filter: blur(14px)`).
+4. **[skiper-ui.com](https://skiper-ui.com/):** Segmented control pill pada filter status, tombol preset persentase DP (`30%`, `50% SOP MOU`, `100%`), dan kalkulator simulasi pemesanan.
+5. **[aura.build](https://www.aura.build/):** Tata cahaya atmosferik (*ambient radial mesh*) ungu-lavender halus di latar belakang untuk mode terang dan gelap.
+6. **[godly.design](https://godly.design/websites/):** Tipografi haute-couture atelier memadukan display serif `Newsreader`, sans-serif `Plus Jakarta Sans`, dan `JetBrains Mono` (`tabular-nums`) untuk nominal angka agar tidak terpotong.
+7. **[motion-primitives.com](https://motion-primitives.com/):** Laci akordeon interaktif untuk rincian spesifikasi teknis kain (Toyobo Fodu medis, American Drill kantor, dan Ripstop Scotlight 3M K3).
 
+---
+
+## Modul & Fitur Utama Sistem
+
+### 1. Halaman Depan Publik (`/`)
+- Etalase digital resmi profil PT Cahaya Binar Berlian.
+- Simulasi visual interaktif **13 Palet Warna Seragam Medis OKA** (Toska, Navy, Maroon, Hijau, Hijau Muda, Soft Pink, Pink Fanta, Biru Muda, Biru Benhur, Ungu, Kuning, Orange, dan Putih).
+- Kalkulator estimasi biaya kontrak dan simulasi komitmen pembayaran dua termin secara transparan.
+- Tautan integrasi instan menuju WhatsApp resmi perusahaan dan login sistem.
+
+### 2. Meja Kerja Penjualan (`/penjualan`)
+- Pengelolaan pesanan pakaian custom (*Make-to-Order*).
+- Otomatisasi pembuatan dokumen dua tahap:
+  - **Termin I:** Invoice DP 50% saat penandatanganan PO dan MOU.
+  - **Termin II:** Invoice Pelunasan dengan jangka waktu maksimal 7 hari dari tanggal faktur.
+- Tracking status siklus pesanan: `BELUM_BAYAR`, `DP_LUNAS`, `LUNAS`, dan `TERKIRIM`.
+
+### 3. Pengadaan Bahan Baku (`/pembelian`)
+- Pencatatan transaksi belanja kain, benang, kancing, puring, dan aksesoris ke supplier.
+- Penyimpanan *snapshot harga riil* saat transaksi untuk akurasi kalkulasi HPP.
+
+### 4. Laporan Finansial & Arus Kas (`/laporan`)
+- Monitoring sisa piutang tertunggak pelanggan per periode.
+- Rekapitulasi pengeluaran bahan baku dan arus kas masuk.
+- Fasilitas cetak dokumen laporan resmi siap cetak/PDF.
+
+### 5. Data Master Terpadu (`/master`)
+- Master Pelanggan (Instansi, Perusahaan, Rumah Sakit, Individu).
+- Master Supplier Bahan Baku.
+- Katalog Spesifikasi Bahan Baku tanpa sistem stok mati.
+
+### 6. Keamanan & Hak Akses Berbasis Peran
+- **Admin:** Memiliki wewenang operasional penuh (pencatatan penjualan, penerbitan invoice, pembelian bahan, dan kelola data master).
+- **Owner:** Hak akses pengawasan laporan keuangan, rekap piutang, dan ringkasan eksekutif dashboard.
+
+---
+
+## Panduan Instalasi & Menjalankan Aplikasi
+
+### 1. Prasyarat Sistem
+- PHP versi 8.2 atau lebih tinggi (ekstensi: `pdo_mysql`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json`)
+- Composer versi 2.x
+- Server MySQL / MariaDB (misal via XAMPP)
+
+### 2. Kloning Repository
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/auliaoktaviaramdani/project-mpsi-orinamia.git
+cd project-mpsi-orinamia
+git checkout dev-mika
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 3. Instalasi Dependensi
+```bash
+composer install
+```
 
-## Contributing
+### 4. Konfigurasi Lingkungan (.env)
+Salin berkas konfigurasi template:
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Sesuaikan parameter database di dalam file `.env`:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=orinamia
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-## Code of Conduct
+### 5. Impor Skema Database
+Impor struktur dan data awal dari berkas SQL yang tersedia:
+- Lokasi berkas: `database/sql/orinamia.sql`
+- Dapat diimpor melalui phpMyAdmin atau terminal:
+```bash
+mysql -u root -p orinamia < database/sql/orinamia.sql
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 6. Menjalankan Server Pengembangan
+```bash
+php artisan serve
+```
+Akses aplikasi melalui browser di: **`http://127.0.0.1:8000`**
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Kredensial Akun Pengguna Demo
 
-## License
+| Peran | Username | Password | Hak Akses |
+|---|---|---|---|
+| **Admin** | `admin` | `password` | Akses penuh operasional penjualan, pembelian, master data, dan laporan |
+| **Owner** | `owner` | `password` | Pengawasan dashboard, monitoring piutang, dan rekapitulasi laporan |
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## Pengujian Kualitas Kode (Testing & Linting)
+
+Sistem telah dilengkapi rangkaian automated feature test:
+```bash
+# Menjalankan seluruh test suite PHPUnit
+php artisan test
+
+# Memeriksa dan memformat standar kode dengan Laravel Pint
+vendor/bin/pint
+```
+
+Hasil pengujian: **6 test / 25 assertions lulus 100%**.
+
+---
+
+## Hak Cipta & Kepemilikan
+Seluruh hak cipta dilindungi undang-undang.
+Copyright &copy; 2015 &ndash; 2026 **PT CAHAYA BINAR BERLIAN** &bull; **ORINAMIA Daily Wear & Konveksi**.

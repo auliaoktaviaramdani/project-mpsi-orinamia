@@ -433,39 +433,57 @@
         </a>
       </div>
 
-      <!-- Quick Metrics Strip [Spotlight Cards & Animated Tickers] -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:16px;max-width:900px;margin:0 auto;text-align:left;">
+      <!-- Quick Metrics Strip [Spotlight Cards & Animated Tickers - Anti-Clipping Responsive Layout] -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:20px;max-width:1140px;margin:0 auto;text-align:left;">
         
-        <div class="atelier-card spotlight-card" style="padding:18px 22px;">
-          <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Pengalaman Industri</div>
-          <div class="font-num" style="font-size:1.65rem;font-weight:700;color:var(--accent);margin-top:2px;">
-            <span class="anim-counter" data-val="10">10</span>+ Tahun
+        <!-- Metric 1: Pengalaman -->
+        <div class="atelier-card spotlight-card" style="padding:22px 24px;">
+          <div style="font-size:0.75rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;">Pengalaman Industri</div>
+          <div style="display:flex;align-items:baseline;gap:6px;margin:6px 0 2px;">
+            <span class="font-num" style="font-size:1.85rem;font-weight:700;color:var(--accent);">
+              <span class="anim-counter" data-val="10">10</span>+
+            </span>
+            <span style="font-size:1.05rem;font-weight:600;color:var(--text);">Tahun</span>
           </div>
-          <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px;">Berdiri sejak Agustus 2015</div>
+          <div style="font-size:0.8125rem;color:var(--text-muted);margin-top:2px;">Berdiri sejak Agustus 2015</div>
         </div>
 
-        <div class="atelier-card spotlight-card" style="padding:18px 22px;">
-          <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Kapasitas Produksi</div>
-          <div class="font-num" style="font-size:1.65rem;font-weight:700;color:var(--text);margin-top:2px;">
-            <span class="anim-counter" data-val="10000">10.000</span>+ Pcs
+        <!-- Metric 2: Kapasitas -->
+        <div class="atelier-card spotlight-card" style="padding:22px 24px;">
+          <div style="font-size:0.75rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;">Kapasitas Produksi</div>
+          <div style="display:flex;align-items:baseline;gap:6px;margin:6px 0 2px;">
+            <span class="font-num" style="font-size:1.85rem;font-weight:700;color:var(--text);">
+              <span class="anim-counter" data-val="10000">10.000</span>+
+            </span>
+            <span style="font-size:1.05rem;font-weight:600;color:var(--text);">Pcs</span>
           </div>
-          <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px;">Pesanan Fleksibel (Min 10 Pcs)</div>
+          <div style="font-size:0.8125rem;color:var(--text-muted);margin-top:2px;">Pesanan Fleksibel (Min 10 Pcs)</div>
         </div>
 
-        <div class="atelier-card spotlight-card" style="padding:18px 22px;">
-          <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Varian Seragam Medis</div>
-          <div class="font-num" style="font-size:1.65rem;font-weight:700;color:var(--accent);margin-top:2px;">
-            <span class="anim-counter" data-val="13">13</span> Pilihan Warna
+        <!-- Metric 3: Pilihan Warna Medis -->
+        <div class="atelier-card spotlight-card" style="padding:22px 24px;">
+          <div style="font-size:0.75rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;">Varian Seragam Medis</div>
+          <div style="display:flex;align-items:baseline;gap:6px;margin:6px 0 2px;">
+            <span class="font-num" style="font-size:1.85rem;font-weight:700;color:var(--accent);">
+              <span class="anim-counter" data-val="13">13</span>
+            </span>
+            <span style="font-size:1.05rem;font-weight:600;color:var(--text);white-space:normal;">Pilihan Warna</span>
           </div>
-          <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px;">Baju OKA & Scrub Bedah</div>
+          <div style="font-size:0.8125rem;color:var(--text-muted);margin-top:2px;">Baju OKA &amp; Scrub Bedah</div>
         </div>
 
-        <div class="atelier-card spotlight-card" style="padding:18px 22px;">
-          <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Legalitas Badan Hukum</div>
-          <div class="font-num" style="font-size:1.65rem;font-weight:700;color:var(--text);margin-top:2px;">
-            AHU & NIB Resmi
+        <!-- Metric 4: Legalitas Resmi -->
+        <div class="atelier-card spotlight-card" style="padding:22px 24px;">
+          <div style="font-size:0.75rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;">Legalitas Badan Hukum</div>
+          <div style="display:flex;align-items:center;gap:10px;margin:8px 0 4px;flex-wrap:wrap;">
+            <span style="font-size:1.35rem;font-weight:700;color:var(--text);letter-spacing:-0.02em;">
+              AHU &amp; NIB
+            </span>
+            <span class="badge-pill" style="font-size:0.75rem;padding:3px 10px;font-weight:700;color:#10B981;background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.3);">
+              Resmi 2024
+            </span>
           </div>
-          <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px;">Kemenkumham RI Tahun 2024</div>
+          <div style="font-size:0.8125rem;color:var(--text-muted);margin-top:2px;">Kemenkumham RI SK 2024</div>
         </div>
 
       </div>
