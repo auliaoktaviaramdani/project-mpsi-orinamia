@@ -3,7 +3,7 @@
 @section('content')
 <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
   <div>
-    <h1 class="font-editorial" style="font-size:1.75rem;font-weight:600;">Data Master Supplier</h1>
+    <h1 class="font-editorial" style="font-size:1.75rem;font-weight:600;">Data Master <span class="shiny-text">Supplier</span></h1>
     <p style="font-size:0.8375rem;color:var(--muted);margin-top:4px;">Daftar supplier bahan baku Orinamia.</p>
   </div>
   <a href="{{ route('master.supplier.create') }}" class="btn-primary" id="btn-supplier-baru">
@@ -13,12 +13,12 @@
 </div>
 
 @if($suppliers->isEmpty())
-<div class="panel" style="padding:64px;text-align:center;">
+<div class="panel spotlight-card" style="padding:64px;text-align:center;">
   <p class="font-editorial" style="font-size:1.375rem;font-weight:600;margin-bottom:8px;">Belum Ada Supplier</p>
   <a href="{{ route('master.supplier.create') }}" class="btn-primary" style="margin-top:12px;">Tambah Supplier</a>
 </div>
 @else
-<div class="panel" style="overflow-x:auto;">
+<div class="panel spotlight-card" style="overflow-x:auto;">
   <table class="tbl" style="width:100%;border-collapse:collapse;">
     <thead>
       <tr>

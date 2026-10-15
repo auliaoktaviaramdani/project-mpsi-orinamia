@@ -9,7 +9,7 @@
       &larr; Kembali
     </a>
     <div>
-      <h1 class="font-editorial" style="font-size:1.625rem;font-weight:600;">Catat Pesanan Baru</h1>
+      <h1 class="font-editorial" style="font-size:1.625rem;font-weight:600;">Catat Pesanan <span class="shiny-text">Baru</span></h1>
       <p style="font-size:0.8125rem;color:var(--muted);">
         No. Pesanan: <span class="font-num" style="font-weight:600;color:var(--accent);">{{ $noJual }}</span>
         &bull; Pencatat: <strong>{{ auth()->user()->name }}</strong>
@@ -23,7 +23,7 @@
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
 
       <!-- Panel Kiri: Info Pesanan -->
-      <div style="grid-column:span 2;" class="panel" style="padding:24px;">
+      <div style="grid-column:span 2;" class="panel spotlight-card" style="padding:24px;">
         <div style="padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
           <div>
             <label for="pelanggan_id" class="form-label">Pelanggan <span style="color:#7F1D1D">*</span></label>
@@ -143,6 +143,11 @@
                        x-model.number="dpPersen" @input="calcDP()"
                        min="1" max="100" step="1" value="{{ old('dp_persen', 50) }}" required>
                 <span style="font-weight:700;color:var(--muted);">%</span>
+              </div>
+              <div style="display:flex;gap:6px;margin-top:6px;">
+                <button type="button" class="btn-outline" style="min-height:28px;padding:2px 8px;font-size:0.7rem;" @click="dpPersen = 30; calcDP();">30%</button>
+                <button type="button" class="btn-outline" style="min-height:28px;padding:2px 8px;font-size:0.7rem;font-weight:700;color:var(--accent);border-color:var(--accent);" @click="dpPersen = 50; calcDP();">50% (SOP MOU)</button>
+                <button type="button" class="btn-outline" style="min-height:28px;padding:2px 8px;font-size:0.7rem;" @click="dpPersen = 100; calcDP();">100%</button>
               </div>
             </div>
             <div style="margin-bottom:12px;">

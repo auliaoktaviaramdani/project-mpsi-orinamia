@@ -4,7 +4,7 @@
 @section('content')
 <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
   <div>
-    <h1 class="font-editorial" style="font-size:1.75rem;font-weight:600;">Pembelian Bahan Baku</h1>
+    <h1 class="font-editorial" style="font-size:1.75rem;font-weight:600;">Pembelian <span class="shiny-text">Bahan Baku</span></h1>
     <p style="font-size:0.8375rem;color:var(--muted);margin-top:4px;">
       Riwayat pembelian kain dan aksesoris. Harga disimpan sebagai snapshot saat transaksi.
     </p>
@@ -20,7 +20,7 @@
 </div>
 
 @if($pembelians->isEmpty())
-<div class="panel" style="padding:64px;text-align:center;">
+<div class="panel spotlight-card" style="padding:64px;text-align:center;">
   <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="var(--muted)" stroke-width="1" style="margin:0 auto 16px;">
     <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
   </svg>
@@ -33,7 +33,7 @@
   @endif
 </div>
 @else
-<div class="panel" style="overflow-x:auto;">
+<div class="panel spotlight-card" style="overflow-x:auto;">
   <table class="tbl" style="width:100%;border-collapse:collapse;">
     <thead>
       <tr>

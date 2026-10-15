@@ -28,7 +28,7 @@
   <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;">
     <div>
       <h1 class="font-editorial" style="font-size:1.75rem;font-weight:600;color:var(--text);letter-spacing:-0.01em;">
-        Laporan Keuangan & Operasional
+        Laporan Keuangan & <span class="shiny-text">Operasional</span>
       </h1>
       <p style="font-size:0.875rem;color:var(--muted);margin-top:4px;">
         Rekapitulasi data transaksi penjualan busana, pembelian bahan baku, dan monitoring piutang.
@@ -48,7 +48,7 @@
   </div>
 
   <!-- Filter Surface Panel -->
-  <div class="panel" style="padding:20px 24px;">
+  <div class="panel spotlight-card" style="padding:20px 24px;">
     <form action="{{ route('laporan.index') }}" method="GET" style="display:flex;flex-direction:column;gap:16px;">
       
       <!-- Filter Controls Grid -->
@@ -95,12 +95,12 @@
   <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:16px;">
     
     <!-- Total Transaksi -->
-    <div class="panel" style="padding:20px;">
+    <div class="panel spotlight-card" style="padding:20px;">
       <div style="font-size:0.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">
         Total Transaksi Terdata
       </div>
       <div class="font-num" style="font-size:1.625rem;font-weight:700;color:var(--text);">
-        {{ number_format($rows->count(), 0, ',', '.') }}
+        <span class="anim-counter" data-val="{{ $rows->count() }}">{{ number_format($rows->count(), 0, ',', '.') }}</span>
         <span style="font-size:0.875rem;font-weight:400;color:var(--muted);">berkas</span>
       </div>
       <div style="font-size:0.75rem;color:var(--muted);margin-top:6px;">
@@ -109,7 +109,7 @@
     </div>
 
     <!-- Total Nominal -->
-    <div class="panel" style="padding:20px;">
+    <div class="panel spotlight-card" style="padding:20px;">
       <div style="font-size:0.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">
         {{ $jenis === 'pembelian' ? 'Total Pengeluaran Bahan' : 'Total Nilai Transaksi' }}
       </div>
@@ -123,7 +123,7 @@
 
     @if($jenis !== 'pembelian')
     <!-- Sisa Piutang -->
-    <div class="panel" style="padding:20px;position:relative;">
+    <div class="panel spotlight-card" style="padding:20px;position:relative;">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
         <span style="font-size:0.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;">
           Sisa Piutang Tertunggak

@@ -15,8 +15,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Alpine.js -->
+  <!-- Alpine.js & Plugins -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  <!-- Anime.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -165,13 +169,73 @@
     .tbl tbody tr:hover { background: var(--tint); }
     .tbl tbody tr:last-child td { border-bottom: none; }
 
-    /* Panel */
-    .panel {
+    /* [reactbits.dev & 21st.dev] Panel & Spotlight Surfaces */
+    .panel, .surface, .spotlight-card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 8px;
+      position: relative;
       overflow: hidden;
+      transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 200ms ease, border-color 200ms ease;
     }
+    .panel::before, .surface::before, .spotlight-card::before {
+      content: '';
+      position: absolute;
+      top: var(--mouse-y, -1000px);
+      left: var(--mouse-x, -1000px);
+      width: 450px;
+      height: 450px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(173, 142, 235, 0.12) 0%, rgba(243, 145, 236, 0.03) 45%, transparent 70%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 250ms ease;
+      z-index: 1;
+    }
+    .panel:hover::before, .surface:hover::before, .spotlight-card:hover::before {
+      opacity: 1;
+    }
+    .panel:hover {
+      border-color: var(--lavender);
+      box-shadow: 0 8px 24px -8px rgba(110, 56, 122, 0.08);
+    }
+    .dark .panel:hover {
+      border-color: var(--accent);
+      box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.5);
+    }
+
+    /* [reactbits.dev] Shiny Shimmer Text */
+    .shiny-text {
+      background: linear-gradient(110deg, var(--text) 30%, var(--pink) 50%, var(--lavender) 60%, var(--text) 75%);
+      background-size: 220% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+      animation: shineSweep 5s linear infinite;
+    }
+    @keyframes shineSweep {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* [aura.build] Ambient Atmospheric Lighting */
+    .aura-ambient {
+      position: fixed;
+      pointer-events: none;
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: 0;
+      opacity: 0.35;
+    }
+    .aura-ambient-1 {
+      top: -100px; right: 5%; width: 550px; height: 550px;
+      background: radial-gradient(circle, rgba(243, 145, 236, 0.2) 0%, transparent 70%);
+    }
+    .aura-ambient-2 {
+      bottom: 5%; left: -100px; width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(173, 142, 235, 0.2) 0%, transparent 70%);
+    }
+    .dark .aura-ambient { opacity: 0.2; }
 
     /* Focus visible */
     *:focus-visible {
@@ -268,11 +332,15 @@
 </head>
 <body>
 
+  <!-- [aura.build] Ambient Atmospheric Light Orbs -->
+  <div class="aura-ambient aura-ambient-1" aria-hidden="true"></div>
+  <div class="aura-ambient aura-ambient-2" aria-hidden="true"></div>
+
   <!-- Gradient Ribbon -->
   <div class="brand-ribbon no-print" aria-hidden="true"></div>
 
   <!-- Header -->
-  <header class="no-print sticky top-0 z-30" style="background:var(--card);border-bottom:1px solid var(--border);">
+  <header class="no-print sticky top-0 z-30" style="background:var(--card);border-bottom:1px solid var(--border);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);">
     <div style="max-width:1520px;margin:0 auto;padding:0 24px;height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
 
       <!-- Logo + Brand -->
@@ -424,6 +492,51 @@
       </span>
     </div>
   </footer>
+
+  <!-- [reactbits.dev & animejs.com] Global Spotlight & Motion Primitives -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Cursor Spotlight Tracking for all panels
+      document.querySelectorAll('.panel, .surface, .spotlight-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const rect = card.getBoundingClientRect();
+          card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+          card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+        });
+      });
+
+      // 2. Anime.js Entrance & Rolling Counters
+      if (typeof anime !== 'undefined') {
+        anime({
+          targets: '.panel, .surface',
+          opacity: [0.92, 1],
+          translateY: [6, 0],
+          delay: anime.stagger(30, { start: 80 }),
+          duration: 600,
+          easing: 'easeOutCubic'
+        });
+
+        document.querySelectorAll('.anim-counter').forEach(counter => {
+          const targetVal = parseInt(counter.getAttribute('data-val'), 10) || 0;
+          anime({
+            targets: counter,
+            innerHTML: [0, targetVal],
+            round: 1,
+            easing: 'easeOutExpo',
+            duration: 1800,
+            update: function(anim) {
+              const current = Math.round(anim.animations[0].currentValue);
+              if (targetVal >= 1000) {
+                counter.innerHTML = current.toLocaleString('id-ID');
+              } else {
+                counter.innerHTML = current;
+              }
+            }
+          });
+        });
+      }
+    });
+  </script>
 
   @stack('scripts')
 </body>

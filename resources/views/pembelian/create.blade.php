@@ -9,7 +9,7 @@
       &larr; Kembali
     </a>
     <div>
-      <h1 class="font-editorial" style="font-size:1.625rem;font-weight:600;">Catat Pembelian Bahan</h1>
+      <h1 class="font-editorial" style="font-size:1.625rem;font-weight:600;">Catat Pembelian <span class="shiny-text">Bahan</span></h1>
       <p style="font-size:0.8125rem;color:var(--muted);">
         No. Beli: <span class="font-num" style="font-weight:600;color:var(--accent);">{{ $noBeli }}</span>
       </p>
@@ -22,7 +22,7 @@
     <div style="display:grid;gap:20px;">
 
       <!-- Info Pembelian -->
-      <div class="panel" style="padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="panel spotlight-card" style="padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
         <div>
           <label for="supplier_id" class="form-label">Supplier <span style="color:#7F1D1D">*</span></label>
           <div style="display:flex;gap:8px;">

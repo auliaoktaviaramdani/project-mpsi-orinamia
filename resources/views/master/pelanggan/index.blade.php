@@ -4,7 +4,7 @@
 @section('content')
 <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
   <div>
-    <h1 class="font-editorial" style="font-size:1.75rem;font-weight:600;">Data Master Pelanggan</h1>
+    <h1 class="font-editorial" style="font-size:1.75rem;font-weight:600;">Data Master <span class="shiny-text">Pelanggan</span></h1>
     <p style="font-size:0.8375rem;color:var(--muted);margin-top:4px;">Daftar pelanggan Orinamia. Tombol hapus dikunci jika sudah dipakai dalam transaksi.</p>
   </div>
   <a href="{{ route('master.pelanggan.create') }}" class="btn-primary" id="btn-pelanggan-baru">
@@ -16,12 +16,12 @@
 </div>
 
 @if($pelanggans->isEmpty())
-<div class="panel" style="padding:64px;text-align:center;">
+<div class="panel spotlight-card" style="padding:64px;text-align:center;">
   <p class="font-editorial" style="font-size:1.375rem;font-weight:600;margin-bottom:8px;">Belum Ada Pelanggan</p>
   <a href="{{ route('master.pelanggan.create') }}" class="btn-primary" style="margin-top:12px;">Tambah Pelanggan</a>
 </div>
 @else
-<div class="panel" style="overflow-x:auto;">
+<div class="panel spotlight-card" style="overflow-x:auto;">
   <table class="tbl" style="width:100%;border-collapse:collapse;">
     <thead>
       <tr>
