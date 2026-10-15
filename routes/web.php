@@ -14,9 +14,9 @@ use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
 // ------------------------------------------------------------------
-// Redirect root ke login / dashboard
+// Halaman Utama / Landing Page Perusahaan (PT Cahaya Binar Berlian - Orinamia)
 // ------------------------------------------------------------------
-Route::get('/', fn () => redirect()->route('login'));
+Route::get('/', fn () => view('welcome'))->name('home');
 
 // ------------------------------------------------------------------
 // Autentikasi (Tanpa middleware auth)

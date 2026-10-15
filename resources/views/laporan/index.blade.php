@@ -123,9 +123,14 @@
 
     @if($jenis !== 'pembelian')
     <!-- Sisa Piutang -->
-    <div class="panel" style="padding:20px;border-left:3px solid {{ $totalSisa > 0 ? '#DC2626' : '#16A34A' }};">
-      <div style="font-size:0.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">
-        Sisa Piutang Tertunggak
+    <div class="panel" style="padding:20px;position:relative;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
+        <span style="font-size:0.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;">
+          Sisa Piutang Tertunggak
+        </span>
+        <span style="font-size:0.6875rem;font-weight:600;padding:2px 8px;border-radius:999px;{{ $totalSisa > 0 ? 'background:rgba(220,38,38,0.1);color:#DC2626;' : 'background:rgba(22,163,74,0.1);color:#16A34A;' }}">
+          {{ $totalSisa > 0 ? 'Tertunggak' : 'Semua Lunas' }}
+        </span>
       </div>
       <div class="font-num" style="font-size:1.625rem;font-weight:700;color:{{ $totalSisa > 0 ? '#DC2626' : '#16A34A' }};">
         {{ Fmt::rupiah($totalSisa) }}

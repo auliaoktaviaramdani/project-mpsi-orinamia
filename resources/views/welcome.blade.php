@@ -1,223 +1,1087 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="id" x-data="{ dark: localStorage.getItem('orinamia-theme') === 'dark', mobileMenu: false, activeCat: 'medis', selectedColor: 'toska', calcQty: 50, calcType: 125000 }"
+      x-init="$watch('dark', v => { document.documentElement.classList.toggle('dark', v); localStorage.setItem('orinamia-theme', v ? 'dark' : 'light') })"
+      :class="{ 'dark': dark }"
+      class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PT Cahaya Binar Berlian - ORINAMIA Konveksi & Daily Wear</title>
+  <meta name="description" content="Konveksi seragam profesional, seragam medis OKA, PDH/PDL, dan busana kerja terpercaya berlegalitas resmi AHU & NIB oleh PT Cahaya Binar Berlian. Berdiri sejak 2015.">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-        @fonts
+  <!-- Alpine.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-        <!-- Styles / Scripts -->
-        @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-            @vite(['resources/css/app.css', 'resources/js/app.js'])
+  <!-- Anime.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #FAF9FC;
+      --surface:      #FFFFFF;
+      --surface-tint: #F4EFFA;
+      --border:       #E4DFEC;
+      --border-subtle:#ECE7F2;
+      --text:         #2D2B33;
+      --text-muted:   #635D73;
+      --accent:       #6E387A;
+      --accent-hover: #582B62;
+      --accent-light: #F4EFFA;
+      --pink:         #F391EC;
+      --lavender:     #AD8EEB;
+      --aura-glow:    rgba(243, 145, 236, 0.12);
+      --card-shadow:  0 10px 30px -10px rgba(110, 56, 122, 0.06), 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .dark {
+      --bg:           #121116;
+      --surface:      #1B1921;
+      --surface-tint: #24212C;
+      --border:       #2E2A38;
+      --border-subtle:#25212E;
+      --text:         #F5F3F8;
+      --text-muted:   #A9A3B5;
+      --accent:       #CFA8F5;
+      --accent-hover: #E1C5FF;
+      --accent-light: rgba(207, 168, 245, 0.12);
+      --pink:         #F391EC;
+      --lavender:     #AD8EEB;
+      --aura-glow:    rgba(173, 142, 235, 0.15);
+      --card-shadow:  0 10px 35px -10px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: background-color 300ms ease, color 300ms ease;
+    }
+
+    .font-editorial { font-family: 'Newsreader', Georgia, serif; }
+    .font-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    /* Aura Atmospheric Background */
+    .aura-spotlight {
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--aura-glow) 0%, transparent 68%);
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Glass Surfaces */
+    .glass-nav {
+      background: rgba(250, 249, 252, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .dark .glass-nav {
+      background: rgba(18, 17, 22, 0.85);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .atelier-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 250ms ease, border-color 250ms ease;
+    }
+    .atelier-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--lavender);
+      box-shadow: 0 16px 40px -12px rgba(110, 56, 122, 0.12);
+    }
+    .dark .atelier-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.7);
+    }
+
+    /* Subtle Pattern */
+    .dot-pattern {
+      background-image: radial-gradient(var(--border) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* Buttons */
+    .btn-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      background: var(--accent);
+      color: #FFFFFF;
+      font-weight: 600;
+      font-size: 0.875rem;
+      border-radius: 8px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 200ms ease;
+      box-shadow: 0 4px 14px rgba(110, 56, 122, 0.25);
+    }
+    .btn-brand:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(110, 56, 122, 0.35);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: var(--surface);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.875rem;
+      border-radius: 8px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 200ms ease;
+    }
+    .btn-ghost:hover {
+      background: var(--surface-tint);
+      border-color: var(--lavender);
+    }
+
+    /* Badge Pills */
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: var(--accent-light);
+      color: var(--accent);
+      border: 1px solid var(--border);
+    }
+
+    /* Brand Ribbon */
+    .brand-ribbon {
+      height: 3px;
+      background: linear-gradient(90deg, #F391EC 0%, #AD8EEB 50%, #6E387A 100%);
+      width: 100%;
+    }
+
+    /* Color Swatch Circle */
+    .swatch-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform 180ms ease, border-color 180ms ease;
+      position: relative;
+    }
+    .swatch-btn:hover { transform: scale(1.15); }
+    .swatch-btn.active {
+      border-color: var(--accent);
+      transform: scale(1.18);
+      box-shadow: 0 0 0 3px rgba(110, 56, 122, 0.25);
+    }
+
+    /* Tab Switcher */
+    .cat-tab {
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 180ms ease;
+      background: transparent;
+      color: var(--text-muted);
+    }
+    .cat-tab.active {
+      background: var(--surface);
+      color: var(--accent);
+      border-color: var(--border);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .cat-tab:hover:not(.active) {
+      color: var(--text);
+      background: rgba(0,0,0,0.03);
+    }
+
+    /* Shimmer Animation */
+    @keyframes pulseAura {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+    .animate-aura {
+      animation: pulseAura 8s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Gem Ribbon -->
+  <div class="brand-ribbon" aria-hidden="true"></div>
+
+  <!-- Header & Navigation -->
+  <header class="glass-nav sticky top-0 z-50">
+    <div style="max-width:1280px;margin:0 auto;padding:0 24px;height:74px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+      
+      <!-- Brand Identity -->
+      <a href="{{ route('home') }}" style="display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0;">
+        <div style="width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;padding:2px;">
+          <svg width="36" height="36" viewBox="0 0 100 100" fill="none" role="img" aria-label="Logo Orinamia Daily Wear">
+            <circle cx="50" cy="50" r="42" stroke="#454547" stroke-width="6.5"/>
+            <path d="M50 7 L80 35 L70 50 L58 37 L50 27 L35 42 L41 52 L27 50 L20 35 Z" fill="#F391EC"/>
+            <path d="M50 93 L20 65 L30 50 L42 63 L50 73 L65 58 L59 48 L73 50 L80 65 Z" fill="#AD8EEB"/>
+            <polygon points="50,43 56,50 50,57 44,50" fill="#AD8EEB"/>
+          </svg>
+        </div>
+        <div>
+          <div style="font-size:1.15rem;font-weight:700;letter-spacing:0.12em;line-height:1.1;">
+            <span style="color:#E074D8;">ORI</span><span style="color:#9B78E6;">NAMIA</span>
+          </div>
+          <div style="font-size:0.65rem;letter-spacing:0.25em;color:var(--text-muted);font-weight:600;">
+            PT CAHAYA BINAR BERLIAN
+          </div>
+        </div>
+      </a>
+
+      <!-- Desktop Links -->
+      <nav style="display:none;align-items:center;gap:24px;" class="desktop-menu" aria-label="Navigasi Utama">
+        <a href="#tentang" style="text-decoration:none;color:var(--text-muted);font-size:0.875rem;font-weight:500;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Tentang Kami</a>
+        <a href="#layanan" style="text-decoration:none;color:var(--text-muted);font-size:0.875rem;font-weight:500;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Koleksi & Produk</a>
+        <a href="#medis" style="text-decoration:none;color:var(--text-muted);font-size:0.875rem;font-weight:500;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Seragam OKA</a>
+        <a href="#klien" style="text-decoration:none;color:var(--text-muted);font-size:0.875rem;font-weight:500;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Klien Kami</a>
+        <a href="#alur" style="text-decoration:none;color:var(--text-muted);font-size:0.875rem;font-weight:500;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Alur Kerjasama</a>
+        <a href="#legalitas" style="text-decoration:none;color:var(--text-muted);font-size:0.875rem;font-weight:500;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Legalitas</a>
+      </nav>
+
+      <!-- Right Actions -->
+      <div style="display:flex;align-items:center;gap:12px;">
+        
+        <!-- Theme Toggle -->
+        <button @click="dark = !dark" type="button" class="btn-ghost" style="padding:8px 12px;min-height:38px;" title="Ganti Tema">
+          <span x-show="!dark">🌙</span>
+          <span x-show="dark">☀️</span>
+        </button>
+
+        @auth
+          <a href="{{ route('dashboard') }}" class="btn-brand">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+            Buka Meja Kerja
+          </a>
         @else
-            <style>
-                /*! tailwindcss v4.0.7 | MIT License | https://tailwindcss.com */ @layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-translate-x:0;--tw-translate-y:0;--tw-translate-z:0;--tw-rotate-x:initial;--tw-rotate-y:initial;--tw-rotate-z:initial;--tw-skew-x:initial;--tw-skew-y:initial;--tw-space-x-reverse:0;--tw-border-style:solid;--tw-leading:initial;--tw-font-weight:initial;--tw-tracking:initial;--tw-shadow:0 0 #0000;--tw-shadow-color:initial;--tw-shadow-alpha:100%;--tw-inset-shadow:0 0 #0000;--tw-inset-shadow-color:initial;--tw-inset-shadow-alpha:100%;--tw-ring-color:initial;--tw-ring-shadow:0 0 #0000;--tw-inset-ring-color:initial;--tw-inset-ring-shadow:0 0 #0000;--tw-ring-inset:initial;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-offset-shadow:0 0 #0000;--tw-blur:initial;--tw-brightness:initial;--tw-contrast:initial;--tw-grayscale:initial;--tw-hue-rotate:initial;--tw-invert:initial;--tw-opacity:initial;--tw-saturate:initial;--tw-sepia:initial;--tw-drop-shadow:initial;--tw-drop-shadow-color:initial;--tw-drop-shadow-alpha:100%;--tw-drop-shadow-size:initial;--tw-duration:initial;--tw-ease:initial;--tw-content:""}}}@layer theme{:root,:host{--font-sans:"Instrument Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";--font-serif:ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;--font-mono:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;--color-red-50:oklch(97.1% .013 17.38);--color-red-100:oklch(93.6% .032 17.717);--color-red-200:oklch(88.5% .062 18.334);--color-red-300:oklch(80.8% .114 19.571);--color-red-400:oklch(70.4% .191 22.216);--color-red-500:oklch(63.7% .237 25.331);--color-red-600:oklch(57.7% .245 27.325);--color-red-700:oklch(50.5% .213 27.518);--color-red-800:oklch(44.4% .177 26.899);--color-red-900:oklch(39.6% .141 25.723);--color-red-950:oklch(25.8% .092 26.042);--color-orange-50:oklch(98% .016 73.684);--color-orange-100:oklch(95.4% .038 75.164);--color-orange-200:oklch(90.1% .076 70.697);--color-orange-300:oklch(83.7% .128 66.29);--color-orange-400:oklch(75% .183 55.934);--color-orange-500:oklch(70.5% .213 47.604);--color-orange-600:oklch(64.6% .222 41.116);--color-orange-700:oklch(55.3% .195 38.402);--color-orange-800:oklch(47% .157 37.304);--color-orange-900:oklch(40.8% .123 38.172);--color-orange-950:oklch(26.6% .079 36.259);--color-amber-50:oklch(98.7% .022 95.277);--color-amber-100:oklch(96.2% .059 95.617);--color-amber-200:oklch(92.4% .12 95.746);--color-amber-300:oklch(87.9% .169 91.605);--color-amber-400:oklch(82.8% .189 84.429);--color-amber-500:oklch(76.9% .188 70.08);--color-amber-600:oklch(66.6% .179 58.318);--color-amber-700:oklch(55.5% .163 48.998);--color-amber-800:oklch(47.3% .137 46.201);--color-amber-900:oklch(41.4% .112 45.904);--color-amber-950:oklch(27.9% .077 45.635);--color-yellow-50:oklch(98.7% .026 102.212);--color-yellow-100:oklch(97.3% .071 103.193);--color-yellow-200:oklch(94.5% .129 101.54);--color-yellow-300:oklch(90.5% .182 98.111);--color-yellow-400:oklch(85.2% .199 91.936);--color-yellow-500:oklch(79.5% .184 86.047);--color-yellow-600:oklch(68.1% .162 75.834);--color-yellow-700:oklch(55.4% .135 66.442);--color-yellow-800:oklch(47.6% .114 61.907);--color-yellow-900:oklch(42.1% .095 57.708);--color-yellow-950:oklch(28.6% .066 53.813);--color-lime-50:oklch(98.6% .031 120.757);--color-lime-100:oklch(96.7% .067 122.328);--color-lime-200:oklch(93.8% .127 124.321);--color-lime-300:oklch(89.7% .196 126.665);--color-lime-400:oklch(84.1% .238 128.85);--color-lime-500:oklch(76.8% .233 130.85);--color-lime-600:oklch(64.8% .2 131.684);--color-lime-700:oklch(53.2% .157 131.589);--color-lime-800:oklch(45.3% .124 130.933);--color-lime-900:oklch(40.5% .101 131.063);--color-lime-950:oklch(27.4% .072 132.109);--color-green-50:oklch(98.2% .018 155.826);--color-green-100:oklch(96.2% .044 156.743);--color-green-200:oklch(92.5% .084 155.995);--color-green-300:oklch(87.1% .15 154.449);--color-green-400:oklch(79.2% .209 151.711);--color-green-500:oklch(72.3% .219 149.579);--color-green-600:oklch(62.7% .194 149.214);--color-green-700:oklch(52.7% .154 150.069);--color-green-800:oklch(44.8% .119 151.328);--color-green-900:oklch(39.3% .095 152.535);--color-green-950:oklch(26.6% .065 152.934);--color-emerald-50:oklch(97.9% .021 166.113);--color-emerald-100:oklch(95% .052 163.051);--color-emerald-200:oklch(90.5% .093 164.15);--color-emerald-300:oklch(84.5% .143 164.978);--color-emerald-400:oklch(76.5% .177 163.223);--color-emerald-500:oklch(69.6% .17 162.48);--color-emerald-600:oklch(59.6% .145 163.225);--color-emerald-700:oklch(50.8% .118 165.612);--color-emerald-800:oklch(43.2% .095 166.913);--color-emerald-900:oklch(37.8% .077 168.94);--color-emerald-950:oklch(26.2% .051 172.552);--color-teal-50:oklch(98.4% .014 180.72);--color-teal-100:oklch(95.3% .051 180.801);--color-teal-200:oklch(91% .096 180.426);--color-teal-300:oklch(85.5% .138 181.071);--color-teal-400:oklch(77.7% .152 181.912);--color-teal-500:oklch(70.4% .14 182.503);--color-teal-600:oklch(60% .118 184.704);--color-teal-700:oklch(51.1% .096 186.391);--color-teal-800:oklch(43.7% .078 188.216);--color-teal-900:oklch(38.6% .063 188.416);--color-teal-950:oklch(27.7% .046 192.524);--color-cyan-50:oklch(98.4% .019 200.873);--color-cyan-100:oklch(95.6% .045 203.388);--color-cyan-200:oklch(91.7% .08 205.041);--color-cyan-300:oklch(86.5% .127 207.078);--color-cyan-400:oklch(78.9% .154 211.53);--color-cyan-500:oklch(71.5% .143 215.221);--color-cyan-600:oklch(60.9% .126 221.723);--color-cyan-700:oklch(52% .105 223.128);--color-cyan-800:oklch(45% .085 224.283);--color-cyan-900:oklch(39.8% .07 227.392);--color-cyan-950:oklch(30.2% .056 229.695);--color-sky-50:oklch(97.7% .013 236.62);--color-sky-100:oklch(95.1% .026 236.824);--color-sky-200:oklch(90.1% .058 230.902);--color-sky-300:oklch(82.8% .111 230.318);--color-sky-400:oklch(74.6% .16 232.661);--color-sky-500:oklch(68.5% .169 237.323);--color-sky-600:oklch(58.8% .158 241.966);--color-sky-700:oklch(50% .134 242.749);--color-sky-800:oklch(44.3% .11 240.79);--color-sky-900:oklch(39.1% .09 240.876);--color-sky-950:oklch(29.3% .066 243.157);--color-blue-50:oklch(97% .014 254.604);--color-blue-100:oklch(93.2% .032 255.585);--color-blue-200:oklch(88.2% .059 254.128);--color-blue-300:oklch(80.9% .105 251.813);--color-blue-400:oklch(70.7% .165 254.624);--color-blue-500:oklch(62.3% .214 259.815);--color-blue-600:oklch(54.6% .245 262.881);--color-blue-700:oklch(48.8% .243 264.376);--color-blue-800:oklch(42.4% .199 265.638);--color-blue-900:oklch(37.9% .146 265.522);--color-blue-950:oklch(28.2% .091 267.935);--color-indigo-50:oklch(96.2% .018 272.314);--color-indigo-100:oklch(93% .034 272.788);--color-indigo-200:oklch(87% .065 274.039);--color-indigo-300:oklch(78.5% .115 274.713);--color-indigo-400:oklch(67.3% .182 276.935);--color-indigo-500:oklch(58.5% .233 277.117);--color-indigo-600:oklch(51.1% .262 276.966);--color-indigo-700:oklch(45.7% .24 277.023);--color-indigo-800:oklch(39.8% .195 277.366);--color-indigo-900:oklch(35.9% .144 278.697);--color-indigo-950:oklch(25.7% .09 281.288);--color-violet-50:oklch(96.9% .016 293.756);--color-violet-100:oklch(94.3% .029 294.588);--color-violet-200:oklch(89.4% .057 293.283);--color-violet-300:oklch(81.1% .111 293.571);--color-violet-400:oklch(70.2% .183 293.541);--color-violet-500:oklch(60.6% .25 292.717);--color-violet-600:oklch(54.1% .281 293.009);--color-violet-700:oklch(49.1% .27 292.581);--color-violet-800:oklch(43.2% .232 292.759);--color-violet-900:oklch(38% .189 293.745);--color-violet-950:oklch(28.3% .141 291.089);--color-purple-50:oklch(97.7% .014 308.299);--color-purple-100:oklch(94.6% .033 307.174);--color-purple-200:oklch(90.2% .063 306.703);--color-purple-300:oklch(82.7% .119 306.383);--color-purple-400:oklch(71.4% .203 305.504);--color-purple-500:oklch(62.7% .265 303.9);--color-purple-600:oklch(55.8% .288 302.321);--color-purple-700:oklch(49.6% .265 301.924);--color-purple-800:oklch(43.8% .218 303.724);--color-purple-900:oklch(38.1% .176 304.987);--color-purple-950:oklch(29.1% .149 302.717);--color-fuchsia-50:oklch(97.7% .017 320.058);--color-fuchsia-100:oklch(95.2% .037 318.852);--color-fuchsia-200:oklch(90.3% .076 319.62);--color-fuchsia-300:oklch(83.3% .145 321.434);--color-fuchsia-400:oklch(74% .238 322.16);--color-fuchsia-500:oklch(66.7% .295 322.15);--color-fuchsia-600:oklch(59.1% .293 322.896);--color-fuchsia-700:oklch(51.8% .253 323.949);--color-fuchsia-800:oklch(45.2% .211 324.591);--color-fuchsia-900:oklch(40.1% .17 325.612);--color-fuchsia-950:oklch(29.3% .136 325.661);--color-pink-50:oklch(97.1% .014 343.198);--color-pink-100:oklch(94.8% .028 342.258);--color-pink-200:oklch(89.9% .061 343.231);--color-pink-300:oklch(82.3% .12 346.018);--color-pink-400:oklch(71.8% .202 349.761);--color-pink-500:oklch(65.6% .241 354.308);--color-pink-600:oklch(59.2% .249 .584);--color-pink-700:oklch(52.5% .223 3.958);--color-pink-800:oklch(45.9% .187 3.815);--color-pink-900:oklch(40.8% .153 2.432);--color-pink-950:oklch(28.4% .109 3.907);--color-rose-50:oklch(96.9% .015 12.422);--color-rose-100:oklch(94.1% .03 12.58);--color-rose-200:oklch(89.2% .058 10.001);--color-rose-300:oklch(81% .117 11.638);--color-rose-400:oklch(71.2% .194 13.428);--color-rose-500:oklch(64.5% .246 16.439);--color-rose-600:oklch(58.6% .253 17.585);--color-rose-700:oklch(51.4% .222 16.935);--color-rose-800:oklch(45.5% .188 13.697);--color-rose-900:oklch(41% .159 10.272);--color-rose-950:oklch(27.1% .105 12.094);--color-slate-50:oklch(98.4% .003 247.858);--color-slate-100:oklch(96.8% .007 247.896);--color-slate-200:oklch(92.9% .013 255.508);--color-slate-300:oklch(86.9% .022 252.894);--color-slate-400:oklch(70.4% .04 256.788);--color-slate-500:oklch(55.4% .046 257.417);--color-slate-600:oklch(44.6% .043 257.281);--color-slate-700:oklch(37.2% .044 257.287);--color-slate-800:oklch(27.9% .041 260.031);--color-slate-900:oklch(20.8% .042 265.755);--color-slate-950:oklch(12.9% .042 264.695);--color-gray-50:oklch(98.5% .002 247.839);--color-gray-100:oklch(96.7% .003 264.542);--color-gray-200:oklch(92.8% .006 264.531);--color-gray-300:oklch(87.2% .01 258.338);--color-gray-400:oklch(70.7% .022 261.325);--color-gray-500:oklch(55.1% .027 264.364);--color-gray-600:oklch(44.6% .03 256.802);--color-gray-700:oklch(37.3% .034 259.733);--color-gray-800:oklch(27.8% .033 256.848);--color-gray-900:oklch(21% .034 264.665);--color-gray-950:oklch(13% .028 261.692);--color-zinc-50:oklch(98.5% 0 0);--color-zinc-100:oklch(96.7% .001 286.375);--color-zinc-200:oklch(92% .004 286.32);--color-zinc-300:oklch(87.1% .006 286.286);--color-zinc-400:oklch(70.5% .015 286.067);--color-zinc-500:oklch(55.2% .016 285.938);--color-zinc-600:oklch(44.2% .017 285.786);--color-zinc-700:oklch(37% .013 285.805);--color-zinc-800:oklch(27.4% .006 286.033);--color-zinc-900:oklch(21% .006 285.885);--color-zinc-950:oklch(14.1% .005 285.823);--color-neutral-50:oklch(98.5% 0 0);--color-neutral-100:oklch(97% 0 0);--color-neutral-200:oklch(92.2% 0 0);--color-neutral-300:oklch(87% 0 0);--color-neutral-400:oklch(70.8% 0 0);--color-neutral-500:oklch(55.6% 0 0);--color-neutral-600:oklch(43.9% 0 0);--color-neutral-700:oklch(37.1% 0 0);--color-neutral-800:oklch(26.9% 0 0);--color-neutral-900:oklch(20.5% 0 0);--color-neutral-950:oklch(14.5% 0 0);--color-stone-50:oklch(98.5% .001 106.423);--color-stone-100:oklch(97% .001 106.424);--color-stone-200:oklch(92.3% .003 48.717);--color-stone-300:oklch(86.9% .005 56.366);--color-stone-400:oklch(70.9% .01 56.259);--color-stone-500:oklch(55.3% .013 58.071);--color-stone-600:oklch(44.4% .011 73.639);--color-stone-700:oklch(37.4% .01 67.558);--color-stone-800:oklch(26.8% .007 34.298);--color-stone-900:oklch(21.6% .006 56.043);--color-stone-950:oklch(14.7% .004 49.25);--color-black:#000;--color-white:#fff;--spacing:.25rem;--breakpoint-sm:40rem;--breakpoint-md:48rem;--breakpoint-lg:64rem;--breakpoint-xl:80rem;--breakpoint-2xl:96rem;--container-3xs:16rem;--container-2xs:18rem;--container-xs:20rem;--container-sm:24rem;--container-md:28rem;--container-lg:32rem;--container-xl:36rem;--container-2xl:42rem;--container-3xl:48rem;--container-4xl:56rem;--container-5xl:64rem;--container-6xl:72rem;--container-7xl:80rem;--text-xs:.75rem;--text-xs--line-height:calc(1 / .75);--text-sm:.875rem;--text-sm--line-height:calc(1.25 / .875);--text-base:1rem;--text-base--line-height: 1.5 ;--text-lg:1.125rem;--text-lg--line-height:calc(1.75 / 1.125);--text-xl:1.25rem;--text-xl--line-height:calc(1.75 / 1.25);--text-2xl:1.5rem;--text-2xl--line-height:calc(2 / 1.5);--text-3xl:1.875rem;--text-3xl--line-height: 1.2 ;--text-4xl:2.25rem;--text-4xl--line-height:calc(2.5 / 2.25);--text-5xl:3rem;--text-5xl--line-height:1;--text-6xl:3.75rem;--text-6xl--line-height:1;--text-7xl:4.5rem;--text-7xl--line-height:1;--text-8xl:6rem;--text-8xl--line-height:1;--text-9xl:8rem;--text-9xl--line-height:1;--font-weight-thin:100;--font-weight-extralight:200;--font-weight-light:300;--font-weight-normal:400;--font-weight-medium:500;--font-weight-semibold:600;--font-weight-bold:700;--font-weight-extrabold:800;--font-weight-black:900;--tracking-tighter:-.05em;--tracking-tight:-.025em;--tracking-normal:0em;--tracking-wide:.025em;--tracking-wider:.05em;--tracking-widest:.1em;--leading-tight:1.25;--leading-snug:1.375;--leading-normal:1.5;--leading-relaxed:1.625;--leading-loose:2;--radius-xs:.125rem;--radius-sm:.25rem;--radius-md:.375rem;--radius-lg:.5rem;--radius-xl:.75rem;--radius-2xl:1rem;--radius-3xl:1.5rem;--radius-4xl:2rem;--shadow-2xs:0 1px #0000000d;--shadow-xs:0 1px 2px 0 #0000000d;--shadow-sm:0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;--shadow-md:0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;--shadow-lg:0 10px 15px -3px #0000001a, 0 4px 6px -4px #0000001a;--shadow-xl:0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;--shadow-2xl:0 25px 50px -12px #00000040;--inset-shadow-2xs:inset 0 1px #0000000d;--inset-shadow-xs:inset 0 1px 1px #0000000d;--inset-shadow-sm:inset 0 2px 4px #0000000d;--drop-shadow-xs:0 1px 1px #0000000d;--drop-shadow-sm:0 1px 2px #00000026;--drop-shadow-md:0 3px 3px #0000001f;--drop-shadow-lg:0 4px 4px #00000026;--drop-shadow-xl:0 9px 7px #0000001a;--drop-shadow-2xl:0 25px 25px #00000026;--ease-in:cubic-bezier(.4, 0, 1, 1);--ease-out:cubic-bezier(0, 0, .2, 1);--ease-in-out:cubic-bezier(.4, 0, .2, 1);--animate-spin:spin 1s linear infinite;--animate-ping:ping 1s cubic-bezier(0, 0, .2, 1) infinite;--animate-pulse:pulse 2s cubic-bezier(.4, 0, .6, 1) infinite;--animate-bounce:bounce 1s infinite;--blur-xs:4px;--blur-sm:8px;--blur-md:12px;--blur-lg:16px;--blur-xl:24px;--blur-2xl:40px;--blur-3xl:64px;--perspective-dramatic:100px;--perspective-near:300px;--perspective-normal:500px;--perspective-midrange:800px;--perspective-distant:1200px;--aspect-video:16 / 9;--default-transition-duration:.15s;--default-transition-timing-function:cubic-bezier(.4, 0, .2, 1);--default-font-family:var(--font-sans);--default-mono-font-family:var(--font-mono)}}@layer base{*,:after,:before,::backdrop{box-sizing:border-box;border:0 solid;margin:0;padding:0}::file-selector-button{box-sizing:border-box;border:0 solid;margin:0;padding:0}html,:host{-webkit-text-size-adjust:100%;tab-size:4;line-height:1.5;font-family:var(--default-font-family,ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");font-feature-settings:var(--default-font-feature-settings,normal);font-variation-settings:var(--default-font-variation-settings,normal);-webkit-tap-highlight-color:transparent}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;-webkit-text-decoration:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,samp,pre{font-family:var(--default-mono-font-family,ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);font-feature-settings:var(--default-mono-font-feature-settings,normal);font-variation-settings:var(--default-mono-font-variation-settings,normal);font-size:1em}small{font-size:80%}sub,sup{vertical-align:baseline;font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}:-moz-focusring{outline:auto}progress{vertical-align:baseline}summary{display:list-item}ol,ul,menu{list-style:none}img,svg,video,canvas,audio,iframe,embed,object{vertical-align:middle;display:block}img,video{max-width:100%;height:auto}button,input,select,optgroup,textarea{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}::file-selector-button{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}:where(select:is([multiple],[size])) optgroup{font-weight:bolder}:where(select:is([multiple],[size])) optgroup option{padding-inline-start:20px}::file-selector-button{margin-inline-end:4px}::placeholder{opacity:1}@supports (not ((-webkit-appearance:-apple-pay-button))) or (contain-intrinsic-size:1px){::placeholder{color:currentColor}@supports (color:color-mix(in lab,red,red)){::placeholder{color:color-mix(in oklab,currentcolor 50%,transparent)}}}textarea{resize:vertical}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-date-and-time-value{min-height:1lh;text-align:inherit}::-webkit-datetime-edit{display:inline-flex}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-datetime-edit{padding-block:0}::-webkit-datetime-edit-year-field{padding-block:0}::-webkit-datetime-edit-month-field{padding-block:0}::-webkit-datetime-edit-day-field{padding-block:0}::-webkit-datetime-edit-hour-field{padding-block:0}::-webkit-datetime-edit-minute-field{padding-block:0}::-webkit-datetime-edit-second-field{padding-block:0}::-webkit-datetime-edit-millisecond-field{padding-block:0}::-webkit-datetime-edit-meridiem-field{padding-block:0}::-webkit-calendar-picker-indicator{line-height:1}:-moz-ui-invalid{box-shadow:none}button,input:where([type=button],[type=reset],[type=submit]){appearance:button}::file-selector-button{appearance:button}::-webkit-inner-spin-button{height:auto}::-webkit-outer-spin-button{height:auto}[hidden]:where(:not([hidden=until-found])){display:none!important}}@layer components;@layer utilities{.absolute{position:absolute}.fixed{position:fixed}.relative{position:relative}.static{position:static}.inset-0{inset:calc(var(--spacing) * 0)}.start{inset-inline-start:var(--spacing)}.top-0{top:calc(var(--spacing) * 0)}.right-0{right:calc(var(--spacing) * 0)}.container{width:100%}@media(min-width:40rem){.container{max-width:40rem}}@media(min-width:48rem){.container{max-width:48rem}}@media(min-width:64rem){.container{max-width:64rem}}@media(min-width:80rem){.container{max-width:80rem}}@media(min-width:96rem){.container{max-width:96rem}}.mx-auto{margin-inline:auto}.-mt-\[6\.6rem\]{margin-top:-6.6rem}.-mt-px{margin-top:-1px}.mt-2{margin-top:calc(var(--spacing) * 2)}.mt-4{margin-top:calc(var(--spacing) * 4)}.mt-6{margin-top:calc(var(--spacing) * 6)}.mt-8{margin-top:calc(var(--spacing) * 8)}.mr-2{margin-right:calc(var(--spacing) * 2)}.-mb-px{margin-bottom:-1px}.mb-1{margin-bottom:calc(var(--spacing) * 1)}.mb-2{margin-bottom:calc(var(--spacing) * 2)}.mb-4{margin-bottom:calc(var(--spacing) * 4)}.mb-6{margin-bottom:calc(var(--spacing) * 6)}.-ml-8{margin-left:calc(var(--spacing) * -8)}.-ml-px{margin-left:-1px}.ml-1{margin-left:calc(var(--spacing) * 1)}.ml-2{margin-left:calc(var(--spacing) * 2)}.ml-4{margin-left:calc(var(--spacing) * 4)}.ml-12{margin-left:calc(var(--spacing) * 12)}.contents{display:contents}.flex{display:flex}.grid{display:grid}.hidden{display:none}.inline-block{display:inline-block}.inline-flex{display:inline-flex}.table{display:table}.aspect-\[335\/364\]{aspect-ratio:335/364}.h-1{height:calc(var(--spacing) * 1)}.h-1\.5{height:calc(var(--spacing) * 1.5)}.h-2{height:calc(var(--spacing) * 2)}.h-2\.5{height:calc(var(--spacing) * 2.5)}.h-3{height:calc(var(--spacing) * 3)}.h-3\.5{height:calc(var(--spacing) * 3.5)}.h-5{height:calc(var(--spacing) * 5)}.h-8{height:calc(var(--spacing) * 8)}.h-14{height:calc(var(--spacing) * 14)}.h-14\.5{height:calc(var(--spacing) * 14.5)}.h-16{height:calc(var(--spacing) * 16)}.min-h-screen{min-height:100vh}.w-1{width:calc(var(--spacing) * 1)}.w-1\.5{width:calc(var(--spacing) * 1.5)}.w-2{width:calc(var(--spacing) * 2)}.w-2\.5{width:calc(var(--spacing) * 2.5)}.w-3{width:calc(var(--spacing) * 3)}.w-3\.5{width:calc(var(--spacing) * 3.5)}.w-5{width:calc(var(--spacing) * 5)}.w-8{width:calc(var(--spacing) * 8)}.w-\[438px\]{width:438px}.w-auto{width:auto}.w-full{width:100%}.max-w-6xl{max-width:var(--container-6xl)}.max-w-\[335px\]{max-width:335px}.max-w-none{max-width:none}.max-w-xl{max-width:var(--container-xl)}.flex-1{flex:1}.shrink-0{flex-shrink:0}.translate-y-0{--tw-translate-y:calc(var(--spacing) * 0);translate:var(--tw-translate-x) var(--tw-translate-y)}.transform{transform:var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,)}.cursor-default{cursor:default}.cursor-not-allowed{cursor:not-allowed}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-col-reverse{flex-direction:column-reverse}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}.justify-items-center{justify-items:center}.gap-2{gap:calc(var(--spacing) * 2)}.gap-3{gap:calc(var(--spacing) * 3)}.gap-4{gap:calc(var(--spacing) * 4)}:where(.space-x-1>:not(:last-child)){--tw-space-x-reverse:0;margin-inline-start:calc(calc(var(--spacing) * 1) * var(--tw-space-x-reverse));margin-inline-end:calc(calc(var(--spacing) * 1) * calc(1 - var(--tw-space-x-reverse)))}.overflow-hidden{overflow:hidden}.rounded-full{border-radius:3.40282e38px}.rounded-md{border-radius:var(--radius-md)}.rounded-sm{border-radius:var(--radius-sm)}.rounded-t-lg{border-top-left-radius:var(--radius-lg);border-top-right-radius:var(--radius-lg)}.rounded-l-md{border-top-left-radius:var(--radius-md);border-bottom-left-radius:var(--radius-md)}.rounded-r-md{border-top-right-radius:var(--radius-md);border-bottom-right-radius:var(--radius-md)}.rounded-br-lg{border-bottom-right-radius:var(--radius-lg)}.rounded-bl-lg{border-bottom-left-radius:var(--radius-lg)}.border{border-style:var(--tw-border-style);border-width:1px}.border-t{border-top-style:var(--tw-border-style);border-top-width:1px}.border-r{border-right-style:var(--tw-border-style);border-right-width:1px}.border-\[\#19140035\]{border-color:#19140035}.border-\[\#e3e3e0\]{border-color:#e3e3e0}.border-black{border-color:var(--color-black)}.border-gray-200{border-color:var(--color-gray-200)}.border-gray-300{border-color:var(--color-gray-300)}.border-gray-400{border-color:var(--color-gray-400)}.border-transparent{border-color:#0000}.bg-\[\#1b1b18\]{background-color:#1b1b18}.bg-\[\#FDFDFC\]{background-color:#fdfdfc}.bg-\[\#dbdbd7\]{background-color:#dbdbd7}.bg-\[\#fff2f2\]{background-color:#fff2f2}.bg-gray-100{background-color:var(--color-gray-100)}.bg-gray-200{background-color:var(--color-gray-200)}.bg-white{background-color:var(--color-white)}.p-6{padding:calc(var(--spacing) * 6)}.px-2{padding-inline:calc(var(--spacing) * 2)}.px-4{padding-inline:calc(var(--spacing) * 4)}.px-5{padding-inline:calc(var(--spacing) * 5)}.px-6{padding-inline:calc(var(--spacing) * 6)}.py-1{padding-block:calc(var(--spacing) * 1)}.py-1\.5{padding-block:calc(var(--spacing) * 1.5)}.py-2{padding-block:calc(var(--spacing) * 2)}.py-4{padding-block:calc(var(--spacing) * 4)}.pt-8{padding-top:calc(var(--spacing) * 8)}.pb-6{padding-bottom:calc(var(--spacing) * 6)}.pb-12{padding-bottom:calc(var(--spacing) * 12)}.text-center{text-align:center}.text-lg{font-size:var(--text-lg);line-height:var(--tw-leading,var(--text-lg--line-height))}.text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}.text-\[13px\]{font-size:13px}.leading-5{--tw-leading:calc(var(--spacing) * 5);line-height:calc(var(--spacing) * 5)}.leading-7{--tw-leading:calc(var(--spacing) * 7);line-height:calc(var(--spacing) * 7)}.leading-\[20px\]{--tw-leading:20px;line-height:20px}.leading-normal{--tw-leading:var(--leading-normal);line-height:var(--leading-normal)}.font-medium{--tw-font-weight:var(--font-weight-medium);font-weight:var(--font-weight-medium)}.font-semibold{--tw-font-weight:var(--font-weight-semibold);font-weight:var(--font-weight-semibold)}.tracking-wider{--tw-tracking:var(--tracking-wider);letter-spacing:var(--tracking-wider)}.text-\[\#1B1B18\],.text-\[\#1b1b18\]{color:#1b1b18}.text-\[\#706f6c\]{color:#706f6c}.text-\[\#F3BEC7\]{color:#f3bec7}.text-\[\#F8B803\]{color:#f8b803}.text-\[\#F53003\],.text-\[\#f53003\]{color:#f53003}.text-gray-200{color:var(--color-gray-200)}.text-gray-300{color:var(--color-gray-300)}.text-gray-400{color:var(--color-gray-400)}.text-gray-500{color:var(--color-gray-500)}.text-gray-600{color:var(--color-gray-600)}.text-gray-700{color:var(--color-gray-700)}.text-gray-800{color:var(--color-gray-800)}.text-gray-900{color:var(--color-gray-900)}.text-white{color:var(--color-white)}.uppercase{text-transform:uppercase}.underline{text-decoration-line:underline}.underline-offset-4{text-underline-offset:4px}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.opacity-100{opacity:1}.mix-blend-color{mix-blend-mode:color}.mix-blend-darken{mix-blend-mode:darken}.mix-blend-hard-light{mix-blend-mode:hard-light}.mix-blend-multiply{mix-blend-mode:multiply}.shadow{--tw-shadow:0 1px 3px 0 var(--tw-shadow-color,#0000001a), 0 1px 2px -1px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.shadow-\[0px_0px_1px_0px_rgba\(0\,0\,0\,0\.03\)\,0px_1px_2px_0px_rgba\(0\,0\,0\,0\.06\)\]{--tw-shadow:0px 0px 1px 0px var(--tw-shadow-color,#00000008), 0px 1px 2px 0px var(--tw-shadow-color,#0000000f);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.shadow-\[inset_0px_0px_0px_1px_rgba\(26\,26\,0\,0\.16\)\]{--tw-shadow:inset 0px 0px 0px 1px var(--tw-shadow-color,#1a1a0029);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 3px 0 var(--tw-shadow-color,#0000001a), 0 1px 2px -1px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.ring-gray-300{--tw-ring-color:var(--color-gray-300)}.filter{filter:var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,)}.transition{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to,opacity,box-shadow,transform,translate,scale,rotate,filter,-webkit-backdrop-filter,backdrop-filter,display,content-visibility,overlay,pointer-events;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-all{transition-property:all;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-opacity{transition-property:opacity;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.delay-200{transition-delay:.2s}.delay-300{transition-delay:.3s}.delay-400{transition-delay:.4s}.duration-150{--tw-duration:.15s;transition-duration:.15s}.duration-750{--tw-duration:.75s;transition-duration:.75s}.ease-in-out{--tw-ease:var(--ease-in-out);transition-timing-function:var(--ease-in-out)}.\[--stroke-color\:\#1B1B18\]{--stroke-color:#1b1b18}.not-has-\[nav\]\:hidden:not(:has(:is(nav))){display:none}.before\:absolute:before{content:var(--tw-content);position:absolute}.before\:top-0:before{content:var(--tw-content);top:calc(var(--spacing) * 0)}.before\:top-1\/2:before{content:var(--tw-content);top:50%}.before\:bottom-0:before{content:var(--tw-content);bottom:calc(var(--spacing) * 0)}.before\:bottom-1\/2:before{content:var(--tw-content);bottom:50%}.before\:left-\[0\.4rem\]:before{content:var(--tw-content);left:.4rem}.before\:border-l:before{content:var(--tw-content);border-left-style:var(--tw-border-style);border-left-width:1px}.before\:border-\[\#e3e3e0\]:before{content:var(--tw-content);border-color:#e3e3e0}@media(hover:hover){.hover\:border-\[\#1915014a\]:hover{border-color:#1915014a}.hover\:border-\[\#19140035\]:hover{border-color:#19140035}.hover\:border-black:hover{border-color:var(--color-black)}.hover\:bg-black:hover{background-color:var(--color-black)}.hover\:bg-gray-100:hover{background-color:var(--color-gray-100)}.hover\:text-gray-400:hover{color:var(--color-gray-400)}.hover\:text-gray-700:hover{color:var(--color-gray-700)}}.focus\:border-blue-300:focus{border-color:var(--color-blue-300)}.focus\:ring:focus{--tw-ring-shadow:var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color,currentcolor);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.focus\:outline-none:focus{--tw-outline-style:none;outline-style:none}.active\:bg-gray-100:active{background-color:var(--color-gray-100)}.active\:text-gray-500:active{color:var(--color-gray-500)}.active\:text-gray-700:active{color:var(--color-gray-700)}.active\:text-gray-800:active{color:var(--color-gray-800)}@media(min-width:40rem){.sm\:flex{display:flex}.sm\:hidden{display:none}.sm\:flex-1{flex:1}.sm\:items-center{align-items:center}.sm\:justify-between{justify-content:space-between}.sm\:justify-start{justify-content:flex-start}.sm\:gap-2{gap:calc(var(--spacing) * 2)}.sm\:px-6{padding-inline:calc(var(--spacing) * 6)}.sm\:pt-0{padding-top:calc(var(--spacing) * 0)}}@media(min-width:64rem){.lg\:mt-10{margin-top:calc(var(--spacing) * 10)}.lg\:mb-0{margin-bottom:calc(var(--spacing) * 0)}.lg\:mb-6{margin-bottom:calc(var(--spacing) * 6)}.lg\:-ml-px{margin-left:-1px}.lg\:ml-0{margin-left:calc(var(--spacing) * 0)}.lg\:block{display:block}.lg\:aspect-auto{aspect-ratio:auto}.lg\:w-\[438px\]{width:438px}.lg\:max-w-4xl{max-width:var(--container-4xl)}.lg\:grow{flex-grow:1}.lg\:flex-row{flex-direction:row}.lg\:justify-center{justify-content:center}.lg\:rounded-t-none{border-top-left-radius:0;border-top-right-radius:0}.lg\:rounded-tl-lg{border-top-left-radius:var(--radius-lg)}.lg\:rounded-r-lg{border-top-right-radius:var(--radius-lg);border-bottom-right-radius:var(--radius-lg)}.lg\:rounded-br-none{border-bottom-right-radius:0}.lg\:p-8{padding:calc(var(--spacing) * 8)}.lg\:p-20{padding:calc(var(--spacing) * 20)}.lg\:px-8{padding-inline:calc(var(--spacing) * 8)}.lg\:pb-10{padding-bottom:calc(var(--spacing) * 10)}}.rtl\:flex-row-reverse:where(:dir(rtl),[dir=rtl],[dir=rtl] *){flex-direction:row-reverse}@media(prefers-color-scheme:dark){.dark\:border-\[\#3E3E3A\]{border-color:#3e3e3a}.dark\:border-\[\#eeeeec\]{border-color:#eeeeec}.dark\:border-gray-600{border-color:var(--color-gray-600)}.dark\:bg-\[\#0a0a0a\]{background-color:#0a0a0a}.dark\:bg-\[\#1D0002\]{background-color:#1d0002}.dark\:bg-\[\#3E3E3A\]{background-color:#3e3e3a}.dark\:bg-\[\#161615\]{background-color:#161615}.dark\:bg-\[\#eeeeec\]{background-color:#eeeeec}.dark\:bg-gray-700{background-color:var(--color-gray-700)}.dark\:bg-gray-800{background-color:var(--color-gray-800)}.dark\:bg-gray-900{background-color:var(--color-gray-900)}.dark\:text-\[\#1C1C1A\]{color:#1c1c1a}.dark\:text-\[\#4B0600\]{color:#4b0600}.dark\:text-\[\#391800\]{color:#391800}.dark\:text-\[\#733000\]{color:#733000}.dark\:text-\[\#A1A09A\]{color:#a1a09a}.dark\:text-\[\#EDEDEC\]{color:#ededec}.dark\:text-\[\#F61500\]{color:#f61500}.dark\:text-\[\#FF4433\]{color:#f43}.dark\:text-black{color:var(--color-black)}.dark\:text-gray-200{color:var(--color-gray-200)}.dark\:text-gray-300{color:var(--color-gray-300)}.dark\:text-gray-400{color:var(--color-gray-400)}.dark\:text-gray-600{color:var(--color-gray-600)}.dark\:mix-blend-hard-light{mix-blend-mode:hard-light}.dark\:mix-blend-normal{mix-blend-mode:normal}.dark\:shadow-\[inset_0px_0px_0px_1px_\#fffaed2d\]{--tw-shadow:inset 0px 0px 0px 1px var(--tw-shadow-color,#fffaed2d);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.dark\:\[--stroke-color\:\#FF750F\]{--stroke-color:#ff750f}.dark\:before\:border-\[\#3E3E3A\]:before{content:var(--tw-content);border-color:#3e3e3a}@media(hover:hover){.dark\:hover\:border-\[\#3E3E3A\]:hover{border-color:#3e3e3a}.dark\:hover\:border-\[\#62605b\]:hover{border-color:#62605b}.dark\:hover\:border-white:hover{border-color:var(--color-white)}.dark\:hover\:bg-gray-900:hover{background-color:var(--color-gray-900)}.dark\:hover\:bg-white:hover{background-color:var(--color-white)}.dark\:hover\:text-gray-200:hover{color:var(--color-gray-200)}.dark\:hover\:text-gray-300:hover{color:var(--color-gray-300)}}.dark\:focus\:border-blue-700:focus{border-color:var(--color-blue-700)}.dark\:focus\:border-blue-800:focus{border-color:var(--color-blue-800)}.dark\:active\:bg-gray-700:active{background-color:var(--color-gray-700)}.dark\:active\:text-gray-300:active{color:var(--color-gray-300)}}@starting-style{.starting\:opacity-0{opacity:0}}@media(prefers-reduced-motion:no-preference){@starting-style{.motion-safe\:starting\:-translate-x-\[26px\]{--tw-translate-x: -26px ;translate:var(--tw-translate-x) var(--tw-translate-y)}}@starting-style{.motion-safe\:starting\:-translate-x-\[51px\]{--tw-translate-x: -51px ;translate:var(--tw-translate-x) var(--tw-translate-y)}}@starting-style{.motion-safe\:starting\:-translate-x-\[78px\]{--tw-translate-x: -78px ;translate:var(--tw-translate-x) var(--tw-translate-y)}}@starting-style{.motion-safe\:starting\:-translate-x-\[102px\]{--tw-translate-x: -102px ;translate:var(--tw-translate-x) var(--tw-translate-y)}}@starting-style{.motion-safe\:starting\:translate-y-6{--tw-translate-y:calc(var(--spacing) * 6);translate:var(--tw-translate-x) var(--tw-translate-y)}}}}@property --tw-translate-x{syntax:"*";inherits:false;initial-value:0}@property --tw-translate-y{syntax:"*";inherits:false;initial-value:0}@property --tw-translate-z{syntax:"*";inherits:false;initial-value:0}@property --tw-rotate-x{syntax:"*";inherits:false}@property --tw-rotate-y{syntax:"*";inherits:false}@property --tw-rotate-z{syntax:"*";inherits:false}@property --tw-skew-x{syntax:"*";inherits:false}@property --tw-skew-y{syntax:"*";inherits:false}@property --tw-space-x-reverse{syntax:"*";inherits:false;initial-value:0}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}@property --tw-leading{syntax:"*";inherits:false}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-tracking{syntax:"*";inherits:false}@property --tw-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-shadow-color{syntax:"*";inherits:false}@property --tw-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%}@property --tw-inset-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-inset-shadow-color{syntax:"*";inherits:false}@property --tw-inset-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%}@property --tw-ring-color{syntax:"*";inherits:false}@property --tw-ring-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-inset-ring-color{syntax:"*";inherits:false}@property --tw-inset-ring-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-ring-inset{syntax:"*";inherits:false}@property --tw-ring-offset-width{syntax:"<length>";inherits:false;initial-value:0}@property --tw-ring-offset-color{syntax:"*";inherits:false;initial-value:#fff}@property --tw-ring-offset-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-blur{syntax:"*";inherits:false}@property --tw-brightness{syntax:"*";inherits:false}@property --tw-contrast{syntax:"*";inherits:false}@property --tw-grayscale{syntax:"*";inherits:false}@property --tw-hue-rotate{syntax:"*";inherits:false}@property --tw-invert{syntax:"*";inherits:false}@property --tw-opacity{syntax:"*";inherits:false}@property --tw-saturate{syntax:"*";inherits:false}@property --tw-sepia{syntax:"*";inherits:false}@property --tw-drop-shadow{syntax:"*";inherits:false}@property --tw-drop-shadow-color{syntax:"*";inherits:false}@property --tw-drop-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%}@property --tw-drop-shadow-size{syntax:"*";inherits:false}@property --tw-duration{syntax:"*";inherits:false}@property --tw-ease{syntax:"*";inherits:false}@property --tw-content{syntax:"*";inherits:false;initial-value:""}@keyframes spin{to{transform:rotate(360deg)}}@keyframes ping{75%,to{opacity:0;transform:scale(2)}}@keyframes pulse{50%{opacity:.5}}@keyframes bounce{0%,to{animation-timing-function:cubic-bezier(.8,0,1,1);transform:translateY(-25%)}50%{animation-timing-function:cubic-bezier(0,0,.2,1);transform:none}}
-            </style>
-        @endif
-    </head>
-    <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col">
-        <header class="w-full lg:max-w-4xl max-w-[335px] text-sm mb-6 not-has-[nav]:hidden">
-            @if (Route::has('login'))
-                <nav class="flex items-center justify-end gap-4">
-                    @auth
-                        <a
-                            href="{{ url('/dashboard') }}"
-                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal"
-                        >
-                            Dashboard
-                        </a>
-                    @else
-                        <a
-                            href="{{ route('login') }}"
-                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] text-[#1b1b18] border border-transparent hover:border-[#19140035] dark:hover:border-[#3E3E3A] rounded-sm text-sm leading-normal"
-                        >
-                            Log in
-                        </a>
+          <a href="{{ route('login') }}" class="btn-brand">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+            </svg>
+            Portal SIMORIN
+          </a>
+        @endauth
 
-                        @if (Route::has('register'))
-                            <a
-                                href="{{ route('register') }}"
-                                class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal">
-                                Register
-                            </a>
-                        @endif
-                    @endauth
-                </nav>
-            @endif
-        </header>
-        <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
-            <main class="flex max-w-[335px] w-full flex-col-reverse lg:max-w-4xl lg:flex-row">
-                <div class="text-[13px] leading-[20px] flex-1 p-6 pb-6 lg:p-20 lg:pb-10 bg-white dark:bg-[#161615] dark:text-[#EDEDEC] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] rounded-bl-lg rounded-br-lg lg:rounded-tl-lg lg:rounded-br-none">
-                    <h1 class="mb-1 font-medium">Let's get started</h1>
-                    <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">With so many options available to you,<br /> we suggest you start with the following:</p>
-                    <ul class="flex flex-col mb-4 lg:mb-6">
-                        <li class="flex items-center gap-4 py-2 relative before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A] before:top-1/2 before:bottom-0 before:left-[0.4rem] before:absolute">
-                            <span class="relative py-1 bg-white dark:bg-[#161615]">
-                                <span class="flex items-center justify-center rounded-full bg-[#FDFDFC] dark:bg-[#161615] shadow-[0px_0px_1px_0px_rgba(0,0,0,0.03),0px_1px_2px_0px_rgba(0,0,0,0.06)] w-3.5 h-3.5 border dark:border-[#3E3E3A] border-[#e3e3e0]">
-                                    <span class="rounded-full bg-[#dbdbd7] dark:bg-[#3E3E3A] w-1.5 h-1.5"></span>
-                                </span>
-                            </span>
-                            <span>
-                                Read the
-                                <a href="https://laravel.com/docs" target="_blank" class="inline-flex items-center space-x-1 font-medium underline underline-offset-4 text-[#f53003] dark:text-[#FF4433] ml-1">
-                                    <span>Documentation</span>
-                                    <svg
-                                        width="10"
-                                        height="11"
-                                        viewBox="0 0 10 11"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="w-2.5 h-2.5"
-                                    >
-                                        <path
-                                            d="M7.70833 6.95834V2.79167H3.54167M2.5 8L7.5 3.00001"
-                                            stroke="currentColor"
-                                            stroke-linecap="square"
-                                        />
-                                    </svg>
-                                </a>
-                            </span>
-                        </li>
-                        <li class="flex items-center gap-4 py-2 relative before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A] before:bottom-1/2 before:top-0 before:left-[0.4rem] before:absolute">
-                            <span class="relative py-1 bg-white dark:bg-[#161615]">
-                                <span class="flex items-center justify-center rounded-full bg-[#FDFDFC] dark:bg-[#161615] shadow-[0px_0px_1px_0px_rgba(0,0,0,0.03),0px_1px_2px_0px_rgba(0,0,0,0.06)] w-3.5 h-3.5 border dark:border-[#3E3E3A] border-[#e3e3e0]">
-                                    <span class="rounded-full bg-[#dbdbd7] dark:bg-[#3E3E3A] w-1.5 h-1.5"></span>
-                                </span>
-                            </span>
-                            <span>
-                                Watch video tutorials at
-                                <a href="https://laracasts.com" target="_blank" class="inline-flex items-center space-x-1 font-medium underline underline-offset-4 text-[#f53003] dark:text-[#FF4433] ml-1">
-                                    <span>Laracasts</span>
-                                    <svg
-                                        width="10"
-                                        height="11"
-                                        viewBox="0 0 10 11"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="w-2.5 h-2.5"
-                                    >
-                                        <path
-                                            d="M7.70833 6.95834V2.79167H3.54167M2.5 8L7.5 3.00001"
-                                            stroke="currentColor"
-                                            stroke-linecap="square"
-                                        />
-                                    </svg>
-                                </a>
-                            </span>
-                        </li>
-                    </ul>
-                    <ul class="flex gap-3 text-sm leading-normal">
-                        <li>
-                            <a href="https://cloud.laravel.com" target="_blank" class="inline-block dark:bg-[#eeeeec] dark:border-[#eeeeec] dark:text-[#1C1C1A] dark:hover:bg-white dark:hover:border-white hover:bg-black hover:border-black px-5 py-1.5 bg-[#1b1b18] rounded-sm border border-black text-white text-sm leading-normal">
-                                Deploy now
-                            </a>
-                        </li>
-                    </ul>
+        <!-- Mobile hamburger -->
+        <button @click="mobileMenu = !mobileMenu" class="btn-ghost mobile-btn" style="padding:8px;display:none;">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
 
-                    <p class="mt-6 lg:mt-10 text-[#706f6c] dark:text-[#A1A09A]">
-                        v{{ app()->version() }}
-                        <a href="https://github.com/laravel/framework/blob/13.x/CHANGELOG.md" target="_blank" class="inline-flex items-center space-x-1 font-medium underline underline-offset-4 text-[#f53003] dark:text-[#FF4433] ml-1">
-                            <span>View changelog</span>
-                            <svg
-                                width="10"
-                                height="11"
-                                viewBox="0 0 10 11"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-2.5 h-2.5"
-                            >
-                                <path
-                                    d="M7.70833 6.95834V2.79167H3.54167M2.5 8L7.5 3.00001"
-                                    stroke="currentColor"
-                                    stroke-linecap="square"
-                                />
-                            </svg>
-                        </a>
-                    </p>
-                </div>
-                <div class="bg-[#fff2f2] dark:bg-[#1D0002] relative lg:-ml-px -mb-px lg:mb-0 rounded-t-lg lg:rounded-t-none lg:rounded-r-lg aspect-[335/364] lg:aspect-auto w-full lg:w-[438px] shrink-0 overflow-hidden">
-                    {{-- Laravel Logo --}}
-                    <svg class="w-full text-[#F53003] dark:text-[#F61500] transition-all translate-y-0 opacity-100 max-w-none duration-750 starting:opacity-0 motion-safe:starting:translate-y-6" viewBox="0 0 438 104" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M17.2036 -3H0V102.197H49.5189V86.7187H17.2036V-3Z" fill="currentColor" />
-                        <path d="M110.256 41.6337C108.061 38.1275 104.945 35.3731 100.905 33.3681C96.8667 31.3647 92.8016 30.3618 88.7131 30.3618C83.4247 30.3618 78.5885 31.3389 74.201 33.2923C69.8111 35.2456 66.0474 37.928 62.9059 41.3333C59.7643 44.7401 57.3198 48.6726 55.5754 53.1293C53.8287 57.589 52.9572 62.274 52.9572 67.1813C52.9572 72.1925 53.8287 76.8995 55.5754 81.3069C57.3191 85.7173 59.7636 89.6241 62.9059 93.0293C66.0474 96.4361 69.8119 99.1155 74.201 101.069C78.5885 103.022 83.4247 103.999 88.7131 103.999C92.8016 103.999 96.8667 102.997 100.905 100.994C104.945 98.9911 108.061 96.2359 110.256 92.7282V102.195H126.563V32.1642H110.256V41.6337ZM108.76 75.7472C107.762 78.4531 106.366 80.8078 104.572 82.8112C102.776 84.8161 100.606 86.4183 98.0637 87.6206C95.5202 88.823 92.7004 89.4238 89.6103 89.4238C86.5178 89.4238 83.7252 88.823 81.2324 87.6206C78.7388 86.4183 76.5949 84.8161 74.7998 82.8112C73.004 80.8078 71.6319 78.4531 70.6856 75.7472C69.7356 73.0421 69.2644 70.1868 69.2644 67.1821C69.2644 64.1758 69.7356 61.3205 70.6856 58.6154C71.6319 55.9102 73.004 53.5571 74.7998 51.5522C76.5949 49.5495 78.738 47.9451 81.2324 46.7427C83.7252 45.5404 86.5178 44.9396 89.6103 44.9396C92.7012 44.9396 95.5202 45.5404 98.0637 46.7427C100.606 47.9451 102.776 49.5487 104.572 51.5522C106.367 53.5571 107.762 55.9102 108.76 58.6154C109.756 61.3205 110.256 64.1758 110.256 67.1821C110.256 70.1868 109.756 73.0421 108.76 75.7472Z" fill="currentColor" />
-                        <path d="M242.805 41.6337C240.611 38.1275 237.494 35.3731 233.455 33.3681C229.416 31.3647 225.351 30.3618 221.262 30.3618C215.974 30.3618 211.138 31.3389 206.75 33.2923C202.36 35.2456 198.597 37.928 195.455 41.3333C192.314 44.7401 189.869 48.6726 188.125 53.1293C186.378 57.589 185.507 62.274 185.507 67.1813C185.507 72.1925 186.378 76.8995 188.125 81.3069C189.868 85.7173 192.313 89.6241 195.455 93.0293C198.597 96.4361 202.361 99.1155 206.75 101.069C211.138 103.022 215.974 103.999 221.262 103.999C225.351 103.999 229.416 102.997 233.455 100.994C237.494 98.9911 240.611 96.2359 242.805 92.7282V102.195H259.112V32.1642H242.805V41.6337ZM241.31 75.7472C240.312 78.4531 238.916 80.8078 237.122 82.8112C235.326 84.8161 233.156 86.4183 230.614 87.6206C228.07 88.823 225.251 89.4238 222.16 89.4238C219.068 89.4238 216.275 88.823 213.782 87.6206C211.289 86.4183 209.145 84.8161 207.35 82.8112C205.554 80.8078 204.182 78.4531 203.236 75.7472C202.286 73.0421 201.814 70.1868 201.814 67.1821C201.814 64.1758 202.286 61.3205 203.236 58.6154C204.182 55.9102 205.554 53.5571 207.35 51.5522C209.145 49.5495 211.288 47.9451 213.782 46.7427C216.275 45.5404 219.068 44.9396 222.16 44.9396C225.251 44.9396 228.07 45.5404 230.614 46.7427C233.156 47.9451 235.326 49.5487 237.122 51.5522C238.917 53.5571 240.312 55.9102 241.31 58.6154C242.306 61.3205 242.806 64.1758 242.806 67.1821C242.805 70.1868 242.305 73.0421 241.31 75.7472Z" fill="currentColor" />
-                        <path d="M438 -3H421.694V102.197H438V-3Z" fill="currentColor" />
-                        <path d="M139.43 102.197H155.735V48.2834H183.712V32.1665H139.43V102.197Z" fill="currentColor" />
-                        <path d="M324.49 32.1665L303.995 85.794L283.498 32.1665H266.983L293.748 102.197H314.242L341.006 32.1665H324.49Z" fill="currentColor" />
-                        <path d="M376.571 30.3656C356.603 30.3656 340.797 46.8497 340.797 67.1828C340.797 89.6597 356.094 104 378.661 104C391.29 104 399.354 99.1488 409.206 88.5848L398.189 80.0226C398.183 80.031 389.874 90.9895 377.468 90.9895C363.048 90.9895 356.977 79.3111 356.977 73.269H411.075C413.917 50.1328 398.775 30.3656 376.571 30.3656ZM357.02 61.0967C357.145 59.7487 359.023 43.3761 376.442 43.3761C393.861 43.3761 395.978 59.7464 396.099 61.0967H357.02Z" fill="currentColor" />
-                    </svg>
+    <!-- Mobile Dropdown Menu -->
+    <div x-show="mobileMenu" x-transition style="border-top:1px solid var(--border);padding:16px 24px;display:flex;flex-direction:column;gap:12px;background:var(--surface);">
+      <a href="#tentang" @click="mobileMenu = false" style="text-decoration:none;color:var(--text);font-weight:600;">Tentang Kami</a>
+      <a href="#layanan" @click="mobileMenu = false" style="text-decoration:none;color:var(--text);font-weight:600;">Koleksi & Produk</a>
+      <a href="#medis" @click="mobileMenu = false" style="text-decoration:none;color:var(--text);font-weight:600;">Seragam Medis OKA</a>
+      <a href="#klien" @click="mobileMenu = false" style="text-decoration:none;color:var(--text);font-weight:600;">Klien Kami</a>
+      <a href="#alur" @click="mobileMenu = false" style="text-decoration:none;color:var(--text);font-weight:600;">Alur Kerjasama</a>
+      <a href="#legalitas" @click="mobileMenu = false" style="text-decoration:none;color:var(--text);font-weight:600;">Legalitas PT</a>
+      <a href="https://wa.me/6285716107394" target="_blank" class="btn-brand" style="justify-content:center;margin-top:8px;">
+        Konsultasi via WhatsApp (0857 1610 7394)
+      </a>
+    </div>
+  </header>
 
-                    {{-- 13 --}}
-                    <svg class="w-[438px] max-w-none relative -mt-[6.6rem] -ml-8 lg:ml-0 [--stroke-color:#1B1B18] dark:[--stroke-color:#FF750F]" viewBox="0 0 440 392" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g class="mix-blend-darken dark:mix-blend-normal transition-all delay-300 opacity-100 duration-750 starting:opacity-0 text-[#1B1B18] dark:text-black">
-                            <mask id="path-1-mask" maskUnits="userSpaceOnUse" x="-0.328613" y="103" width="338" height="299" fill="black">
-                                <rect fill="white" x="-0.328613" y="103" width="338" height="299"/>
-                                <path d="M234.936 400.8C204.136 400.8 178.936 392.4 159.336 375.6C140.136 358.8 130.536 337 130.536 310.2H200.736C200.736 318.2 203.736 324.8 209.736 330C215.736 335.2 223.736 337.8 233.736 337.8C243.336 337.8 251.136 335 257.136 329.4C263.536 323.8 266.736 316.6 266.736 307.8C266.736 299.8 263.936 293.2 258.336 288C252.736 282.8 245.536 280.2 236.736 280.2H199.536V218.4H236.736C243.536 218.4 249.336 216 254.136 211.2C258.936 206.4 261.336 200.4 261.336 193.2C261.336 184.8 258.736 178.2 253.536 173.4C248.336 168.6 241.736 166.2 233.736 166.2C226.536 166.2 220.336 168.4 215.136 172.8C210.336 177.2 207.936 182.8 207.936 189.6H141.336C141.336 164.8 150.136 144.6 167.736 129C185.336 113 207.936 105 235.536 105C263.136 105 285.536 112.2 302.736 126.6C320.336 141 329.136 160 329.136 183.6C329.136 200.8 324.536 214.8 315.336 225.6C306.136 236 294.336 243.2 279.936 247.2C297.136 252 310.736 260.2 320.736 271.8C331.136 283.4 336.336 298 336.336 315.6C336.336 340.4 326.936 360.8 308.136 376.8C289.336 392.8 264.936 400.8 234.936 400.8Z"/>
-                                <path d="M26.8714 167.6H1.67139V105.2H94.6714V400.2H26.8714V167.6Z"/>
-                            </mask>
-                            <path d="M234.936 400.8C204.136 400.8 178.936 392.4 159.336 375.6C140.136 358.8 130.536 337 130.536 310.2H200.736C200.736 318.2 203.736 324.8 209.736 330C215.736 335.2 223.736 337.8 233.736 337.8C243.336 337.8 251.136 335 257.136 329.4C263.536 323.8 266.736 316.6 266.736 307.8C266.736 299.8 263.936 293.2 258.336 288C252.736 282.8 245.536 280.2 236.736 280.2H199.536V218.4H236.736C243.536 218.4 249.336 216 254.136 211.2C258.936 206.4 261.336 200.4 261.336 193.2C261.336 184.8 258.736 178.2 253.536 173.4C248.336 168.6 241.736 166.2 233.736 166.2C226.536 166.2 220.336 168.4 215.136 172.8C210.336 177.2 207.936 182.8 207.936 189.6H141.336C141.336 164.8 150.136 144.6 167.736 129C185.336 113 207.936 105 235.536 105C263.136 105 285.536 112.2 302.736 126.6C320.336 141 329.136 160 329.136 183.6C329.136 200.8 324.536 214.8 315.336 225.6C306.136 236 294.336 243.2 279.936 247.2C297.136 252 310.736 260.2 320.736 271.8C331.136 283.4 336.336 298 336.336 315.6C336.336 340.4 326.936 360.8 308.136 376.8C289.336 392.8 264.936 400.8 234.936 400.8Z" fill="currentColor"/>
-                            <path d="M26.8714 167.6H1.67139V105.2H94.6714V400.2H26.8714V167.6Z" fill="currentColor"/>
-                            <path d="M234.936 400.8C204.136 400.8 178.936 392.4 159.336 375.6C140.136 358.8 130.536 337 130.536 310.2H200.736C200.736 318.2 203.736 324.8 209.736 330C215.736 335.2 223.736 337.8 233.736 337.8C243.336 337.8 251.136 335 257.136 329.4C263.536 323.8 266.736 316.6 266.736 307.8C266.736 299.8 263.936 293.2 258.336 288C252.736 282.8 245.536 280.2 236.736 280.2H199.536V218.4H236.736C243.536 218.4 249.336 216 254.136 211.2C258.936 206.4 261.336 200.4 261.336 193.2C261.336 184.8 258.736 178.2 253.536 173.4C248.336 168.6 241.736 166.2 233.736 166.2C226.536 166.2 220.336 168.4 215.136 172.8C210.336 177.2 207.936 182.8 207.936 189.6H141.336C141.336 164.8 150.136 144.6 167.736 129C185.336 113 207.936 105 235.536 105C263.136 105 285.536 112.2 302.736 126.6C320.336 141 329.136 160 329.136 183.6C329.136 200.8 324.536 214.8 315.336 225.6C306.136 236 294.336 243.2 279.936 247.2C297.136 252 310.736 260.2 320.736 271.8C331.136 283.4 336.336 298 336.336 315.6C336.336 340.4 326.936 360.8 308.136 376.8C289.336 392.8 264.936 400.8 234.936 400.8Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-1-mask)"/>
-                            <path d="M26.8714 167.6H1.67139V105.2H94.6714V400.2H26.8714V167.6Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-1-mask)"/>
-                        </g>
+  <style>
+    @media (min-width: 900px) {
+      .desktop-menu { display: flex !important; }
+      .mobile-btn { display: none !important; }
+    }
+    @media (max-width: 899px) {
+      .desktop-menu { display: none !important; }
+      .mobile-btn { display: inline-flex !important; }
+    }
+  </style>
 
-                        <g class="transition-all delay-400 opacity-100 duration-750 starting:opacity-0 motion-safe:starting:-translate-x-[26px] text-[#F3BEC7] dark:text-[#4B0600]">
-                            <mask id="path-2-mask" maskUnits="userSpaceOnUse" x="25.3357" y="103" width="338" height="299" fill="black">
-                                <rect fill="white" x="25.3357" y="103" width="338" height="299"/>
-                                <path d="M260.6 400.8C229.8 400.8 204.6 392.4 185 375.6C165.8 358.8 156.2 337 156.2 310.2H226.4C226.4 318.2 229.4 324.8 235.4 330C241.4 335.2 249.4 337.8 259.4 337.8C269 337.8 276.8 335 282.8 329.4C289.2 323.8 292.4 316.6 292.4 307.8C292.4 299.8 289.6 293.2 284 288C278.4 282.8 271.2 280.2 262.4 280.2H225.2V218.4H262.4C269.2 218.4 275 216 279.8 211.2C284.6 206.4 287 200.4 287 193.2C287 184.8 284.4 178.2 279.2 173.4C274 168.6 267.4 166.2 259.4 166.2C252.2 166.2 246 168.4 240.8 172.8C236 177.2 233.6 182.8 233.6 189.6H167C167 164.8 175.8 144.6 193.4 129C211 113 233.6 105 261.2 105C288.8 105 311.2 112.2 328.4 126.6C346 141 354.8 160 354.8 183.6C354.8 200.8 350.2 214.8 341 225.6C331.8 236 320 243.2 305.6 247.2C322.8 252 336.4 260.2 346.4 271.8C356.8 283.4 362 298 362 315.6C362 340.4 352.6 360.8 333.8 376.8C315 392.8 290.6 400.8 260.6 400.8Z"/>
-                                <path d="M52.5357 167.6H27.3357V105.2H120.336V400.2H52.5357V167.6Z"/>
-                            </mask>
-                            <path d="M260.6 400.8C229.8 400.8 204.6 392.4 185 375.6C165.8 358.8 156.2 337 156.2 310.2H226.4C226.4 318.2 229.4 324.8 235.4 330C241.4 335.2 249.4 337.8 259.4 337.8C269 337.8 276.8 335 282.8 329.4C289.2 323.8 292.4 316.6 292.4 307.8C292.4 299.8 289.6 293.2 284 288C278.4 282.8 271.2 280.2 262.4 280.2H225.2V218.4H262.4C269.2 218.4 275 216 279.8 211.2C284.6 206.4 287 200.4 287 193.2C287 184.8 284.4 178.2 279.2 173.4C274 168.6 267.4 166.2 259.4 166.2C252.2 166.2 246 168.4 240.8 172.8C236 177.2 233.6 182.8 233.6 189.6H167C167 164.8 175.8 144.6 193.4 129C211 113 233.6 105 261.2 105C288.8 105 311.2 112.2 328.4 126.6C346 141 354.8 160 354.8 183.6C354.8 200.8 350.2 214.8 341 225.6C331.8 236 320 243.2 305.6 247.2C322.8 252 336.4 260.2 346.4 271.8C356.8 283.4 362 298 362 315.6C362 340.4 352.6 360.8 333.8 376.8C315 392.8 290.6 400.8 260.6 400.8Z" fill="currentColor"/>
-                            <path d="M52.5357 167.6H27.3357V105.2H120.336V400.2H52.5357V167.6Z" fill="currentColor"/>
-                            <path d="M260.6 400.8C229.8 400.8 204.6 392.4 185 375.6C165.8 358.8 156.2 337 156.2 310.2H226.4C226.4 318.2 229.4 324.8 235.4 330C241.4 335.2 249.4 337.8 259.4 337.8C269 337.8 276.8 335 282.8 329.4C289.2 323.8 292.4 316.6 292.4 307.8C292.4 299.8 289.6 293.2 284 288C278.4 282.8 271.2 280.2 262.4 280.2H225.2V218.4H262.4C269.2 218.4 275 216 279.8 211.2C284.6 206.4 287 200.4 287 193.2C287 184.8 284.4 178.2 279.2 173.4C274 168.6 267.4 166.2 259.4 166.2C252.2 166.2 246 168.4 240.8 172.8C236 177.2 233.6 182.8 233.6 189.6H167C167 164.8 175.8 144.6 193.4 129C211 113 233.6 105 261.2 105C288.8 105 311.2 112.2 328.4 126.6C346 141 354.8 160 354.8 183.6C354.8 200.8 350.2 214.8 341 225.6C331.8 236 320 243.2 305.6 247.2C322.8 252 336.4 260.2 346.4 271.8C356.8 283.4 362 298 362 315.6C362 340.4 352.6 360.8 333.8 376.8C315 392.8 290.6 400.8 260.6 400.8Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-2-mask)"/>
-                            <path d="M52.5357 167.6H27.3357V105.2H120.336V400.2H52.5357V167.6Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-2-mask)"/>
-                        </g>
-                        
-                        <g class="mix-blend-color dark:mix-blend-hard-light transition-all delay-400 opacity-100 duration-750 starting:opacity-0 motion-safe:starting:-translate-x-[51px] text-[#F8B803] dark:text-[#391800]">
-                            <mask id="path-3-mask" maskUnits="userSpaceOnUse" x="51" y="103" width="338" height="299" fill="black">
-                                <rect fill="white" x="51" y="103" width="338" height="299"/>
-                                <path d="M286.264 400.8C255.464 400.8 230.264 392.4 210.664 375.6C191.464 358.8 181.864 337 181.864 310.2H252.064C252.064 318.2 255.064 324.8 261.064 330C267.064 335.2 275.064 337.8 285.064 337.8C294.664 337.8 302.464 335 308.464 329.4C314.864 323.8 318.064 316.6 318.064 307.8C318.064 299.8 315.264 293.2 309.664 288C304.064 282.8 296.864 280.2 288.064 280.2H250.864V218.4H288.064C294.864 218.4 300.664 216 305.464 211.2C310.264 206.4 312.664 200.4 312.664 193.2C312.664 184.8 310.064 178.2 304.864 173.4C299.664 168.6 293.064 166.2 285.064 166.2C277.864 166.2 271.664 168.4 266.464 172.8C261.664 177.2 259.264 182.8 259.264 189.6H192.664C192.664 164.8 201.464 144.6 219.064 129C236.664 113 259.264 105 286.864 105C314.464 105 336.864 112.2 354.064 126.6C371.664 141 380.464 160 380.464 183.6C380.464 200.8 375.864 214.8 366.664 225.6C357.464 236 345.664 243.2 331.264 247.2C348.464 252 362.064 260.2 372.064 271.8C382.464 283.4 387.664 298 387.664 315.6C387.664 340.4 378.264 360.8 359.464 376.8C340.664 392.8 316.264 400.8 286.264 400.8Z"/>
-                                <path d="M78.2 167.6H53V105.2H146V400.2H78.2V167.6Z"/>
-                            </mask>
-                            <path d="M286.264 400.8C255.464 400.8 230.264 392.4 210.664 375.6C191.464 358.8 181.864 337 181.864 310.2H252.064C252.064 318.2 255.064 324.8 261.064 330C267.064 335.2 275.064 337.8 285.064 337.8C294.664 337.8 302.464 335 308.464 329.4C314.864 323.8 318.064 316.6 318.064 307.8C318.064 299.8 315.264 293.2 309.664 288C304.064 282.8 296.864 280.2 288.064 280.2H250.864V218.4H288.064C294.864 218.4 300.664 216 305.464 211.2C310.264 206.4 312.664 200.4 312.664 193.2C312.664 184.8 310.064 178.2 304.864 173.4C299.664 168.6 293.064 166.2 285.064 166.2C277.864 166.2 271.664 168.4 266.464 172.8C261.664 177.2 259.264 182.8 259.264 189.6H192.664C192.664 164.8 201.464 144.6 219.064 129C236.664 113 259.264 105 286.864 105C314.464 105 336.864 112.2 354.064 126.6C371.664 141 380.464 160 380.464 183.6C380.464 200.8 375.864 214.8 366.664 225.6C357.464 236 345.664 243.2 331.264 247.2C348.464 252 362.064 260.2 372.064 271.8C382.464 283.4 387.664 298 387.664 315.6C387.664 340.4 378.264 360.8 359.464 376.8C340.664 392.8 316.264 400.8 286.264 400.8Z" fill="currentColor"/>
-                            <path d="M78.2 167.6H53V105.2H146V400.2H78.2V167.6Z" fill="currentColor"/>
-                            <path d="M286.264 400.8C255.464 400.8 230.264 392.4 210.664 375.6C191.464 358.8 181.864 337 181.864 310.2H252.064C252.064 318.2 255.064 324.8 261.064 330C267.064 335.2 275.064 337.8 285.064 337.8C294.664 337.8 302.464 335 308.464 329.4C314.864 323.8 318.064 316.6 318.064 307.8C318.064 299.8 315.264 293.2 309.664 288C304.064 282.8 296.864 280.2 288.064 280.2H250.864V218.4H288.064C294.864 218.4 300.664 216 305.464 211.2C310.264 206.4 312.664 200.4 312.664 193.2C312.664 184.8 310.064 178.2 304.864 173.4C299.664 168.6 293.064 166.2 285.064 166.2C277.864 166.2 271.664 168.4 266.464 172.8C261.664 177.2 259.264 182.8 259.264 189.6H192.664C192.664 164.8 201.464 144.6 219.064 129C236.664 113 259.264 105 286.864 105C314.464 105 336.864 112.2 354.064 126.6C371.664 141 380.464 160 380.464 183.6C380.464 200.8 375.864 214.8 366.664 225.6C357.464 236 345.664 243.2 331.264 247.2C348.464 252 362.064 260.2 372.064 271.8C382.464 283.4 387.664 298 387.664 315.6C387.664 340.4 378.264 360.8 359.464 376.8C340.664 392.8 316.264 400.8 286.264 400.8Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-3-mask)"/>
-                            <path d="M78.2 167.6H53V105.2H146V400.2H78.2V167.6Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-3-mask)"/>
-                        </g>
-                        
-                        <g class="mix-blend-multiply dark:mix-blend-normal transition-all delay-400 opacity-100 duration-750 starting:opacity-0 motion-safe:starting:-translate-x-[78px] text-[#F3BEC7] dark:text-[#733000]">
-                            <mask id="path-4-mask" maskUnits="userSpaceOnUse" x="76.6643" y="103" width="338" height="299" fill="black">
-                                <rect fill="white" x="76.6643" y="103" width="338" height="299"/>
-                                <path d="M311.929 400.8C281.129 400.8 255.929 392.4 236.329 375.6C217.129 358.8 207.529 337 207.529 310.2H277.729C277.729 318.2 280.729 324.8 286.729 330C292.729 335.2 300.729 337.8 310.729 337.8C320.329 337.8 328.129 335 334.129 329.4C340.529 323.8 343.729 316.6 343.729 307.8C343.729 299.8 340.929 293.2 335.329 288C329.729 282.8 322.529 280.2 313.729 280.2H276.529V218.4H313.729C320.529 218.4 326.329 216 331.129 211.2C335.929 206.4 338.329 200.4 338.329 193.2C338.329 184.8 335.729 178.2 330.529 173.4C325.329 168.6 318.729 166.2 310.729 166.2C303.529 166.2 297.329 168.4 292.129 172.8C287.329 177.2 284.929 182.8 284.929 189.6H218.329C218.329 164.8 227.129 144.6 244.729 129C262.329 113 284.929 105 312.529 105C340.129 105 362.529 112.2 379.729 126.6C397.329 141 406.129 160 406.129 183.6C406.129 200.8 401.529 214.8 392.329 225.6C383.129 236 371.329 243.2 356.929 247.2C374.129 252 387.729 260.2 397.729 271.8C408.129 283.4 413.329 298 413.329 315.6C413.329 340.4 403.929 360.8 385.129 376.8C366.329 392.8 341.929 400.8 311.929 400.8Z"/>
-                                <path d="M103.864 167.6H78.6643V105.2H171.664V400.2H103.864V167.6Z"/>
-                            </mask>
-                            <path d="M311.929 400.8C281.129 400.8 255.929 392.4 236.329 375.6C217.129 358.8 207.529 337 207.529 310.2H277.729C277.729 318.2 280.729 324.8 286.729 330C292.729 335.2 300.729 337.8 310.729 337.8C320.329 337.8 328.129 335 334.129 329.4C340.529 323.8 343.729 316.6 343.729 307.8C343.729 299.8 340.929 293.2 335.329 288C329.729 282.8 322.529 280.2 313.729 280.2H276.529V218.4H313.729C320.529 218.4 326.329 216 331.129 211.2C335.929 206.4 338.329 200.4 338.329 193.2C338.329 184.8 335.729 178.2 330.529 173.4C325.329 168.6 318.729 166.2 310.729 166.2C303.529 166.2 297.329 168.4 292.129 172.8C287.329 177.2 284.929 182.8 284.929 189.6H218.329C218.329 164.8 227.129 144.6 244.729 129C262.329 113 284.929 105 312.529 105C340.129 105 362.529 112.2 379.729 126.6C397.329 141 406.129 160 406.129 183.6C406.129 200.8 401.529 214.8 392.329 225.6C383.129 236 371.329 243.2 356.929 247.2C374.129 252 387.729 260.2 397.729 271.8C408.129 283.4 413.329 298 413.329 315.6C413.329 340.4 403.929 360.8 385.129 376.8C366.329 392.8 341.929 400.8 311.929 400.8Z" fill="currentColor"/>
-                            <path d="M103.864 167.6H78.6643V105.2H171.664V400.2H103.864V167.6Z" fill="currentColor"/>
-                            <path d="M311.929 400.8C281.129 400.8 255.929 392.4 236.329 375.6C217.129 358.8 207.529 337 207.529 310.2H277.729C277.729 318.2 280.729 324.8 286.729 330C292.729 335.2 300.729 337.8 310.729 337.8C320.329 337.8 328.129 335 334.129 329.4C340.529 323.8 343.729 316.6 343.729 307.8C343.729 299.8 340.929 293.2 335.329 288C329.729 282.8 322.529 280.2 313.729 280.2H276.529V218.4H313.729C320.529 218.4 326.329 216 331.129 211.2C335.929 206.4 338.329 200.4 338.329 193.2C338.329 184.8 335.729 178.2 330.529 173.4C325.329 168.6 318.729 166.2 310.729 166.2C303.529 166.2 297.329 168.4 292.129 172.8C287.329 177.2 284.929 182.8 284.929 189.6H218.329C218.329 164.8 227.129 144.6 244.729 129C262.329 113 284.929 105 312.529 105C340.129 105 362.529 112.2 379.729 126.6C397.329 141 406.129 160 406.129 183.6C406.129 200.8 401.529 214.8 392.329 225.6C383.129 236 371.329 243.2 356.929 247.2C374.129 252 387.729 260.2 397.729 271.8C408.129 283.4 413.329 298 413.329 315.6C413.329 340.4 403.929 360.8 385.129 376.8C366.329 392.8 341.929 400.8 311.929 400.8Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-4-mask)"/>
-                            <path d="M103.864 167.6H78.6643V105.2H171.664V400.2H103.864V167.6Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-4-mask)"/>
-                        </g>
-                        
-                        <g class="mix-blend-hard-light transition-all delay-400 opacity-100 duration-750 starting:opacity-0 motion-safe:starting:-translate-x-[102px] text-[#F3BEC7] dark:text-[#4B0600]">
-                            <mask id="path-5-mask" maskUnits="userSpaceOnUse" x="102.329" y="103" width="338" height="299" fill="black">
-                                <rect fill="white" x="102.329" y="103" width="338" height="299"/>
-                                <path d="M337.593 400.8C306.793 400.8 281.593 392.4 261.993 375.6C242.793 358.8 233.193 337 233.193 310.2H303.393C303.393 318.2 306.393 324.8 312.393 330C318.393 335.2 326.393 337.8 336.393 337.8C345.993 337.8 353.793 335 359.793 329.4C366.193 323.8 369.393 316.6 369.393 307.8C369.393 299.8 366.593 293.2 360.993 288C355.393 282.8 348.193 280.2 339.393 280.2H302.193V218.4H339.393C346.193 218.4 351.993 216 356.793 211.2C361.593 206.4 363.993 200.4 363.993 193.2C363.993 184.8 361.393 178.2 356.193 173.4C350.993 168.6 344.393 166.2 336.393 166.2C329.193 166.2 322.993 168.4 317.793 172.8C312.993 177.2 310.593 182.8 310.593 189.6H243.993C243.993 164.8 252.793 144.6 270.393 129C287.993 113 310.593 105 338.193 105C365.793 105 388.193 112.2 405.393 126.6C422.993 141 431.793 160 431.793 183.6C431.793 200.8 427.193 214.8 417.993 225.6C408.793 236 396.993 243.2 382.593 247.2C399.793 252 413.393 260.2 423.393 271.8C433.793 283.4 438.993 298 438.993 315.6C438.993 340.4 429.593 360.8 410.793 376.8C391.993 392.8 367.593 400.8 337.593 400.8Z"/>
-                                <path d="M129.529 167.6H104.329V105.2H197.329V400.2H129.529V167.6Z"/>
-                            </mask>
-                            <path d="M337.593 400.8C306.793 400.8 281.593 392.4 261.993 375.6C242.793 358.8 233.193 337 233.193 310.2H303.393C303.393 318.2 306.393 324.8 312.393 330C318.393 335.2 326.393 337.8 336.393 337.8C345.993 337.8 353.793 335 359.793 329.4C366.193 323.8 369.393 316.6 369.393 307.8C369.393 299.8 366.593 293.2 360.993 288C355.393 282.8 348.193 280.2 339.393 280.2H302.193V218.4H339.393C346.193 218.4 351.993 216 356.793 211.2C361.593 206.4 363.993 200.4 363.993 193.2C363.993 184.8 361.393 178.2 356.193 173.4C350.993 168.6 344.393 166.2 336.393 166.2C329.193 166.2 322.993 168.4 317.793 172.8C312.993 177.2 310.593 182.8 310.593 189.6H243.993C243.993 164.8 252.793 144.6 270.393 129C287.993 113 310.593 105 338.193 105C365.793 105 388.193 112.2 405.393 126.6C422.993 141 431.793 160 431.793 183.6C431.793 200.8 427.193 214.8 417.993 225.6C408.793 236 396.993 243.2 382.593 247.2C399.793 252 413.393 260.2 423.393 271.8C433.793 283.4 438.993 298 438.993 315.6C438.993 340.4 429.593 360.8 410.793 376.8C391.993 392.8 367.593 400.8 337.593 400.8Z" fill="currentColor"/>
-                            <path d="M129.529 167.6H104.329V105.2H197.329V400.2H129.529V167.6Z" fill="currentColor"/>
-                            <path d="M337.593 400.8C306.793 400.8 281.593 392.4 261.993 375.6C242.793 358.8 233.193 337 233.193 310.2H303.393C303.393 318.2 306.393 324.8 312.393 330C318.393 335.2 326.393 337.8 336.393 337.8C345.993 337.8 353.793 335 359.793 329.4C366.193 323.8 369.393 316.6 369.393 307.8C369.393 299.8 366.593 293.2 360.993 288C355.393 282.8 348.193 280.2 339.393 280.2H302.193V218.4H339.393C346.193 218.4 351.993 216 356.793 211.2C361.593 206.4 363.993 200.4 363.993 193.2C363.993 184.8 361.393 178.2 356.193 173.4C350.993 168.6 344.393 166.2 336.393 166.2C329.193 166.2 322.993 168.4 317.793 172.8C312.993 177.2 310.593 182.8 310.593 189.6H243.993C243.993 164.8 252.793 144.6 270.393 129C287.993 113 310.593 105 338.193 105C365.793 105 388.193 112.2 405.393 126.6C422.993 141 431.793 160 431.793 183.6C431.793 200.8 427.193 214.8 417.993 225.6C408.793 236 396.993 243.2 382.593 247.2C399.793 252 413.393 260.2 423.393 271.8C433.793 283.4 438.993 298 438.993 315.6C438.993 340.4 429.593 360.8 410.793 376.8C391.993 392.8 367.593 400.8 337.593 400.8Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-5-mask)"/>
-                            <path d="M129.529 167.6H104.329V105.2H197.329V400.2H129.529V167.6Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-5-mask)"/>
-                        </g>
-                    </svg>
-                    <div class="absolute inset-0 rounded-t-lg lg:rounded-t-none lg:rounded-r-lg shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]"></div>
-                </div>
-            </main>
+  <!-- HERO SECTION: High Editorial Atelier -->
+  <section style="position:relative;padding:90px 24px 80px;overflow:hidden;border-bottom:1px solid var(--border);">
+    
+    <!-- Aura Ambient Radial Glow -->
+    <div class="aura-spotlight animate-aura" style="top:-100px;left:50%;transform:translateX(-50%);"></div>
+
+    <div style="max-width:1160px;margin:0 auto;position:relative;z-index:1;text-align:center;">
+      
+      <!-- Trust Pill -->
+      <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 16px;background:var(--surface);border:1px solid var(--border);border-radius:999px;margin-bottom:28px;box-shadow:0 2px 10px rgba(0,0,0,0.03);">
+        <span style="width:8px;height:8px;border-radius:50%;background:#10B981;display:inline-block;"></span>
+        <span style="font-size:0.8125rem;font-weight:600;color:var(--text);">PT CAHAYA BINAR BERLIAN</span>
+        <span style="color:var(--text-muted);font-size:0.75rem;">&bull;</span>
+        <span style="font-size:0.75rem;color:var(--text-muted);">Didirikan Agustus 2015</span>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="font-editorial" style="font-size:clamp(2.4rem, 5.5vw, 4.2rem);line-height:1.12;font-weight:500;color:var(--text);letter-spacing:-0.02em;max-width:960px;margin:0 auto 24px;">
+        Konveksi Seragam Profesional, <i>Atelier</i> Rumah Jahit, & Pakaian Medis Berstandar Tinggi.
+      </h1>
+
+      <!-- Subtitle -->
+      <p style="font-size:clamp(1rem, 1.8vw, 1.18rem);color:var(--text-muted);max-width:760px;margin:0 auto 36px;line-height:1.7;">
+        Solusi terpadu pembuatan seragam kerja, pakaian dinas PDH/PDL, scrub medis OKA, jas, hingga apparel komunitas. Dikelola oleh tenaga profesional dan berbadan hukum resmi dengan komitmen ketepatan waktu serta presisi jahitan.
+      </p>
+
+      <!-- Action Buttons -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:48px;">
+        <a href="https://wa.me/6285716107394?text=Halo%20Orinamia,%20saya%20ingin%20konsultasi%20pembuatan%20seragam"
+           target="_blank"
+           class="btn-brand" style="font-size:0.95rem;padding:12px 28px;">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.174.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.174.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.824z"/>
+          </svg>
+          Konsultasi & Penawaran Kerjasama
+        </a>
+        <a href="#layanan" class="btn-ghost" style="font-size:0.95rem;padding:12px 24px;">
+          Eksplorasi Katalog
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Quick Metrics Strip -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:16px;max-width:900px;margin:0 auto;text-align:left;">
+        
+        <div class="atelier-card" style="padding:18px 22px;">
+          <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Pengalaman Industri</div>
+          <div class="font-num" style="font-size:1.65rem;font-weight:700;color:var(--accent);margin-top:2px;">
+            10+ Tahun
+          </div>
+          <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px;">Berdiri sejak Agustus 2015</div>
         </div>
 
-        @if (Route::has('login'))
-            <div class="h-14.5 hidden lg:block"></div>
-        @endif
-    </body>
+        <div class="atelier-card" style="padding:18px 22px;">
+          <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Kapasitas Produksi</div>
+          <div class="font-num" style="font-size:1.65rem;font-weight:700;color:var(--text);margin-top:2px;">
+            10 s/d 10.000+
+          </div>
+          <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px;">Pcs per pesanan (Fleksibel)</div>
+        </div>
+
+        <div class="atelier-card" style="padding:18px 22px;">
+          <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Varian Seragam Medis</div>
+          <div class="font-num" style="font-size:1.65rem;font-weight:700;color:var(--accent);margin-top:2px;">
+            13 Pilihan Warna
+          </div>
+          <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px;">Baju OKA & Scrub Bedah</div>
+        </div>
+
+        <div class="atelier-card" style="padding:18px 22px;">
+          <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Legalitas Badan Hukum</div>
+          <div class="font-num" style="font-size:1.65rem;font-weight:700;color:var(--text);margin-top:2px;">
+            AHU & NIB Resmi
+          </div>
+          <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px;">SK Kemenkumham RI 2024</div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 1: TENTANG KAMI & LATAR BELAKANG -->
+  <section id="tentang" style="padding:90px 24px;border-bottom:1px solid var(--border);">
+    <div style="max-width:1160px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:48px;align-items:center;">
+      
+      <!-- Text Description -->
+      <div>
+        <span class="badge-pill" style="margin-bottom:14px;">Tentang Orinamia Konveksi</span>
+        <h2 class="font-editorial" style="font-size:clamp(1.8rem, 3.2vw, 2.6rem);font-weight:500;line-height:1.2;color:var(--text);margin-bottom:20px;">
+          Berawal dari Dedikasi Seorang Tenaga Medis, Berkembang Menjadi <i>Atelier</i> Konveksi Profesional.
+        </h2>
+        
+        <p style="color:var(--text-muted);margin-bottom:16px;line-height:1.75;font-size:0.95rem;">
+          <strong>ORINAMIA Konveksi</strong> didirikan pada bulan <strong>Agustus 2015</strong>, bermula dari inisiatif mandiri seorang perawat yang memiliki kepekaan tinggi terhadap kenyamanan dan standar fungsional pakaian kerja medis serta pakaian jadi.
+        </p>
+
+        <p style="color:var(--text-muted);margin-bottom:24px;line-height:1.75;font-size:0.95rem;">
+          Didorong kreativitas, ketelitian pola jahitan, dan kepercayaan berkelanjutan dari berbagai instansi, ORINAMIA bertransformasi dan berekspansi menjadi unit usaha resmi di bawah naungan <strong>PT CAHAYA BINAR BERLIAN</strong>.
+        </p>
+
+        <div style="display:flex;flex-direction:column;gap:12px;padding:20px;background:var(--surface-tint);border-radius:10px;border:1px solid var(--border);">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="color:#10B981;font-weight:700;">✓</span>
+            <span style="font-size:0.875rem;color:var(--text);"><strong>Standar Mutu Jahitan Halus:</strong> Menggunakan benang jahit premium dan mesin garmen modern.</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="color:#10B981;font-weight:700;">✓</span>
+            <span style="font-size:0.875rem;color:var(--text);"><strong>Kemitraan Multisektoral:</strong> Bekerja sama dengan rumah sakit swasta/pemerintah, BUMN, perhotelan, hingga sekolah.</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="color:#10B981;font-weight:700;">✓</span>
+            <span style="font-size:0.875rem;color:var(--text);"><strong>Ketepatan Waktu:</strong> Penjadwalan produksi terstruktur dengan pelacakan progres transparan.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Atelier Heritage Card -->
+      <div class="atelier-card" style="padding:36px;position:relative;background:var(--surface);">
+        <div style="font-size:0.75rem;color:var(--accent);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">Profil Entitas</div>
+        <div style="font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:4px;">PT Cahaya Binar Berlian</div>
+        <div style="font-size:0.875rem;color:var(--text-muted);margin-bottom:24px;">Merk Dagang: ORINAMIA Konveksi & Rumah Jahit</div>
+
+        <div style="border-top:1px dashed var(--border);padding-top:18px;display:flex;flex-direction:column;gap:16px;">
+          <div>
+            <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;">Sertifikasi Kemenkumham RI</div>
+            <div class="font-num" style="font-size:0.95rem;font-weight:700;color:var(--accent);margin-top:2px;">
+              AHU-0202685.AH.01.30. Tahun 2024
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;">Nomor Induk Berusaha (NIB)</div>
+            <div class="font-num" style="font-size:0.95rem;font-weight:700;color:var(--text);margin-top:2px;">
+              2104240036065
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;">Alamat Workshop & Operasional</div>
+            <div style="font-size:0.875rem;color:var(--text);margin-top:2px;line-height:1.5;">
+              Jl Cibodas Raya No 10 D Perum 1, Karawaci, Kota Tangerang, Banten
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;">Rekening Resmi Perusahaan</div>
+            <div class="font-num" style="font-size:0.875rem;color:var(--text);margin-top:2px;">
+              Bank Syariah Indonesia (BSI) <strong>7273909413</strong> a/n PT Cahaya Binar Berlian
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 2: KOLEKSI & LAYANAN PRODUKSI -->
+  <section id="layanan" style="padding:90px 24px;border-bottom:1px solid var(--border);background:var(--surface-tint);">
+    <div style="max-width:1160px;margin:0 auto;">
+      
+      <div style="text-align:center;max-width:720px;margin:0 auto 40px;">
+        <span class="badge-pill" style="margin-bottom:12px;">Portofolio & Layanan Konveksi</span>
+        <h2 class="font-editorial" style="font-size:clamp(1.8rem, 3vw, 2.5rem);font-weight:500;color:var(--text);">
+          Spesialisasi Busana Kerja & Pakaian Dinas
+        </h2>
+        <p style="color:var(--text-muted);margin-top:10px;">
+          Katalog komprehensif mulai dari pakaian dinas korporat hingga baju ruang operasi rumah sakit.
+        </p>
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:36px;">
+        <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'medis' }" @click="activeCat = 'medis'">
+          🏥 Seragam Medis & OKA
+        </button>
+        <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'korporat' }" @click="activeCat = 'korporat'">
+          👔 Kemeja PDH & Kantor
+        </button>
+        <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'industri' }" @click="activeCat = 'industri'">
+          🦺 Safety Tambang & PDL
+        </button>
+        <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'apparel' }" @click="activeCat = 'apparel'">
+          👕 Jas, Kaos & Komunitas
+        </button>
+      </div>
+
+      <!-- Dynamic Catalog Grid -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:24px;">
+        
+        <!-- Tab: Medis -->
+        <template x-if="activeCat === 'medis'">
+          <div style="display:contents;">
+            <div class="atelier-card" style="padding:24px;">
+              <div style="font-size:1.8rem;margin-bottom:10px;">🥼</div>
+              <h3 style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:6px;">Baju OKA Kamar Bedah</h3>
+              <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;">Dirancang khusus untuk dokter dan nakes bedah. Bahan adem, higienis, jahitan kuat, dan tidak tembus pandang.</p>
+              <div class="font-num" style="margin-top:16px;font-size:0.75rem;font-weight:600;color:var(--accent);">13 Pilihan Warna Tersedia</div>
+            </div>
+
+            <div class="atelier-card" style="padding:24px;">
+              <div style="font-size:1.8rem;margin-bottom:10px;">🩺</div>
+              <h3 style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:6px;">Scrub Medis & Perawat</h3>
+              <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;">Atasan v-neck ergonomis dengan saku fungsional dan celana pinggang karet elastis. Nyaman untuk shift panjang.</p>
+              <div class="font-num" style="margin-top:16px;font-size:0.75rem;font-weight:600;color:var(--accent);">Pilihan Lengan Pendek / Panjang</div>
+            </div>
+
+            <div class="atelier-card" style="padding:24px;">
+              <div style="font-size:1.8rem;margin-bottom:10px;">🧥</div>
+              <h3 style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:6px;">Jas Dokter & Jas Laboratorium</h3>
+              <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;">Bahan katun drill atau toyobo bertekstur rapi, potongan jatuh anggun, dan kancing berkualitas tahan cuci berkali-kali.</p>
+              <div class="font-num" style="margin-top:16px;font-size:0.75rem;font-weight:600;color:var(--accent);">Standar Rumah Sakit & Klinik</div>
+            </div>
+          </div>
+        </template>
+
+        <!-- Tab: Korporat -->
+        <template x-if="activeCat === 'korporat'">
+          <div style="display:contents;">
+            <div class="atelier-card" style="padding:24px;">
+              <div style="font-size:1.8rem;margin-bottom:10px;">👔</div>
+              <h3 style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:6px;">Kemeja Kerja & Kantor</h3>
+              <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;">Kemeja eksekutif pria dan wanita dengan bordir komputer presisi. Tersedia bahan katun, oxford, dan tropical.</p>
+              <div class="font-num" style="margin-top:16px;font-size:0.75rem;font-weight:600;color:var(--accent);">Potongan Slim & Regular</div>
+            </div>
+
+            <div class="atelier-card" style="padding:24px;">
+              <div style="font-size:1.8rem;margin-bottom:10px;">🏛️</div>
+              <h3 style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:6px;">Pakaian Dinas Harian (PDH)</h3>
+              <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;">Standar resmi instansi pemerintah, BUMN, perbankan, dan swasta. Dilengkapi pangkat bahu dan saku simetris.</p>
+              <div class="font-num" style="margin-top:16px;font-size:0.75rem;font-weight:600;color:var(--accent);">Sesuai Regulasi Pakaian Dinas</div>
+            </div>
+
+            <div class="atelier-card" style="padding:24px;">
+              <div style="font-size:1.8rem;margin-bottom:10px;">🏨</div>
+              <h3 style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:6px;">Seragam Hospitality & Hotel</h3>
+              <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;">Seragam resepsionis, housekeeping, front office, dan staf hotel dengan sentuhan elegan estetis.</p>
+              <div class="font-num" style="margin-top:16px;font-size:0.75rem;font-weight:600;color:var(--accent);">Dipakai di Novotel & Omar Hotel</div>
+            </div>
+          </div>
+        </template>
+
+        <!-- Tab: Industri -->
+        <template x-if="activeCat === 'industri'">
+          <div style="display:contents;">
+            <div class="atelier-card" style="padding:24px;">
+              <div style="font-size:1.8rem;margin-bottom:10px;">🦺</div>
+              <h3 style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:6px;">Kemeja Safety Tambang & Proyek</h3>
+              <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;">Dilengkapi scotlight / reflector pita 3M bercahaya tinggi, saku ganda dengan pengait pulpen, ventilasi udara punggung.</p>
+              <div class="font-num" style="margin-top:16px;font-size:0.75rem;font-weight:600;color:var(--accent);">Standar K3 & Durabilitas Tinggi</div>
+            </div>
+
+            <div class="atelier-card" style="padding:24px;">
+              <div style="font-size:1.8rem;margin-bottom:10px;">🏕️</div>
+              <h3 style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:6px;">Pakaian Dinas Lapangan (PDL)</h3>
+              <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;">Kain ripstop atau drill anti robek, lengan bisa dilipat dengan kancing pengait, fleksibel di berbagai medan.</p>
+              <div class="font-num" style="margin-top:16px;font-size:0.75rem;font-weight:600;color:var(--accent);">Cocok untuk Tim Lapangan & Ekspedisi</div>
+            </div>
+
+            <div class="atelier-card" style="padding:24px;">
+              <div style="font-size:1.8rem;margin-bottom:10px;">🏭</div>
+              <h3 style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:6px;">Kemeja Pabrik & Manufaktur</h3>
+              <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;">Seragam operator pabrik yang tahan gesekan, adem, dan mudah dicuci. Pilihan kombinasi warna kontras.</p>
+              <div class="font-num" style="margin-top:16px;font-size:0.75rem;font-weight:600;color:var(--accent);">Kapasitas Pesanan Skala Ribuan Pcs</div>
+            </div>
+          </div>
+        </template>
+
+        <!-- Tab: Apparel -->
+        <template x-if="activeCat === 'apparel'">
+          <div style="display:contents;">
+            <div class="atelier-card" style="padding:24px;">
+              <div style="font-size:1.8rem;margin-bottom:10px;">🧥</div>
+              <h3 style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:6px;">Jas Almamater & Blazer</h3>
+              <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;">Jas universitas, sekolah kedinasan, dan blazer organisasi lengkap dengan puring dalam serta bordir lambang.</p>
+              <div class="font-num" style="margin-top:16px;font-size:0.75rem;font-weight:600;color:var(--accent);">Bahan Twist & High Quality Wool</div>
+            </div>
+
+            <div class="atelier-card" style="padding:24px;">
+              <div style="font-size:1.8rem;margin-bottom:10px;">👕</div>
+              <h3 style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:6px;">Kaos Polos, Polo & T-Shirt Event</h3>
+              <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;">Cotton combed 24s / 30s premium reaktif, polo shirt lacoste pique untuk gathering dan seragam santai staf.</p>
+              <div class="font-num" style="margin-top:16px;font-size:0.75rem;font-weight:600;color:var(--accent);">Sablon DTF / Bordir Komputer</div>
+            </div>
+
+            <div class="atelier-card" style="padding:24px;">
+              <div style="font-size:1.8rem;margin-bottom:10px;">👗</div>
+              <h3 style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:6px;">Jaket Komunitas & Gamis Seragam</h3>
+              <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;">Jaket bomber, jaket parasut, seragam pengajian, gamis institusi pendidikan, dan seragam sekolah terpadu.</p>
+              <div class="font-num" style="margin-top:16px;font-size:0.75rem;font-weight:600;color:var(--accent);">Desain Pola Custom Sesuai Request</div>
+            </div>
+          </div>
+        </template>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 3: SERAGAM MEDIS OKA INTERACTIVE SWATCH -->
+  <section id="medis" style="padding:90px 24px;border-bottom:1px solid var(--border);">
+    <div style="max-width:1160px;margin:0 auto;">
+      
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:48px;align-items:center;">
+        
+        <!-- Swatch Picker -->
+        <div>
+          <span class="badge-pill" style="margin-bottom:14px;">Spesialisasi Unggulan</span>
+          <h2 class="font-editorial" style="font-size:clamp(1.8rem, 3.2vw, 2.6rem);font-weight:500;line-height:1.2;color:var(--text);margin-bottom:16px;">
+            Palet 13 Warna Seragam Medis OKA & Kamar Operasi
+          </h2>
+          <p style="color:var(--text-muted);margin-bottom:24px;font-size:0.95rem;">
+            Pilih warna di bawah untuk melihat simulasi visual seragam OKA produksi Orinamia. Seluruh kain telah lolos uji kenyamanan sirkulasi udara dan ketahanan pencucian sterilisasi.
+          </p>
+
+          <!-- Color Buttons Grid -->
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px;">
+            
+            <button type="button" class="swatch-btn" :class="{ 'active': selectedColor === 'toska' }"
+                    @click="selectedColor = 'toska'" style="background:#20B2AA;" title="Toska"></button>
+            <button type="button" class="swatch-btn" :class="{ 'active': selectedColor === 'navy' }"
+                    @click="selectedColor = 'navy'" style="background:#1B2A4A;" title="Navy"></button>
+            <button type="button" class="swatch-btn" :class="{ 'active': selectedColor === 'maroon' }"
+                    @click="selectedColor = 'maroon'" style="background:#800000;" title="Maroon"></button>
+            <button type="button" class="swatch-btn" :class="{ 'active': selectedColor === 'hijau' }"
+                    @click="selectedColor = 'hijau'" style="background:#2E8B57;" title="Hijau"></button>
+            <button type="button" class="swatch-btn" :class="{ 'active': selectedColor === 'hijau_muda' }"
+                    @click="selectedColor = 'hijau_muda'" style="background:#90EE90;" title="Hijau Muda"></button>
+            <button type="button" class="swatch-btn" :class="{ 'active': selectedColor === 'soft_pink' }"
+                    @click="selectedColor = 'soft_pink'" style="background:#FFB6C1;" title="Soft Pink"></button>
+            <button type="button" class="swatch-btn" :class="{ 'active': selectedColor === 'pink_fanta' }"
+                    @click="selectedColor = 'pink_fanta'" style="background:#FF1493;" title="Pink Fanta"></button>
+            <button type="button" class="swatch-btn" :class="{ 'active': selectedColor === 'biru_muda' }"
+                    @click="selectedColor = 'biru_muda'" style="background:#87CEEB;" title="Biru Muda"></button>
+            <button type="button" class="swatch-btn" :class="{ 'active': selectedColor === 'biru_benhur' }"
+                    @click="selectedColor = 'biru_benhur'" style="background:#0047AB;" title="Biru Benhur"></button>
+            <button type="button" class="swatch-btn" :class="{ 'active': selectedColor === 'ungu' }"
+                    @click="selectedColor = 'ungu'" style="background:#800080;" title="Ungu"></button>
+            <button type="button" class="swatch-btn" :class="{ 'active': selectedColor === 'kuning' }"
+                    @click="selectedColor = 'kuning'" style="background:#FFD700;" title="Kuning"></button>
+            <button type="button" class="swatch-btn" :class="{ 'active': selectedColor === 'orange' }"
+                    @click="selectedColor = 'orange'" style="background:#FFA500;" title="Orange"></button>
+            <button type="button" class="swatch-btn" :class="{ 'active': selectedColor === 'putih' }"
+                    @click="selectedColor = 'putih'" style="background:#FFFFFF;border:1px solid #D5CEE2;" title="Putih"></button>
+
+          </div>
+
+          <div style="font-size:0.875rem;color:var(--text);font-weight:600;">
+            Warna Terpilih: 
+            <span class="font-editorial" style="font-size:1.15rem;font-weight:600;color:var(--accent);text-transform:capitalize;"
+                  x-text="selectedColor.replace('_', ' ')"></span>
+          </div>
+
+        </div>
+
+        <!-- Interactive Visual Preview Card -->
+        <div class="atelier-card" style="padding:36px;text-align:center;background:var(--surface);">
+          <div style="width:120px;height:120px;border-radius:24px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,0.12);transition:background-color 250ms ease;"
+               :style="{
+                 'background-color': selectedColor === 'toska' ? '#20B2AA' :
+                                    selectedColor === 'navy' ? '#1B2A4A' :
+                                    selectedColor === 'maroon' ? '#800000' :
+                                    selectedColor === 'hijau' ? '#2E8B57' :
+                                    selectedColor === 'hijau_muda' ? '#90EE90' :
+                                    selectedColor === 'soft_pink' ? '#FFB6C1' :
+                                    selectedColor === 'pink_fanta' ? '#FF1493' :
+                                    selectedColor === 'biru_muda' ? '#87CEEB' :
+                                    selectedColor === 'biru_benhur' ? '#0047AB' :
+                                    selectedColor === 'ungu' ? '#800080' :
+                                    selectedColor === 'kuning' ? '#FFD700' :
+                                    selectedColor === 'orange' ? '#FFA500' : '#FFFFFF',
+                 'border': selectedColor === 'putih' ? '1px solid #D5CEE2' : 'none'
+               }">
+            <svg width="60" height="60" fill="none" :stroke="selectedColor === 'putih' || selectedColor === 'hijau_muda' || selectedColor === 'kuning' ? '#2D2B33' : '#FFFFFF'" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+            </svg>
+          </div>
+
+          <h3 style="font-size:1.25rem;font-weight:700;color:var(--text);margin-bottom:6px;">
+            Set Seragam OKA & Scrub Bedah
+          </h3>
+          <p style="font-size:0.875rem;color:var(--text-muted);margin-bottom:16px;">
+            Atasan kerah V ergonomis + Celana panjang pinggang serut elastis + Topi bedah (surgical cap opsional).
+          </p>
+
+          <div style="display:flex;justify-content:center;gap:12px;font-size:0.8125rem;">
+            <span class="badge-pill">Ukuran S s/d 5XL</span>
+            <span class="badge-pill">Katun Toyobo / Drill</span>
+            <span class="badge-pill">Bordir Nama & Logo</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 4: KLIEN & MITRA TERPERCAYA -->
+  <section id="klien" style="padding:90px 24px;border-bottom:1px solid var(--border);background:var(--surface-tint);">
+    <div style="max-width:1160px;margin:0 auto;text-align:center;">
+      
+      <span class="badge-pill" style="margin-bottom:14px;">Kemitraan Terpercaya</span>
+      <h2 class="font-editorial" style="font-size:clamp(1.8rem, 3.2vw, 2.6rem);font-weight:500;line-height:1.2;color:var(--text);margin-bottom:16px;">
+        Dipercaya Berbagai Rumah Sakit, Hotel, Korporat & Lembaga Nasional
+      </h2>
+      <p style="color:var(--text-muted);max-width:700px;margin:0 auto 48px;font-size:0.95rem;">
+        Berikut adalah institusi dan perusahaan yang telah menjalin kerjasama pengadaan seragam dengan PT Cahaya Binar Berlian (ORINAMIA Konveksi):
+      </p>
+
+      <!-- Client Grid -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:16px;">
+        
+        <div class="atelier-card" style="padding:22px;text-align:center;">
+          <div style="font-size:1.15rem;font-weight:700;color:var(--text);">Novotel Hotels</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Hospitality & Perhotelan</div>
+        </div>
+
+        <div class="atelier-card" style="padding:22px;text-align:center;">
+          <div style="font-size:1.15rem;font-weight:700;color:var(--text);">RS Sari Asih</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Jaringan Rumah Sakit</div>
+        </div>
+
+        <div class="atelier-card" style="padding:22px;text-align:center;">
+          <div style="font-size:1.15rem;font-weight:700;color:var(--text);">RS An-Nisa Tangerang</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Layanan Kesehatan</div>
+        </div>
+
+        <div class="atelier-card" style="padding:22px;text-align:center;">
+          <div style="font-size:1.15rem;font-weight:700;color:var(--text);">RSIA Bunda Sejati</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">RS Ibu & Anak</div>
+        </div>
+
+        <div class="atelier-card" style="padding:22px;text-align:center;">
+          <div style="font-size:1.15rem;font-weight:700;color:var(--text);">PT DNP Indonesia</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Manufaktur Industri</div>
+        </div>
+
+        <div class="atelier-card" style="padding:22px;text-align:center;">
+          <div style="font-size:1.15rem;font-weight:700;color:var(--text);">BAZNAS</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Badan Amil Zakat Nasional</div>
+        </div>
+
+        <div class="atelier-card" style="padding:22px;text-align:center;">
+          <div style="font-size:1.15rem;font-weight:700;color:var(--text);">Dompet Dhuafa</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Lembaga Kemanusiaan</div>
+        </div>
+
+        <div class="atelier-card" style="padding:22px;text-align:center;">
+          <div style="font-size:1.15rem;font-weight:700;color:var(--text);">Rumah Zakat</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Lembaga Filantropi</div>
+        </div>
+
+        <div class="atelier-card" style="padding:22px;text-align:center;">
+          <div style="font-size:1.15rem;font-weight:700;color:var(--text);">HIPKABI Banten</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Himpunan Perawat Bedah</div>
+        </div>
+
+        <div class="atelier-card" style="padding:22px;text-align:center;">
+          <div style="font-size:1.15rem;font-weight:700;color:var(--text);">NAKES PRO Volunteer</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Komunitas Medis</div>
+        </div>
+
+        <div class="atelier-card" style="padding:22px;text-align:center;">
+          <div style="font-size:1.15rem;font-weight:700;color:var(--text);">Omar Hotel</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Akomodasi & Wisata</div>
+        </div>
+
+        <div class="atelier-card" style="padding:22px;text-align:center;">
+          <div style="font-size:1.15rem;font-weight:700;color:var(--text);">Grand Mirah Hotel</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Hospitality Suites</div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 5: ALUR KERJASAMA & SISTEM PEMBAYARAN DUA TAHAP -->
+  <section id="alur" style="padding:90px 24px;border-bottom:1px solid var(--border);">
+    <div style="max-width:1160px;margin:0 auto;">
+      
+      <div style="text-align:center;max-width:760px;margin:0 auto 50px;">
+        <span class="badge-pill" style="margin-bottom:12px;">Transparansi Kemitraan</span>
+        <h2 class="font-editorial" style="font-size:clamp(1.8rem, 3.2vw, 2.6rem);font-weight:500;line-height:1.2;color:var(--text);">
+          Alur Pemesanan & Sistem Pembayaran Dua Tahap
+        </h2>
+        <p style="color:var(--text-muted);margin-top:10px;font-size:0.95rem;">
+          Sesuai SOP resmi PT Cahaya Binar Berlian, setiap pesanan dijamin dengan dokumen Purchase Order (PO), MOU, dan penagihan dua termin yang jelas.
+        </p>
+      </div>
+
+      <!-- Step Cards Grid -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:24px;">
+        
+        <!-- Step 1 -->
+        <div class="atelier-card" style="padding:28px;position:relative;">
+          <div class="font-num" style="font-size:2rem;font-weight:700;color:var(--accent);opacity:0.6;margin-bottom:8px;">01</div>
+          <h3 style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:8px;">Konsultasi & Sample</h3>
+          <p style="font-size:0.875rem;color:var(--text-muted);line-height:1.65;">
+            Diskusi kebutuhan bahan, pemilihan warna, ukuran, estimasi kuantitas (mulai 10 pcs hingga ribuan pcs), dan pembuatan sampel pola (mockup).
+          </p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="atelier-card" style="padding:28px;position:relative;">
+          <div class="font-num" style="font-size:2rem;font-weight:700;color:var(--accent);opacity:0.6;margin-bottom:8px;">02</div>
+          <h3 style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:8px;">MOU & Termin I (DP 50%)</h3>
+          <p style="font-size:0.875rem;color:var(--text-muted);line-height:1.65;">
+            Penandatanganan PO dan MOU kerja sama, dilanjutkan penerbitan Invoice DP 50% untuk komitmen alokasi bahan baku dan penjadwalan mesin jahit.
+          </p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="atelier-card" style="padding:28px;position:relative;">
+          <div class="font-num" style="font-size:2rem;font-weight:700;color:var(--accent);opacity:0.6;margin-bottom:8px;">03</div>
+          <h3 style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:8px;">Produksi & Quality Control</h3>
+          <p style="font-size:0.875rem;color:var(--text-muted);line-height:1.65;">
+            Pemotongan kain, proses jahit, bordir komputer, pembersihan benang sisa, serta quality control ketat untuk memastikan tidak ada cacat produksi.
+          </p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="atelier-card" style="padding:28px;position:relative;">
+          <div class="font-num" style="font-size:2rem;font-weight:700;color:var(--accent);opacity:0.6;margin-bottom:8px;">04</div>
+          <h3 style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:8px;">Pelunasan & Pengiriman</h3>
+          <p style="font-size:0.875rem;color:var(--text-muted);line-height:1.65;">
+            Penerbitan Invoice Pelunasan dengan jangka waktu maksimal 7 hari dari tanggal faktur (atau sesuai perjanjian), kemudian pesanan dikirim aman ke alamat Anda.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Interactive Estimator Card (Reactbits / Skiper UI / Motion Primitives inspired) -->
+      <div class="atelier-card" style="margin-top:40px;padding:36px;background:var(--surface);">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px;">
+          <div>
+            <span class="badge-pill" style="margin-bottom:6px;">Kalkulator Transparan</span>
+            <h3 class="font-editorial" style="font-size:1.45rem;font-weight:600;color:var(--text);">Simulasi Estimasi Biaya & Struktur Pembayaran Dua Termin</h3>
+            <p style="font-size:0.875rem;color:var(--text-muted);margin-top:2px;">
+              Pilih spesifikasi seragam dan kuantitas pemesanan (10 hingga ribuan pcs). Sistem menghitung otomatis komitmen DP 50% dan pelunasan H+7.
+            </p>
+          </div>
+          <span style="font-size:0.75rem;color:var(--text-muted);font-weight:600;padding:4px 10px;background:var(--surface-tint);border-radius:6px;border:1px solid var(--border);">
+            Sesuai PO & MOU Resmi
+          </span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:24px;align-items:start;">
+          
+          <!-- Controls -->
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <div>
+              <label style="display:block;font-size:0.8125rem;font-weight:600;color:var(--text);margin-bottom:8px;">
+                Jenis Seragam / Produk
+              </label>
+              <select x-model.number="calcType" style="width:100%;padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;font-size:0.875rem;outline:none;">
+                <option :value="125000">Set Seragam Medis OKA & Scrub Bedah (Estimasi Rp 125.000 / set)</option>
+                <option :value="115000">Kemeja Kerja Eksekutif / PDH Bordir (Estimasi Rp 115.000 / pcs)</option>
+                <option :value="145000">Kemeja Safety Proyek / PDL Scotlight 3M (Estimasi Rp 145.000 / pcs)</option>
+                <option :value="75000">Kaos Polo Lacoste Pique / T-Shirt Cotton 24s (Estimasi Rp 75.000 / pcs)</option>
+                <option :value="185000">Jas Almamater Kampus / Blazer Puring (Estimasi Rp 185.000 / pcs)</option>
+              </select>
+            </div>
+
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <label style="font-size:0.8125rem;font-weight:600;color:var(--text);">
+                  Kuantitas Pemesanan
+                </label>
+                <span class="font-num" style="font-weight:700;color:var(--accent);font-size:0.95rem;" x-text="calcQty + ' Pcs'"></span>
+              </div>
+              <input type="range" min="10" max="1000" step="10" x-model.number="calcQty" style="width:100%;accent-color:var(--accent);cursor:pointer;">
+              <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);margin-top:4px;">
+                <span>Min: 10 Pcs</span>
+                <span>500 Pcs</span>
+                <span>Max: 1.000+ Pcs</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Calculation Result Summary -->
+          <div style="padding:22px;border-radius:10px;background:var(--surface-tint);border:1px solid var(--border);">
+            <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.05em;margin-bottom:12px;">
+              Rincian Perhitungan Estimasi
+            </div>
+            
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:0.875rem;">
+              <span style="color:var(--text-muted);">Estimasi Total Nilai Kontrak:</span>
+              <strong class="font-num" style="color:var(--text);font-size:1.15rem;" x-text="'Rp ' + (calcQty * calcType).toLocaleString('id-ID')"></strong>
+            </div>
+
+            <div style="border-top:1px dashed var(--border);padding-top:10px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;font-size:0.85rem;">
+              <span style="color:var(--text-muted);">Termin I &bull; DP 50% (Saat PO & MOU):</span>
+              <strong class="font-num" style="color:var(--accent);" x-text="'Rp ' + ((calcQty * calcType) * 0.5).toLocaleString('id-ID')"></strong>
+            </div>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-size:0.85rem;">
+              <span style="color:var(--text-muted);">Termin II &bull; Pelunasan (Maks H+7 Faktur):</span>
+              <strong class="font-num" style="color:var(--text);" x-text="'Rp ' + ((calcQty * calcType) * 0.5).toLocaleString('id-ID')"></strong>
+            </div>
+
+            <a :href="'https://wa.me/6285716107394?text=' + encodeURIComponent('Halo PT Cahaya Binar Berlian, saya ingin mengajukan pemesanan ' + calcQty + ' pcs seragam dengan perkiraan estimasi nilai Rp ' + (calcQty * calcType).toLocaleString('id-ID') + '. Mohon informasi proposal dan PO resminya.')"
+               target="_blank" class="btn-brand" style="width:100%;justify-content:center;padding:10px;">
+              Kirim Rincian via WhatsApp Resmi &rarr;
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 6: LEGALITAS & KANTOR -->
+  <section id="legalitas" style="padding:90px 24px;border-bottom:1px solid var(--border);background:var(--surface-tint);">
+    <div style="max-width:1160px;margin:0 auto;">
+      
+      <div class="atelier-card" style="padding:48px 36px;background:var(--surface);">
+        <div style="max-width:760px;margin:0 auto;text-align:center;">
+          <span class="badge-pill" style="margin-bottom:12px;">Akuntabilitas Hukum</span>
+          <h2 class="font-editorial" style="font-size:clamp(1.8rem, 3vw, 2.5rem);font-weight:500;color:var(--text);margin-bottom:14px;">
+            Legalitas Terdaftar Resmi Negara
+          </h2>
+          <p style="color:var(--text-muted);font-size:0.95rem;line-height:1.7;margin-bottom:32px;">
+            PT Cahaya Binar Berlian adalah entitas perseroan terbatas resmi yang memenuhi standar perpajakan dan izin usaha garmen di Indonesia.
+          </p>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:20px;text-align:left;margin-bottom:36px;">
+            <div style="padding:16px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+              <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;">Badan Hukum PT</div>
+              <div style="font-weight:700;font-size:1rem;color:var(--text);margin-top:2px;">PT Cahaya Binar Berlian</div>
+            </div>
+
+            <div style="padding:16px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+              <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;">SK Kemenkumham RI</div>
+              <div class="font-num" style="font-weight:700;font-size:0.9rem;color:var(--accent);margin-top:2px;">AHU-0202685.AH.01.30.2024</div>
+            </div>
+
+            <div style="padding:16px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+              <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;">Nomor Induk Berusaha (NIB)</div>
+              <div class="font-num" style="font-weight:700;font-size:0.9rem;color:var(--text);margin-top:2px;">2104240036065</div>
+            </div>
+
+            <div style="padding:16px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+              <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;">Rekening Resmi Perusahaan</div>
+              <div class="font-num" style="font-weight:700;font-size:0.9rem;color:var(--text);margin-top:2px;">BSI 7273909413</div>
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+            <a href="https://wa.me/6285716107394?text=Halo%20PT%20Cahaya%20Binar%20Berlian,%20saya%20ingin%20mengajukan%20penawaran%20seragam"
+               target="_blank" class="btn-brand" style="padding:12px 28px;">
+              Hubungi Tim Kami (0857 1610 7394)
+            </a>
+            @auth
+              <a href="{{ route('dashboard') }}" class="btn-ghost" style="padding:12px 24px;">
+                Buka Sistem Manajemen SIMORIN &rarr;
+              </a>
+            @else
+              <a href="{{ route('login') }}" class="btn-ghost" style="padding:12px 24px;">
+                Login Pengguna Sistem &rarr;
+              </a>
+            @endauth
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="padding:60px 24px 30px;background:var(--surface);border-top:1px solid var(--border);">
+    <div style="max-width:1160px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:36px;margin-bottom:48px;">
+      
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:#fff;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;">
+            <svg width="28" height="28" viewBox="0 0 100 100" fill="none">
+              <circle cx="50" cy="50" r="42" stroke="#454547" stroke-width="6.5"/>
+              <path d="M50 7 L80 35 L70 50 L58 37 L50 27 L35 42 L41 52 L27 50 L20 35 Z" fill="#F391EC"/>
+              <path d="M50 93 L20 65 L30 50 L42 63 L50 73 L65 58 L59 48 L73 50 L80 65 Z" fill="#AD8EEB"/>
+              <polygon points="50,43 56,50 50,57 44,50" fill="#AD8EEB"/>
+            </svg>
+          </div>
+          <span style="font-size:1.1rem;font-weight:700;"><span style="color:#E074D8;">ORI</span><span style="color:#9B78E6;">NAMIA</span></span>
+        </div>
+        <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.7;">
+          Atelier konveksi terkemuka di Tangerang untuk seragam kerja, pakaian dinas PDH/PDL, dan pakaian medis OKA. Bagian dari unit usaha PT Cahaya Binar Berlian.
+        </p>
+      </div>
+
+      <div>
+        <h4 style="font-size:0.9rem;font-weight:700;color:var(--text);margin-bottom:12px;">Alamat Workshop</h4>
+        <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.7;">
+          Jl Cibodas Raya No 10 D Perum 1, Karawaci, Tangerang, Banten.<br>
+          Atelier Administrasi: Jl Tongkol Raya No 20C Perum 1, Karawaci, Tangerang.
+        </p>
+      </div>
+
+      <div>
+        <h4 style="font-size:0.9rem;font-weight:700;color:var(--text);margin-bottom:12px;">Kontak & Layanan</h4>
+        <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.7;">
+          Hotline / WhatsApp: <strong class="font-num" style="color:var(--text);">0857 1610 7394</strong><br>
+          Operasional: Senin &ndash; Sabtu (08.00 &ndash; 17.00 WIB)<br>
+          Sistem Informasi: SIMORIN (Sistem Informasi Manajemen Orinamia)
+        </p>
+      </div>
+
+    </div>
+
+    <div style="max-width:1160px;margin:0 auto;border-top:1px solid var(--border);padding-top:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:0.8rem;color:var(--text-muted);">
+      <div>&copy; 2015 &ndash; {{ date('Y') }} PT CAHAYA BINAR BERLIAN &bull; ORINAMIA Daily Wear & Konveksi. Seluruh hak cipta dilindungi.</div>
+      <div style="display:flex;gap:16px;">
+        <a href="{{ route('login') }}" style="color:var(--accent);text-decoration:none;font-weight:600;">Login Staf & Owner</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Anime.js Micro-Interactions & Motion Primitives -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof anime !== 'undefined') {
+        // Staggered entrance for atelier cards
+        anime({
+          targets: '.atelier-card',
+          opacity: [0.85, 1],
+          translateY: [8, 0],
+          delay: anime.stagger(40, { start: 100 }),
+          duration: 700,
+          easing: 'easeOutCubic'
+        });
+
+        // Breathing ambient light aura
+        anime({
+          targets: '.aura-spotlight',
+          scale: [0.95, 1.05],
+          opacity: [0.7, 1],
+          duration: 6000,
+          direction: 'alternate',
+          loop: true,
+          easing: 'easeInOutSine'
+        });
+      }
+    });
+  </script>
+
+</body>
 </html>
