@@ -57,13 +57,19 @@
       --card-shadow:  0 10px 35px -10px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0,0,0,0.3);
     }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 100px;
+    }
+    [id] {
+      scroll-margin-top: 100px;
+    }
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.6;
-      overflow-x: hidden;
+      overflow-x: clip;
       transition: background-color 300ms ease, color 300ms ease;
     }
 
@@ -88,13 +94,16 @@
 
     /* Glass Surfaces */
     .glass-nav {
-      background: rgba(250, 249, 252, 0.85);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(250, 249, 252, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
     }
     .dark .glass-nav {
-      background: rgba(18, 17, 22, 0.85);
+      background: rgba(18, 17, 22, 0.92);
       border-bottom: 1px solid var(--border);
     }
 
@@ -1388,37 +1397,72 @@
       </div>
 
       <!-- Atelier Heritage Card -->
-      <div class="atelier-card" style="padding:36px;position:relative;background:var(--surface);">
-        <div style="font-size:0.75rem;color:var(--accent);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">Profil Entitas</div>
-        <div style="font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:4px;">PT Cahaya Binar Berlian</div>
-        <div style="font-size:0.875rem;color:var(--text-muted);margin-bottom:24px;">Merk Dagang: ORINAMIA Konveksi & Rumah Jahit</div>
+      <div class="atelier-card" style="padding:clamp(22px, 3.5vw, 36px);position:relative;background:var(--surface);overflow:hidden;min-width:0;word-break:break-word;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap;">
+          <div style="font-size:0.75rem;color:var(--accent);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Profil Entitas</div>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:0.72rem;font-weight:700;color:#10B981;background:rgba(16, 185, 129, 0.08);padding:3px 10px;border-radius:999px;border:1px solid rgba(16, 185, 129, 0.2);">
+            <span style="width:6px;height:6px;border-radius:50%;background:#10B981;"></span>
+            Legalitas Aktif
+          </span>
+        </div>
+        <div style="font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.25;">PT Cahaya Binar Berlian</div>
+        <div style="font-size:0.875rem;color:var(--text-muted);margin-bottom:22px;">Merk Dagang: ORINAMIA Konveksi &amp; Rumah Jahit</div>
 
         <div style="border-top:1px dashed var(--border);padding-top:18px;display:flex;flex-direction:column;gap:16px;">
-          <div>
-            <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;">Sertifikasi Kemenkumham RI</div>
-            <div class="font-num" style="font-size:0.95rem;font-weight:700;color:var(--accent);margin-top:2px;">
-              AHU-0202685.AH.01.30. Tahun 2024
+          <!-- Grid for Kemenkumham and NIB -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:14px;">
+            <div style="background:var(--surface-tint);padding:12px 14px;border-radius:8px;border:1px solid var(--border);">
+              <div style="font-size:0.7rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.04em;">SK Kemenkumham RI</div>
+              <div class="font-num" style="font-size:0.875rem;font-weight:700;color:var(--accent);margin-top:3px;white-space:normal;word-break:break-word;">
+                AHU-0202685.AH.01.30. Tahun 2024
+              </div>
+            </div>
+
+            <div style="background:var(--surface-tint);padding:12px 14px;border-radius:8px;border:1px solid var(--border);">
+              <div style="font-size:0.7rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.04em;">Nomor Induk Berusaha (NIB)</div>
+              <div class="font-num" style="font-size:0.95rem;font-weight:700;color:var(--text);margin-top:3px;white-space:normal;word-break:break-word;">
+                2104240036065
+              </div>
             </div>
           </div>
 
+          <!-- Alamat Workshop -->
           <div>
-            <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;">Nomor Induk Berusaha (NIB)</div>
-            <div class="font-num" style="font-size:0.95rem;font-weight:700;color:var(--text);margin-top:2px;">
-              2104240036065
-            </div>
-          </div>
-
-          <div>
-            <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;">Alamat Workshop & Operasional</div>
-            <div style="font-size:0.875rem;color:var(--text);margin-top:2px;line-height:1.5;">
+            <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;">Alamat Workshop &amp; Operasional</div>
+            <div style="font-size:0.875rem;color:var(--text);margin-top:3px;line-height:1.55;word-break:break-word;">
               Jl Cibodas Raya No 10 D Perum 1, Karawaci, Kota Tangerang, Banten
             </div>
           </div>
 
-          <div>
-            <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;">Rekening Resmi Perusahaan</div>
-            <div class="font-num" style="font-size:0.875rem;color:var(--text);margin-top:2px;">
-              Bank Syariah Indonesia (BSI) <strong>7273909413</strong> a/n PT Cahaya Binar Berlian
+          <!-- Rekening Resmi Perusahaan Box -->
+          <div style="background:var(--surface-tint);border:1px solid var(--border);border-radius:10px;padding:14px 16px;" x-data="{ copied: false }">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+              <span style="font-size:0.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.04em;">Rekening Resmi Perusahaan</span>
+              <span style="display:inline-flex;align-items:center;gap:5px;font-size:0.7rem;font-weight:700;color:var(--accent);background:var(--surface);padding:2px 8px;border-radius:999px;border:1px solid var(--border);">
+                Atas Nama PT
+              </span>
+            </div>
+
+            <div style="font-size:0.875rem;font-weight:600;color:var(--text);margin-bottom:6px;">
+              Bank Syariah Indonesia (BSI)
+            </div>
+
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;margin-bottom:6px;flex-wrap:wrap;">
+              <span class="font-num" style="font-size:1.05rem;font-weight:700;letter-spacing:0.04em;color:var(--text);white-space:normal;word-break:break-all;">
+                7273909413
+              </span>
+              <button
+                type="button"
+                @click="navigator.clipboard.writeText('7273909413'); copied = true; setTimeout(() => copied = false, 2000)"
+                style="border:none;background:var(--surface-tint);color:var(--accent);font-size:0.75rem;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:all 150ms ease;"
+                title="Salin nomor rekening BSI">
+                <span x-show="!copied">Salin No. Rekening</span>
+                <span x-show="copied" style="color:#10B981;">Tersalin ✓</span>
+              </button>
+            </div>
+
+            <div style="font-size:0.75rem;color:var(--text-muted);line-height:1.4;">
+              Atas Nama: <strong style="color:var(--text);">PT Cahaya Binar Berlian</strong>
             </div>
           </div>
         </div>
@@ -2749,7 +2793,9 @@
 
     <div style="height:20px;width:1px;background:var(--border);"></div>
 
-    <a href="#kalkulator" class="btn-ghost" style="padding:6px 12px;font-size:0.75rem;border-radius:999px;border:none;background:var(--surface-tint);">
+    <a href="#kalkulator" 
+       @click.prevent="document.getElementById('kalkulator')?.scrollIntoView({ behavior: 'smooth', block: 'start' })"
+       class="btn-ghost" style="padding:6px 12px;font-size:0.75rem;border-radius:999px;border:none;background:var(--surface-tint);">
       Estimasi Biaya
     </a>
 
