@@ -9,7 +9,8 @@ class Pelanggan extends Model
 {
     use HasAutoNumber;
 
-    protected $table    = 'pelanggan';
+    protected $table = 'pelanggan';
+
     protected $fillable = ['no_pelanggan', 'nama', 'tlp', 'alamat', 'is_active'];
 
     protected function casts(): array

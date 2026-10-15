@@ -9,7 +9,8 @@ class Supplier extends Model
 {
     use HasAutoNumber;
 
-    protected $table    = 'supplier';
+    protected $table = 'supplier';
+
     protected $fillable = ['no_supplier', 'nama', 'alamat', 'tlp', 'is_active'];
 
     protected function casts(): array

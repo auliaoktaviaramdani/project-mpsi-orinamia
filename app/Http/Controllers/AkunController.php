@@ -13,6 +13,7 @@ class AkunController extends Controller
     public function index()
     {
         $akuns = User::orderBy('name')->get();
+
         return view('master.akun.index', compact('akuns'));
     }
 
@@ -24,17 +25,17 @@ class AkunController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'     => ['required', 'string', 'max:100'],
+            'name' => ['required', 'string', 'max:100'],
             'username' => ['required', 'string', 'max:50', 'unique:users,username'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'role'     => ['required', Rule::in(['admin', 'owner'])],
+            'role' => ['required', Rule::in(['admin', 'owner'])],
         ]);
 
         User::create([
-            'name'     => $validated['name'],
+            'name' => $validated['name'],
             'username' => $validated['username'],
             'password' => Hash::make($validated['password']),
-            'role'     => $validated['role'],
+            'role' => $validated['role'],
         ]);
 
         return redirect()->route('akun.index')
@@ -49,16 +50,16 @@ class AkunController extends Controller
     public function update(Request $request, User $akun)
     {
         $validated = $request->validate([
-            'name'     => ['required', 'string', 'max:100'],
+            'name' => ['required', 'string', 'max:100'],
             'username' => ['required', 'string', 'max:50', Rule::unique('users', 'username')->ignore($akun->id)],
             'password' => ['nullable', 'string', 'min:6', 'confirmed'],
-            'role'     => ['required', Rule::in(['admin', 'owner'])],
+            'role' => ['required', Rule::in(['admin', 'owner'])],
         ]);
 
         $data = [
-            'name'     => $validated['name'],
+            'name' => $validated['name'],
             'username' => $validated['username'],
-            'role'     => $validated['role'],
+            'role' => $validated['role'],
         ];
 
         if (! empty($validated['password'])) {

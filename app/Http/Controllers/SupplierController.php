@@ -13,25 +13,27 @@ class SupplierController extends Controller
     public function index()
     {
         $suppliers = Supplier::orderBy('no_supplier')->paginate(25);
+
         return view('master.supplier.index', compact('suppliers'));
     }
 
     public function create()
     {
         $noSupplier = Supplier::nextNoSupplier();
+
         return view('master.supplier.create', compact('noSupplier'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama'   => ['required', 'string', 'max:100'],
+            'nama' => ['required', 'string', 'max:100'],
             'alamat' => ['nullable', 'string'],
-            'tlp'    => ['nullable', 'string', 'max:30'],
+            'tlp' => ['nullable', 'string', 'max:30'],
         ]);
 
         $validated['no_supplier'] = Supplier::nextNoSupplier();
-        $validated['is_active']   = true;
+        $validated['is_active'] = true;
 
         Supplier::create($validated);
 
@@ -47,9 +49,9 @@ class SupplierController extends Controller
     public function update(Request $request, Supplier $supplier)
     {
         $validated = $request->validate([
-            'nama'      => ['required', 'string', 'max:100'],
-            'alamat'    => ['nullable', 'string'],
-            'tlp'       => ['nullable', 'string', 'max:30'],
+            'nama' => ['required', 'string', 'max:100'],
+            'alamat' => ['nullable', 'string'],
+            'tlp' => ['nullable', 'string', 'max:30'],
             'is_active' => ['nullable', 'boolean'],
         ]);
 
@@ -78,18 +80,18 @@ class SupplierController extends Controller
     public function quickStore(Request $request)
     {
         $validated = $request->validate([
-            'nama'   => ['required', 'string', 'max:100'],
+            'nama' => ['required', 'string', 'max:100'],
             'alamat' => ['nullable', 'string'],
-            'tlp'    => ['nullable', 'string', 'max:30'],
+            'tlp' => ['nullable', 'string', 'max:30'],
         ]);
 
         $validated['no_supplier'] = Supplier::nextNoSupplier();
-        $validated['is_active']   = true;
+        $validated['is_active'] = true;
 
         $supplier = Supplier::create($validated);
 
         return response()->json([
-            'success'  => true,
+            'success' => true,
             'supplier' => $supplier,
         ]);
     }

@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
-use App\Models\Penjualan;
 use App\Models\Pembelian;
-use Illuminate\Support\Facades\DB;
+use App\Models\Penjualan;
 
 class DashboardController extends Controller
 {
@@ -16,17 +15,17 @@ class DashboardController extends Controller
             ->sum('balance_due');
 
         $totalPenjualan = Penjualan::sum('total');
-        $totalPaid      = Penjualan::sum('paid');
+        $totalPaid = Penjualan::sum('paid');
         $totalPembelian = Pembelian::sum('total_beli');
 
         // Jumlah invoice yang belum lunas
         $invoiceMenunggu = Invoice::where('status', 'BELUM_BAYAR')->count();
 
-        $paidPercent    = $totalPenjualan > 0 ? round(($totalPaid / $totalPenjualan) * 100, 1) : 0;
-        $unpaidPercent  = 100 - $paidPercent;
+        $paidPercent = $totalPenjualan > 0 ? round(($totalPaid / $totalPenjualan) * 100, 1) : 0;
+        $unpaidPercent = 100 - $paidPercent;
 
-        $jumlahPesanan  = Penjualan::count();
-        $jumlahFaktur   = Pembelian::count();
+        $jumlahPesanan = Penjualan::count();
+        $jumlahFaktur = Pembelian::count();
 
         return view('dashboard', compact(
             'totalPiutang',

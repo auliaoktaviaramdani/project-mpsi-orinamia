@@ -9,13 +9,14 @@ class Invoice extends Model
 {
     use HasAutoNumber;
 
-    protected $table    = 'invoice';
+    protected $table = 'invoice';
+
     protected $fillable = ['penjualan_id', 'jenis', 'nomor', 'jumlah', 'jatuh_tempo', 'status'];
 
     protected function casts(): array
     {
         return [
-            'jumlah'      => 'decimal:2',
+            'jumlah' => 'decimal:2',
             'jatuh_tempo' => 'date',
         ];
     }

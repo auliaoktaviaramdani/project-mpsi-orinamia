@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Invoice;
 use App\Models\Pembelian;
 use App\Models\Penjualan;
-use App\Support\Fmt;
 use Illuminate\Http\Request;
 
 class LaporanController extends Controller
@@ -39,8 +37,8 @@ class LaporanController extends Controller
         $today = now()->toDateString();
         $firstOfMonth = now()->startOfMonth()->toDateString();
 
-        $jenis  = $request->input('jenis', 'penjualan');
-        $dari   = $request->input('dari', $firstOfMonth);
+        $jenis = $request->input('jenis', 'penjualan');
+        $dari = $request->input('dari', $firstOfMonth);
         $sampai = $request->input('sampai', $today);
 
         if (! in_array($jenis, ['penjualan', 'pembelian', 'piutang'])) {
@@ -55,13 +53,13 @@ class LaporanController extends Controller
     public function show(Request $request)
     {
         $validated = $request->validate([
-            'jenis'  => ['required', 'in:penjualan,pembelian,piutang'],
-            'dari'   => ['required', 'date'],
+            'jenis' => ['required', 'in:penjualan,pembelian,piutang'],
+            'dari' => ['required', 'date'],
             'sampai' => ['required', 'date', 'gte:dari'],
         ]);
 
-        $jenis  = $validated['jenis'];
-        $dari   = $validated['dari'];
+        $jenis = $validated['jenis'];
+        $dari = $validated['dari'];
         $sampai = $validated['sampai'];
 
         $rows = $this->getRows($jenis, $dari, $sampai);

@@ -8,7 +8,7 @@
     Ringkasan keuangan Orinamia Daily Wear &bull; {{ \App\Support\Fmt::tgl(now()) }}
   </p>
 </div>
-
+  
 <!-- Summary Cards -->
 <section style="display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-bottom:24px;" aria-label="Ringkasan Keuangan">
 

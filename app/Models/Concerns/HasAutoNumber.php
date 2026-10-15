@@ -20,10 +20,10 @@ trait HasAutoNumber
         $next = 1;
         if ($last) {
             $parts = explode('-', $last);
-            $next  = ((int) end($parts)) + 1;
+            $next = ((int) end($parts)) + 1;
         }
 
-        return $prefix . '-' . str_pad($next, 3, '0', STR_PAD_LEFT);
+        return $prefix.'-'.str_pad($next, 3, '0', STR_PAD_LEFT);
     }
 
     /**
@@ -42,10 +42,10 @@ trait HasAutoNumber
         $next = 1;
         if ($last) {
             $parts = explode('-', $last);
-            $next  = ((int) end($parts)) + 1;
+            $next = ((int) end($parts)) + 1;
         }
 
-        return $prefix . '-' . $period . '-' . str_pad($next, 3, '0', STR_PAD_LEFT);
+        return $prefix.'-'.$period.'-'.str_pad($next, 3, '0', STR_PAD_LEFT);
     }
 
     // -------------------------------------------------------------------------

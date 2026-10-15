@@ -8,11 +8,13 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasAutoNumber;
+    use HasAutoNumber, Notifiable;
 
-    protected $table    = 'users';
+    protected $table = 'users';
+
     protected $fillable = ['username', 'password', 'name', 'role'];
-    protected $hidden   = ['password', 'remember_token'];
+
+    protected $hidden = ['password', 'remember_token'];
 
     protected function casts(): array
     {

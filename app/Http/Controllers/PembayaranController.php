@@ -16,20 +16,20 @@ class PembayaranController extends Controller
     {
         $validated = $request->validate([
             'tanggal' => ['required', 'date'],
-            'jumlah'  => ['required', 'numeric', 'min:1'],
+            'jumlah' => ['required', 'numeric', 'min:1'],
         ]);
 
         $sisa = $invoice->sisaTagihan();
 
         if ((float) $validated['jumlah'] > $sisa) {
-            return back()->with('error', 'Jumlah pembayaran melebihi sisa tagihan invoice (Rp ' . number_format($sisa, 0, ',', '.') . ').');
+            return back()->with('error', 'Jumlah pembayaran melebihi sisa tagihan invoice (Rp '.number_format($sisa, 0, ',', '.').').');
         }
 
         Pembayaran::create([
             'invoice_id' => $invoice->id,
-            'tanggal'    => $validated['tanggal'],
-            'jumlah'     => $validated['jumlah'],
-            'user_id'    => Auth::id(),
+            'tanggal' => $validated['tanggal'],
+            'jumlah' => $validated['jumlah'],
+            'user_id' => Auth::id(),
         ]);
 
         // Hitung ulang totals dan status di penjualan
