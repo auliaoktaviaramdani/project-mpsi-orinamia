@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orinamia Daily Wear - Sistem Penjualan, Invoice & Pembayaran</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Newsreader"', 'Georgia', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            silk: {
+              bg: '#FAF9FC',
+              card: '#FFFFFF',
+              tint: '#F4EFFA',
+              border: '#E4DFEC',
+              darkBg: '#17161B',
+              darkCard: '#211F27',
+              darkTint: '#2C2836',
+              darkBorder: '#363242'
+            },
+            charcoal: {
+              DEFAULT: '#2D2B33',
+              ring: '#454547',
+              muted: '#635D73',
+              darkText: '#F4F2F7',
+              darkMuted: '#B5AFC4'
+            },
+            orinamia: {
+              pink: '#F391EC',
+              lavender: '#AD8EEB',
+              berry: '#6E387A',
+              berryHover: '#582B62',
+              darkAccent: '#CFA8F5'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-editorial { font-family: 'Newsreader', Georgia, serif; }
+    .font-num { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+
+    /* Soft Thread Dashed Divider */
+    .thread-divider {
+      border-top: 1.5px dashed #D5CEE2;
+    }
+    .dark .thread-divider {
+      border-top: 1.5px dashed #3E394D;
+    }
+
+    *:focus-visible {
+      outline: 2px solid #6E387A !important;
+      outline-offset: 2px !important;
+    }
+    .dark *:focus-visible {
+      outline: 2px solid #CFA8F5 !important;
+    }
+
+    @media print {
+      .no-print { display: none !important; }
+      .print-sheet { display: block !important; border: none !important; }
+    }
+  </style>
+</head>
+<body class="bg-silk-bg text-charcoal dark:bg-silk-darkBg dark:text-charcoal-darkText min-h-screen flex flex-col">
+
+  <!-- Brand Identity Ribbon (Derived from Logo Orchid Pink #F391EC & Lavender #AD8EEB) -->
+  <div class="h-1 w-full bg-gradient-to-r from-orinamia-pink via-orinamia-lavender to-orinamia-berry no-print"></div>
+
+  <!-- 1. CLEAN SILK-WHITE TOP HEADER (Matches the clean white background of the official logo) -->
+  <header class="bg-silk-card dark:bg-silk-darkCard border-b border-silk-border dark:border-silk-darkBorder sticky top-0 z-30 no-print">
+    <div class="max-w-[1520px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      
+      <!-- Official Orinamia Logo & Brand Name -->
+      <div class="flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-full bg-white p-0.5 flex items-center justify-center shrink-0 border border-silk-border">
+          <svg class="w-full h-full" viewBox="0 0 100 100" fill="none" role="img" aria-label="Logo Orinamia Daily Wear">
+            <circle cx="50" cy="50" r="42" stroke="#454547" stroke-width="6.5"/>
+            <path d="M50 7 L80 35 L70 50 L58 37 L50 27 L35 42 L41 52 L27 50 L20 35 Z" fill="#F391EC"/>
+            <path d="M50 93 L20 65 L30 50 L42 63 L50 73 L65 58 L59 48 L73 50 L80 65 Z" fill="#AD8EEB"/>
+            <polygon points="50,43 56,50 50,57 44,50" fill="#AD8EEB"/>
+          </svg>
+        </div>
+        <div>
+          <div class="text-lg font-bold tracking-[0.16em] leading-none">
+            <span style="color:#E074D8">ORI</span><span style="color:#9B78E6">NAMIA</span>
+          </div>
+          <div class="text-[10px] font-semibold tracking-[0.26em] text-charcoal-ring dark:text-charcoal-darkMuted mt-1">DAILY WEAR</div>
+        </div>
+      </div>
+
+      <!-- Soft Tailored Navigation Tabs -->
+      <nav class="hidden md:flex items-center gap-1.5 bg-silk-bg dark:bg-silk-darkBg p-1.5 rounded-lg border border-silk-border dark:border-silk-darkBorder" aria-label="Menu Utama">
+        <button type="button" onclick="switchTab('penjualan')" id="nav-penjualan" class="nav-pill min-h-[40px] px-4 py-1.5 rounded-md text-sm font-semibold bg-silk-card dark:bg-silk-darkCard text-orinamia-berry dark:text-orinamia-darkAccent border border-silk-border dark:border-silk-darkBorder">
+          Penjualan & Invoice
+        </button>
+        <button type="button" onclick="switchTab('pembelian')" id="nav-pembelian" class="nav-pill min-h-[40px] px-4 py-1.5 rounded-md text-sm font-medium text-charcoal-muted dark:text-charcoal-darkMuted hover:text-charcoal dark:hover:text-white">
+          Pembelian Bahan
+        </button>
+        <button type="button" onclick="switchTab('master')" id="nav-master" class="nav-pill min-h-[40px] px-4 py-1.5 rounded-md text-sm font-medium text-charcoal-muted dark:text-charcoal-darkMuted hover:text-charcoal dark:hover:text-white">
+          Data Master
+        </button>
+        <button type="button" onclick="switchTab('laporan')" id="nav-laporan" class="nav-pill min-h-[40px] px-4 py-1.5 rounded-md text-sm font-medium text-charcoal-muted dark:text-charcoal-darkMuted hover:text-charcoal dark:hover:text-white">
+          Laporan & Cetak Invoice
+        </button>
+      </nav>
+
+      <!-- Right Controls: Role Switcher, Theme, & Primary Action -->
+      <div class="flex items-center gap-2.5">
+        <label for="rolePicker" class="sr-only">Pilih Akun Login</label>
+        <select id="rolePicker" onchange="switchUserRole(this.value)" class="min-h-[44px] px-3 py-1.5 rounded-md bg-silk-bg dark:bg-silk-darkBg border border-silk-border dark:border-silk-darkBorder text-xs font-medium">
+          <option value="admin">Akun: Admin Orinamia</option>
+          <option value="owner">Akun: Owner (Lihat Saja)</option>
+        </select>
+
+        <button type="button" onclick="toggleThemeMode()" class="min-h-[44px] px-3 py-1.5 rounded-md border border-silk-border dark:border-silk-darkBorder text-xs font-medium hover:bg-silk-tint dark:hover:bg-silk-darkTint">
+          Tema: <span id="themeName" class="font-semibold text-orinamia-berry dark:text-orinamia-darkAccent">Terang</span>
+        </button>
+
+        <button type="button" onclick="openSlideDrawer('drawerOrder')" class="admin-action-btn min-h-[44px] px-4 py-2 rounded-md bg-orinamia-berry hover:bg-orinamia-berryHover text-white text-sm font-semibold">
+          + Pesanan Baru
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Bar -->
+    <div class="flex md:hidden overflow-x-auto px-4 py-2 gap-2 border-t border-silk-border dark:border-silk-darkBorder bg-silk-bg dark:bg-silk-darkBg">
+      <button type="button" onclick="switchTab('penjualan')" class="min-h-[40px] px-3 py-1 rounded text-xs font-semibold bg-orinamia-berry text-white shrink-0">Penjualan & Invoice</button>
+      <button type="button" onclick="switchTab('pembelian')" class="min-h-[40px] px-3 py-1 rounded text-xs font-medium border border-silk-border shrink-0">Pembelian Bahan</button>
+      <button type="button" onclick="switchTab('master')" class="min-h-[40px] px-3 py-1 rounded text-xs font-medium border border-silk-border shrink-0">Data Master</button>
+      <button type="button" onclick="switchTab('laporan')" class="min-h-[40px] px-3 py-1 rounded text-xs font-medium border border-silk-border shrink-0">Cetak & Laporan</button>
+    </div>
+  </header>
+
+  <!-- Subtle Testing Bar for UI States (R-27) -->
+  <div class="bg-silk-tint/60 dark:bg-silk-darkTint/50 border-b border-silk-border dark:border-silk-darkBorder px-4 sm:px-6 lg:px-8 py-2 no-print">
+    <div class="max-w-[1520px] mx-auto flex flex-wrap items-center justify-between gap-2 text-xs">
+      <span class="text-charcoal-muted dark:text-charcoal-darkMuted">
+        Orinamia Konveksi • Jalan Tongkol Raya no 20C perum 1 Karawaci Tangerang • BSI 7273909413 a/n PT Cahaya Binar Berlian
+      </span>
+      <div class="flex items-center gap-1.5">
+        <span class="text-charcoal-muted dark:text-charcoal-darkMuted mr-1">Pratinjau Kondisi:</span>
+        <button type="button" onclick="setScreenState('normal')" class="min-h-[34px] px-2.5 py-1 rounded bg-charcoal text-white dark:bg-white dark:text-charcoal font-medium">Data Normal</button>
+        <button type="button" onclick="setScreenState('empty')" class="min-h-[34px] px-2.5 py-1 rounded border border-silk-border dark:border-silk-darkBorder bg-white dark:bg-silk-darkCard">Kosong (Empty)</button>
+        <button type="button" onclick="setScreenState('loading')" class="min-h-[34px] px-2.5 py-1 rounded border border-silk-border dark:border-silk-darkBorder bg-white dark:bg-silk-darkCard">Memuat (Loading)</button>
+        <button type="button" onclick="setScreenState('error')" class="min-h-[34px] px-2.5 py-1 rounded border border-red-300 text-[#7F1D1D] bg-[#FEE2E2]">Galat (Error)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- UI State Containers -->
+  <div id="state-loading" class="hidden max-w-[1520px] w-full mx-auto my-12 p-12 rounded-lg bg-silk-card dark:bg-silk-darkCard border border-silk-border dark:border-silk-darkBorder text-center">
+    <p class="font-editorial text-xl font-medium">Sedang memuat buku pesanan Orinamia...</p>
+    <p class="text-xs text-charcoal-muted dark:text-charcoal-darkMuted mt-1">Menyinkronkan data penjualan, tagihan DP, dan pelunasan.</p>
+  </div>
+
+  <div id="state-error" class="hidden max-w-[1520px] w-full mx-auto mt-6 px-4 sm:px-6 lg:px-8">
+    <div class="p-4 rounded-lg bg-[#FEE2E2] text-[#7F1D1D] border border-red-300 flex items-center justify-between">
+      <div>
+        <p class="text-sm font-bold">Penyimpanan Tidak Dapat Dilanjutkan</p>
+        <p class="text-xs mt-0.5">Pastikan nominal pembayaran tidak melebihi sisa tagihan invoice, atau lunasi tagihan sebelum mengubah status menjadi Terkirim.</p>
+      </div>
+      <button type="button" onclick="setScreenState('normal')" class="min-h-[40px] px-3.5 py-1.5 rounded-md bg-[#7F1D1D] text-white text-xs font-semibold">Mengerti</button>
+    </div>
+  </div>
+
+  <div id="state-empty" class="hidden max-w-[1520px] w-full mx-auto my-12 p-12 rounded-lg bg-silk-card dark:bg-silk-darkCard border border-dashed border-silk-border dark:border-silk-darkBorder text-center">
+    <p class="font-editorial text-2xl font-medium">Belum Ada Pesanan pada Periode Ini</p>
+    <p class="text-xs text-charcoal-muted dark:text-charcoal-darkMuted mt-1.5 max-w-md mx-auto">Catat pesanan pakaian pelanggan untuk menerbitkan Invoice DP dan Invoice Pelunasan secara otomatis.</p>
+    <button type="button" onclick="setScreenState('normal'); openSlideDrawer('drawerOrder')" class="admin-action-btn mt-4 min-h-[44px] px-5 py-2 rounded-md bg-orinamia-berry text-white text-xs font-semibold">
+      + Buat Pesanan Pertama
+    </button>
+  </div>
+
+  <!-- MAIN CONTENT WORKSPACE -->
+  <main id="main-workspace" class="flex-1 max-w-[1520px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- 2. EDITORIAL SUMMARY RIBBON (Asymmetric, Soft Tailored Radius, No Stock Cards) -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-4 no-print" aria-label="Ringkasan Keuangan">
+      
+      <!-- Focal Card (6 Cols): Total Piutang Aktif -->
+      <div class="lg:col-span-6 p-5 rounded-lg bg-silk-card dark:bg-silk-darkCard border border-silk-border dark:border-silk-darkBorder flex flex-col justify-between">
+        <div class="flex items-center justify-between gap-2">
+          <div>
+            <span class="text-xs font-semibold text-orinamia-berry dark:text-orinamia-darkAccent">Fokus Piutang Usaha (`balance_due`)</span>
+            <h2 class="font-editorial text-xl font-medium mt-0.5">Tagihan Pelanggan Belum Lunas</h2>
+          </div>
+          <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-[#FEE2E2] text-[#7F1D1D]">3 Invoice Menunggu</span>
+        </div>
+
+        <div class="my-3 flex items-baseline gap-2">
+          <span class="text-sm font-semibold text-charcoal-muted dark:text-charcoal-darkMuted">Rp</span>
+          <span id="summaryTotalDue" class="font-num text-3xl sm:text-4xl font-semibold tracking-tight whitespace-nowrap">11.000.000</span>
+          <span class="text-xs text-charcoal-muted dark:text-charcoal-darkMuted ml-2">dari total pesanan Rp 35.500.000</span>
+        </div>
+
+        <!-- Soft Rounded Progress Bar -->
+        <div class="space-y-1.5 pt-2">
+          <div class="flex justify-between text-xs">
+            <span class="text-charcoal-muted dark:text-charcoal-darkMuted">Sudah Diterima (`paid`): <strong class="font-num text-[#064E3B] dark:text-emerald-300">Rp 24.500.000 (69%)</strong></span>
+            <span class="text-charcoal-muted dark:text-charcoal-darkMuted">Sisa Piutang: <strong id="summaryUnpaidLabel" class="font-num text-[#7F1D1D] dark:text-red-300">Rp 11.000.000 (31%)</strong></span>
+          </div>
+          <div class="w-full h-2.5 rounded-full bg-silk-tint dark:bg-silk-darkTint overflow-hidden flex">
+            <div id="progressPaid" class="h-full bg-orinamia-berry transition-all duration-300" style="width: 69%"></div>
+            <div id="progressUnpaid" class="h-full bg-orinamia-pink/50 transition-all duration-300" style="width: 31%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Secondary Card 1 (3 Cols): Penjualan -->
+      <div class="lg:col-span-3 p-5 rounded-lg bg-silk-card dark:bg-silk-darkCard border border-silk-border dark:border-silk-darkBorder flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-medium text-charcoal-muted dark:text-charcoal-darkMuted">Total Penjualan (`penjualan`)</span>
+          <h3 class="font-editorial text-lg font-medium mt-0.5">Pesanan Make-to-Order</h3>
+        </div>
+        <div class="my-3">
+          <span class="font-num text-2xl font-semibold whitespace-nowrap">Rp 35.500.000</span>
+        </div>
+        <div class="pt-3 thread-divider flex justify-between text-xs text-charcoal-muted dark:text-charcoal-darkMuted">
+          <span>4 Pesanan Aktif</span>
+          <span>Tanpa Master Stok</span>
+        </div>
+      </div>
+
+      <!-- Secondary Card 2 (3 Cols): Pembelian Bahan -->
+      <div class="lg:col-span-3 p-5 rounded-lg bg-silk-card dark:bg-silk-darkCard border border-silk-border dark:border-silk-darkBorder flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-medium text-charcoal-muted dark:text-charcoal-darkMuted">Pembelian Bahan (`pembelian`)</span>
+          <h3 class="font-editorial text-lg font-medium mt-0.5">Belanja Kain & Aksesoris</h3>
+        </div>
+        <div class="my-3">
+          <span class="font-num text-2xl font-semibold whitespace-nowrap">Rp 11.837.500</span>
+        </div>
+        <div class="pt-3 thread-divider flex justify-between text-xs text-charcoal-muted dark:text-charcoal-darkMuted">
+          <span>4 Faktur Supplier</span>
+          <span>Harga Snapshot</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 1: MEJA KERJA PENJUALAN & LEMBAR RINCIAN 2 INVOICE (60/40 Split) -->
+    <section id="tab-content-penjualan" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- Left Column (7 Cols): Daftar Pesanan Penjualan -->
+      <div class="lg:col-span-7 rounded-lg bg-silk-card dark:bg-silk-darkCard border border-silk-border dark:border-silk-darkBorder overflow-hidden">
+        <div class="p-5 border-b border-silk-border dark:border-silk-darkBorder flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="font-editorial text-xl font-medium">Daftar Pesanan Penjualan</h2>
+            <p class="text-xs text-charcoal-muted dark:text-charcoal-darkMuted mt-0.5">Pilih baris pesanan untuk melihat rincian pakaian dan mengelola kedua tagihan invoice di sebelah kanan.</p>
+          </div>
+          <div>
+            <label for="filterStatus" class="sr-only">Saring Status Pesanan</label>
+            <select id="filterStatus" onchange="applyStatusFilter(this.value)" class="min-h-[40px] px-3 py-1.5 rounded-md bg-silk-bg dark:bg-silk-darkBg border border-silk-border dark:border-silk-darkBorder text-xs font-medium">
+              <option value="ALL">Semua Status (4)</option>
+              <option value="BELUM_BAYAR">Belum Bayar</option>
+              <option value="DP_LUNAS">DP Lunas</option>
+              <option value="LUNAS">Lunas</option>
+              <option value="TERKIRIM">Terkirim</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-silk-border dark:border-silk-darkBorder bg-silk-bg dark:bg-silk-darkBg text-xs font-semibold text-charcoal-muted dark:text-charcoal-darkMuted">
+                <th class="py-3 px-4 whitespace-nowrap">No. Pesanan</th>
+                <th class="py-3 px-3 whitespace-nowrap">Tanggal</th>
+                <th class="py-3 px-4">Pelanggan</th>
+                <th class="py-3 px-4 text-right whitespace-nowrap">Total</th>
+                <th class="py-3 px-4 text-right whitespace-nowrap">Terbayar</th>
+                <th class="py-3 px-4 text-right whitespace-nowrap">Sisa Piutang</th>
+                <th class="py-3 px-4 whitespace-nowrap">Status</th>
+              </tr>
+            </thead>
+            <tbody id="salesTableBody" class="divide-y divide-silk-border dark:divide-silk-darkBorder text-sm">
+              <!-- Diisi otomatis oleh JavaScript dari data orinamia.sql -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Right Column (5 Cols): Lembar Rincian Pesanan & Kartu 2 Invoice (Soft Atelier Sheet) -->
+      <div class="lg:col-span-5 rounded-lg bg-silk-card dark:bg-silk-darkCard border border-silk-border dark:border-silk-darkBorder overflow-hidden">
+        
+        <!-- Top Atelier Sheet Header -->
+        <div class="p-5 bg-silk-tint/70 dark:bg-silk-darkTint border-b border-silk-border dark:border-silk-darkBorder flex items-start justify-between gap-4">
+          <div>
+            <span class="text-xs font-medium text-orinamia-berry dark:text-orinamia-darkAccent">Lembar Rincian Pesanan</span>
+            <h3 id="sheetOrderNo" class="font-num text-xl font-semibold mt-0.5">PJ-202610-001</h3>
+            <p id="sheetCustomer" class="text-xs text-charcoal-muted dark:text-charcoal-darkMuted mt-0.5">CV Maju Bersama (PL-003) • Bekasi</p>
+          </div>
+          <div class="text-right">
+            <span id="sheetStatusBadge" class="inline-block px-2.5 py-1 rounded-md text-xs font-semibold bg-[#FEF3C7] text-[#78350F]">DP Lunas</span>
+            <p id="sheetDate" class="font-num text-xs text-charcoal-muted dark:text-charcoal-darkMuted mt-1.5">05 Okt 2026</p>
+          </div>
+        </div>
+
+        <!-- Rincian Item Pakaian (Ketik Bebas) -->
+        <div class="p-5 space-y-3">
+          <div class="flex items-center justify-between text-xs text-charcoal-muted dark:text-charcoal-darkMuted">
+            <span class="font-semibold text-charcoal dark:text-white">Item Pakaian Dipesan (`detail_penjualan`)</span>
+            <span>Pencatat: <strong>Admin Orinamia</strong></span>
+          </div>
+
+          <div class="rounded-md border border-silk-border dark:border-silk-darkBorder overflow-hidden">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-silk-bg dark:bg-silk-darkBg border-b border-silk-border dark:border-silk-darkBorder text-charcoal-muted dark:text-charcoal-darkMuted">
+                  <th class="py-2 px-3">Nama Item</th>
+                  <th class="py-2 px-2">Ukuran</th>
+                  <th class="py-2 px-2 text-right">Qty</th>
+                  <th class="py-2 px-3 text-right">Harga</th>
+                  <th class="py-2 px-3 text-right">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody id="sheetItemsBody" class="divide-y divide-silk-border dark:divide-silk-darkBorder">
+                <!-- Diisi oleh JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="flex justify-between items-baseline pt-1">
+            <span class="text-xs text-charcoal-muted dark:text-charcoal-darkMuted">Total Nilai Pesanan:</span>
+            <span id="sheetTotalOrder" class="font-num text-lg font-semibold whitespace-nowrap">Rp 10.000.000</span>
+          </div>
+        </div>
+
+        <!-- Bagian Tagihan 1: Invoice DP -->
+        <div class="p-5 thread-divider space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-xs font-medium text-charcoal-muted dark:text-charcoal-darkMuted">Tagihan Tahap 1 • Uang Muka (DP)</span>
+              <p id="cardDpNo" class="font-num text-sm font-semibold mt-0.5">INV-DP-202610-001</p>
+            </div>
+            <span id="cardDpStatus" class="px-2.5 py-0.5 rounded-md text-xs font-semibold bg-[#D1FAE5] text-[#064E3B]">Lunas</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 p-3 rounded-md bg-silk-bg dark:bg-silk-darkBg border border-silk-border dark:border-silk-darkBorder text-xs">
+            <div>
+              <span class="text-charcoal-muted dark:text-charcoal-darkMuted block">Nominal Tagihan DP</span>
+              <strong id="cardDpAmount" class="font-num text-sm mt-0.5 block whitespace-nowrap">Rp 5.000.000</strong>
+            </div>
+            <div>
+              <span class="text-charcoal-muted dark:text-charcoal-darkMuted block">Jatuh Tempo</span>
+              <strong id="cardDpDue" class="font-num text-sm mt-0.5 block">2026-10-19</strong>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span id="cardDpNote" class="text-xs text-[#064E3B] dark:text-emerald-300">Pembayaran diterima: 2026-10-06</span>
+            <div class="flex gap-2">
+              <button id="btnRecordDp" type="button" onclick="openPayModal('DP')" class="admin-action-btn hidden min-h-[38px] px-3 py-1.5 rounded-md bg-orinamia-berry text-white text-xs font-semibold">
+                + Catat Bayar DP
+              </button>
+              <button type="button" onclick="showPrintSheet('DP')" class="min-h-[38px] px-3 py-1.5 rounded-md border border-silk-border dark:border-silk-darkBorder text-xs font-semibold hover:bg-silk-tint dark:hover:bg-silk-darkTint">
+                Cetak Invoice DP
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bagian Tagihan 2: Invoice Pelunasan -->
+        <div class="p-5 thread-divider space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-xs font-medium text-charcoal-muted dark:text-charcoal-darkMuted">Tagihan Tahap 2 • Pelunasan Pesanan</span>
+              <p id="cardLnNo" class="font-num text-sm font-semibold mt-0.5">INV-LN-202610-001</p>
+            </div>
+            <span id="cardLnStatus" class="px-2.5 py-0.5 rounded-md text-xs font-semibold bg-[#FEE2E2] text-[#7F1D1D]">Belum Bayar</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 p-3 rounded-md bg-silk-bg dark:bg-silk-darkBg border border-silk-border dark:border-silk-darkBorder text-xs">
+            <div>
+              <span class="text-charcoal-muted dark:text-charcoal-darkMuted block">Nominal Pelunasan</span>
+              <strong id="cardLnAmount" class="font-num text-sm mt-0.5 block whitespace-nowrap">Rp 5.000.000</strong>
+            </div>
+            <div>
+              <span class="text-charcoal-muted dark:text-charcoal-darkMuted block">Jatuh Tempo</span>
+              <strong id="cardLnDue" class="font-num text-sm mt-0.5 block">2026-11-02</strong>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span id="cardLnNote" class="text-xs text-[#7F1D1D] dark:text-red-300">Menunggu pembayaran pelunasan</span>
+            <div class="flex gap-2">
+              <button id="btnRecordLn" type="button" onclick="openPayModal('PELUNASAN')" class="admin-action-btn min-h-[38px] px-3.5 py-1.5 rounded-md bg-orinamia-berry hover:bg-orinamia-berryHover text-white text-xs font-semibold">
+                + Catat Pelunasan
+              </button>
+              <button type="button" onclick="showPrintSheet('PELUNASAN')" class="min-h-[38px] px-3 py-1.5 rounded-md border border-silk-border dark:border-silk-darkBorder text-xs font-semibold hover:bg-silk-tint dark:hover:bg-silk-darkTint">
+                Cetak Invoice Pelunasan
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pengiriman Barang Footer -->
+        <div class="p-4 bg-silk-bg dark:bg-silk-darkBg border-t border-silk-border dark:border-silk-darkBorder flex items-center justify-between gap-3">
+          <div class="text-xs">
+            <span class="font-semibold block">Pengiriman Pesanan ke Pelanggan</span>
+            <span id="shipHelperText" class="text-charcoal-muted dark:text-charcoal-darkMuted">Tombol aktif setelah Invoice DP dan Pelunasan lunas.</span>
+          </div>
+          <button id="btnMarkDelivered" type="button" onclick="markAsDelivered()" disabled class="admin-action-btn min-h-[40px] px-4 py-2 rounded-md border border-silk-border dark:border-silk-darkBorder text-xs font-semibold opacity-50 cursor-not-allowed">
+            Tandai Terkirim
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 2: PEMBELIAN BAHAN BAKU -->
+    <section id="tab-content-pembelian" class="hidden rounded-lg bg-silk-card dark:bg-silk-darkCard border border-silk-border dark:border-silk-darkBorder p-6 space-y-5">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-silk-border dark:border-silk-darkBorder pb-4">
+        <div>
+          <h2 class="font-editorial text-2xl font-medium">Riwayat Pembelian Bahan Baku</h2>
+          <p class="text-xs text-charcoal-muted dark:text-charcoal-darkMuted mt-0.5">Harga beli bahan disimpan sebagai snapshot saat transaksi dibuat dan dilengkapi fitur cetak bukti pembelian.</p>
+        </div>
+        <button type="button" onclick="openDialog('dialogSupplier')" class="admin-action-btn min-h-[44px] px-4 py-2 rounded-md border border-silk-border dark:border-silk-darkBorder text-xs font-semibold hover:bg-silk-tint">
+          + Tambah Supplier Baru
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="border-b border-silk-border dark:border-silk-darkBorder bg-silk-bg dark:bg-silk-darkBg text-xs font-semibold text-charcoal-muted dark:text-charcoal-darkMuted">
+              <th class="py-3 px-4">No. Beli</th>
+              <th class="py-3 px-4">No. Faktur</th>
+              <th class="py-3 px-4">Supplier</th>
+              <th class="py-3 px-4">Tanggal Beli</th>
+              <th class="py-3 px-4">Waktu Dicatat (`created_at`)</th>
+              <th class="py-3 px-4">Rincian Bahan (Snapshot Harga)</th>
+              <th class="py-3 px-4 text-right">Total Beli</th>
+              <th class="py-3 px-4 text-right">Bukti</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-silk-border dark:divide-silk-darkBorder">
+            <tr>
+              <td class="py-3.5 px-4 font-num font-semibold whitespace-nowrap">PB-202609-001</td>
+              <td class="py-3.5 px-4 font-num whitespace-nowrap">FK-0908</td>
+              <td class="py-3.5 px-4">Toko Kain Makmur</td>
+              <td class="py-3.5 px-4 font-num text-xs whitespace-nowrap">2026-09-08</td>
+              <td class="py-3.5 px-4 font-num text-xs whitespace-nowrap">2026-09-08 01:45</td>
+              <td class="py-3.5 px-4 text-xs">Kain Marbella (100 yard @ Rp 45.000), Benang Jahit (10 roll @ Rp 8.000)</td>
+              <td class="py-3.5 px-4 font-num font-semibold text-right whitespace-nowrap">Rp 4.580.000</td>
+              <td class="py-3.5 px-4 text-right"><button type="button" onclick="window.print()" class="min-h-[38px] px-3 py-1 rounded border border-silk-border text-xs font-semibold">Cetak</button></td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-4 font-num font-semibold whitespace-nowrap">PB-202609-002</td>
+              <td class="py-3.5 px-4 font-num whitespace-nowrap">FK-2009</td>
+              <td class="py-3.5 px-4">Supplier Voal A</td>
+              <td class="py-3.5 px-4 font-num text-xs whitespace-nowrap">2026-09-20</td>
+              <td class="py-3.5 px-4 font-num text-xs whitespace-nowrap">2026-09-20 06:10</td>
+              <td class="py-3.5 px-4 text-xs">Kain Voal (80.50 yard @ Rp 35.000)</td>
+              <td class="py-3.5 px-4 font-num font-semibold text-right whitespace-nowrap">Rp 2.817.500</td>
+              <td class="py-3.5 px-4 text-right"><button type="button" onclick="window.print()" class="min-h-[38px] px-3 py-1 rounded border border-silk-border text-xs font-semibold">Cetak</button></td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-4 font-num font-semibold whitespace-nowrap">PB-202610-001</td>
+              <td class="py-3.5 px-4 font-num whitespace-nowrap">FK-0310</td>
+              <td class="py-3.5 px-4">Toko Aksesoris Jaya</td>
+              <td class="py-3.5 px-4 font-num text-xs whitespace-nowrap">2026-10-03</td>
+              <td class="py-3.5 px-4 font-num text-xs whitespace-nowrap">2026-10-03 03:05</td>
+              <td class="py-3.5 px-4 text-xs">Kancing Baju (20 pak @ Rp 12.000), Benang Jahit (15 roll @ Rp 8.000)</td>
+              <td class="py-3.5 px-4 font-num font-semibold text-right whitespace-nowrap">Rp 360.000</td>
+              <td class="py-3.5 px-4 text-right"><button type="button" onclick="window.print()" class="min-h-[38px] px-3 py-1 rounded border border-silk-border text-xs font-semibold">Cetak</button></td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-4 font-num font-semibold whitespace-nowrap">PB-202610-002</td>
+              <td class="py-3.5 px-4 font-num whitespace-nowrap">FK-1210</td>
+              <td class="py-3.5 px-4">Toko Kain Makmur</td>
+              <td class="py-3.5 px-4 font-num text-xs whitespace-nowrap">2026-10-12</td>
+              <td class="py-3.5 px-4 font-num text-xs whitespace-nowrap">2026-10-12 02:40</td>
+              <td class="py-3.5 px-4 text-xs">Kain Katun Toyobo (60 yard @ Rp 38.000), Kain Marbella (40 yard @ Rp 45.000)</td>
+              <td class="py-3.5 px-4 font-num font-semibold text-right whitespace-nowrap">Rp 4.080.000</td>
+              <td class="py-3.5 px-4 text-right"><button type="button" onclick="window.print()" class="min-h-[38px] px-3 py-1 rounded border border-silk-border text-xs font-semibold">Cetak</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 3: DATA MASTER (Bahan Baku Tanpa Stok, Pelanggan, Supplier) -->
+    <section id="tab-content-master" class="hidden grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="rounded-lg bg-silk-card dark:bg-silk-darkCard border border-silk-border dark:border-silk-darkBorder p-5 space-y-4">
+        <div>
+          <h2 class="font-editorial text-xl font-medium">Katalog Bahan Baku (Tanpa Stok)</h2>
+          <p class="text-xs text-charcoal-muted dark:text-charcoal-darkMuted">Hanya menyimpan nama bahan, satuan, dan harga beli acuan. Tombol hapus dikunci untuk menjaga keutuhan riwayat.</p>
+        </div>
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="border-b border-silk-border dark:border-silk-darkBorder text-xs font-semibold text-charcoal-muted">
+              <th class="py-2.5 px-3">Kode</th>
+              <th class="py-2.5 px-3">Nama Bahan</th>
+              <th class="py-2.5 px-3">Satuan</th>
+              <th class="py-2.5 px-3 text-right">Harga Acuan</th>
+              <th class="py-2.5 px-3 text-right">Tindakan</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-silk-border dark:divide-silk-darkBorder">
+            <tr>
+              <td class="py-2.5 px-3 font-num text-xs font-semibold">BB-001</td>
+              <td class="py-2.5 px-3">Kain Marbella</td>
+              <td class="py-2.5 px-3 text-xs">yard</td>
+              <td class="py-2.5 px-3 font-num text-right">Rp 45.000</td>
+              <td class="py-2.5 px-3 text-right"><button type="button" onclick="alert('Ubah harga BB-001')" class="px-2.5 py-1 rounded border border-silk-border text-xs font-semibold">Ubah</button></td>
+            </tr>
+            <tr>
+              <td class="py-2.5 px-3 font-num text-xs font-semibold">BB-002</td>
+              <td class="py-2.5 px-3">Kain Voal</td>
+              <td class="py-2.5 px-3 text-xs">yard</td>
+              <td class="py-2.5 px-3 font-num text-right">Rp 35.000</td>
+              <td class="py-2.5 px-3 text-right"><button type="button" onclick="alert('Ubah harga BB-002')" class="px-2.5 py-1 rounded border border-silk-border text-xs font-semibold">Ubah</button></td>
+            </tr>
+            <tr>
+              <td class="py-2.5 px-3 font-num text-xs font-semibold">BB-005</td>
+              <td class="py-2.5 px-3">Kain Katun Toyobo</td>
+              <td class="py-2.5 px-3 text-xs">yard</td>
+              <td class="py-2.5 px-3 font-num text-right">Rp 38.000</td>
+              <td class="py-2.5 px-3 text-right"><button type="button" onclick="alert('Ubah harga BB-005')" class="px-2.5 py-1 rounded border border-silk-border text-xs font-semibold">Ubah</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rounded-lg bg-silk-card dark:bg-silk-darkCard border border-silk-border dark:border-silk-darkBorder p-5 space-y-4">
+        <div>
+          <h2 class="font-editorial text-xl font-medium">Daftar Pelanggan Orinamia</h2>
+          <p class="text-xs text-charcoal-muted dark:text-charcoal-darkMuted">Dilengkapi informasi alamat pengiriman untuk pencetakan dokumen invoice.</p>
+        </div>
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="border-b border-silk-border dark:border-silk-darkBorder text-xs font-semibold text-charcoal-muted">
+              <th class="py-2.5 px-3">Kode</th>
+              <th class="py-2.5 px-3">Nama Instansi / Pelanggan</th>
+              <th class="py-2.5 px-3">Telepon</th>
+              <th class="py-2.5 px-3">Alamat</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-silk-border dark:divide-silk-darkBorder">
+            <tr><td class="py-2.5 px-3 font-num text-xs font-semibold">PL-001</td><td class="py-2.5 px-3">PT Berkah Sejahtera</td><td class="py-2.5 px-3 font-num text-xs">021-5556789</td><td class="py-2.5 px-3 text-xs">Jakarta Selatan</td></tr>
+            <tr><td class="py-2.5 px-3 font-num text-xs font-semibold">PL-002</td><td class="py-2.5 px-3">RS Sari Asih</td><td class="py-2.5 px-3 font-num text-xs">021-5551234</td><td class="py-2.5 px-3 text-xs">Tangerang</td></tr>
+            <tr><td class="py-2.5 px-3 font-num text-xs font-semibold">PL-003</td><td class="py-2.5 px-3">CV Maju Bersama</td><td class="py-2.5 px-3 font-num text-xs">021-8821100</td><td class="py-2.5 px-3 text-xs">Bekasi</td></tr>
+            <tr><td class="py-2.5 px-3 font-num text-xs font-semibold">PL-004</td><td class="py-2.5 px-3">SMK Negeri 5</td><td class="py-2.5 px-3 font-num text-xs">021-7770456</td><td class="py-2.5 px-3 text-xs">Depok</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 4: PRATINJAU CETAK INVOICE RESMI (Sesuai Invoice #4.pdf) -->
+    <section id="tab-content-laporan" class="hidden space-y-5">
+      <div class="max-w-4xl mx-auto flex flex-wrap items-center justify-between gap-3 no-print">
+        <div>
+          <h2 class="font-editorial text-2xl font-medium">Lembar Cetak Invoice Resmi</h2>
+          <p class="text-xs text-charcoal-muted dark:text-charcoal-darkMuted">Mengikuti format asli `Invoice #4.pdf` dengan judul jelas (Invoice DP / Invoice Pelunasan).</p>
+        </div>
+        <div class="flex gap-2">
+          <button type="button" onclick="showPrintSheet('DP')" class="min-h-[40px] px-3.5 py-1.5 rounded-md border border-silk-border bg-white dark:bg-silk-darkCard text-xs font-semibold">Tampilkan Invoice DP</button>
+          <button type="button" onclick="showPrintSheet('PELUNASAN')" class="min-h-[40px] px-3.5 py-1.5 rounded-md border border-silk-border bg-white dark:bg-silk-darkCard text-xs font-semibold">Tampilkan Invoice Pelunasan</button>
+          <button type="button" onclick="window.print()" class="min-h-[40px] px-4 py-1.5 rounded-md bg-orinamia-berry text-white text-xs font-semibold">Cetak Dokumen</button>
+        </div>
+      </div>
+
+      <!-- Lembar Kertas A4 -->
+      <div class="print-sheet max-w-4xl mx-auto rounded-lg bg-white text-[#2D2B33] border border-silk-border p-8 sm:p-10 space-y-8">
+        <div class="flex flex-col sm:flex-row justify-between gap-6 border-b border-silk-border pb-6">
+          <div>
+            <p class="text-sm font-bold">Orinamia Konveksi</p>
+            <div class="my-3 flex flex-col items-center w-44">
+              <svg class="w-16 h-16" viewBox="0 0 100 100" fill="none" role="img" aria-label="Logo Orinamia">
+                <circle cx="50" cy="50" r="42" stroke="#454547" stroke-width="6.5"/>
+                <path d="M50 7 L80 35 L70 50 L58 37 L50 27 L35 42 L41 52 L27 50 L20 35 Z" fill="#F391EC"/>
+                <path d="M50 93 L20 65 L30 50 L42 63 L50 73 L65 58 L59 48 L73 50 L80 65 Z" fill="#AD8EEB"/>
+                <polygon points="50,43 56,50 50,57 44,50" fill="#AD8EEB"/>
+              </svg>
+              <div class="text-xl tracking-widest mt-1 leading-none">
+                <span style="color:#F391EC">ORI</span><span style="color:#AD8EEB">NAMIA</span>
+              </div>
+              <div class="text-[9px] tracking-[0.35em] text-[#454547] font-semibold mt-1">DAILY WEAR</div>
+            </div>
+            <p class="text-xs">Jalan Tongkol Raya no 20C perum 1 Karawaci Tangerang</p>
+            <p class="text-xs font-num">M: 085716107394</p>
+          </div>
+
+          <div class="sm:text-right space-y-1">
+            <span id="printTitle" class="inline-block px-3.5 py-1 rounded-md bg-orinamia-berry text-white text-xs font-bold uppercase tracking-wider">INVOICE DP</span>
+            <p id="printNo" class="font-num text-base font-bold pt-2">Invoice # INV-DP-202610-001</p>
+            <p class="text-xs">Date: <span id="printDate" class="font-num">2026-10-05</span></p>
+            <p class="text-xs">Due date: <span id="printDue" class="font-num font-semibold">2026-10-19</span></p>
+            <div class="pt-3 text-xs">
+              <span class="text-charcoal-muted">Kepada Yth:</span>
+              <p id="printCust" class="font-bold text-sm">CV Maju Bersama</p>
+              <p id="printAddr">Bekasi • 021-8821100</p>
+            </div>
+          </div>
+        </div>
+
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="border-b-2 border-[#2D2B33] text-xs font-semibold">
+              <th class="py-2.5 px-2 w-10">#</th>
+              <th class="py-2.5 px-2">Items</th>
+              <th class="py-2.5 px-2 text-right w-20">Qty</th>
+              <th class="py-2.5 px-2 text-right w-40">Unit cost</th>
+              <th class="py-2.5 px-2 text-right w-40">Total</th>
+            </tr>
+          </thead>
+          <tbody id="printItems" class="divide-y divide-silk-border font-num">
+            <!-- Diisi otomatis -->
+          </tbody>
+        </table>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-4 thread-divider">
+          <div class="text-xs space-y-1">
+            <p class="font-bold">Payment Options</p>
+            <p class="text-charcoal-muted">Bank transfer</p>
+            <p class="font-semibold text-sm pt-1">Bank BSI 7273909413 a/n PT Cahaya Binar Berlian</p>
+            <div class="pt-8">
+              <p class="text-charcoal-muted">Disiapkan oleh:</p>
+              <p class="font-bold mt-8 underline">Admin Orinamia</p>
+            </div>
+          </div>
+
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between py-1 border-b border-silk-border">
+              <span>Total Pesanan</span>
+              <span id="printSubtotal" class="font-num">Rp10.000.000,00</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-silk-border font-bold">
+              <span id="printStageName">Tagihan Invoice DP</span>
+              <span id="printStageVal" class="font-num">Rp5.000.000,00</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-silk-border text-[#064E3B]">
+              <span>Paid (Telah Dibayar)</span>
+              <span id="printPaidVal" class="font-num font-semibold">Rp5.000.000,00</span>
+            </div>
+            <div class="flex justify-between py-2.5 px-3 rounded-md bg-silk-bg font-bold text-base">
+              <span>Balance Due</span>
+              <span id="printDueVal" class="font-num">Rp0,00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- SLIDE-OVER DRAWER: FORM BUAT PESANAN BARU -->
+  <div id="drawerOrder" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" class="hidden fixed inset-0 z-50 bg-black/50 flex justify-end no-print">
+    <div class="bg-silk-card dark:bg-silk-darkCard border-l border-silk-border dark:border-silk-darkBorder w-full max-w-2xl h-full overflow-y-auto p-6 sm:p-8 flex flex-col justify-between">
+      <div class="space-y-6">
+        <div class="flex items-center justify-between border-b border-silk-border dark:border-silk-darkBorder pb-4">
+          <div>
+            <span class="text-xs font-semibold text-orinamia-berry dark:text-orinamia-darkAccent">Pesanan Make-to-Order Baru</span>
+            <h3 id="drawerTitle" class="font-editorial text-2xl font-medium mt-0.5">Catat Penjualan & Terbitkan 2 Invoice</h3>
+          </div>
+          <button type="button" onclick="closeSlideDrawer('drawerOrder')" class="min-h-[40px] px-3 py-1.5 rounded-md border border-silk-border text-xs font-semibold">Tutup (Esc)</button>
+        </div>
+
+        <form onsubmit="submitNewOrder(event)" class="space-y-5">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-semibold mb-1">No. Jual Otomatis</label>
+              <input type="text" value="PJ-202610-003" readonly class="font-num w-full min-h-[42px] px-3 rounded-md bg-silk-bg dark:bg-silk-darkBg border border-silk-border text-sm font-semibold">
+            </div>
+            <div>
+              <label for="inputOrderDate" class="block text-xs font-semibold mb-1">Tanggal Pesanan</label>
+              <input id="inputOrderDate" type="date" value="2026-10-15" required class="font-num w-full min-h-[42px] px-3 rounded-md bg-white dark:bg-silk-darkBg border border-silk-border text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold mb-1">Pencatat Otomatis</label>
+              <input type="text" value="Admin Orinamia" readonly class="w-full min-h-[42px] px-3 rounded-md bg-silk-bg dark:bg-silk-darkBg border border-silk-border text-sm">
+            </div>
+          </div>
+
+          <div>
+            <label for="inputCustomer" class="block text-xs font-semibold mb-1">Pilih Pelanggan</label>
+            <div class="flex gap-2">
+              <select id="inputCustomer" class="flex-1 min-h-[42px] px-3 rounded-md bg-white dark:bg-silk-darkBg border border-silk-border text-sm">
+                <option value="PT Berkah Sejahtera">PL-001 - PT Berkah Sejahtera</option>
+                <option value="RS Sari Asih">PL-002 - RS Sari Asih</option>
+                <option value="CV Maju Bersama">PL-003 - CV Maju Bersama</option>
+                <option value="SMK Negeri 5">PL-004 - SMK Negeri 5</option>
+              </select>
+              <button type="button" onclick="openDialog('dialogCustomer')" class="min-h-[42px] px-3.5 rounded-md border border-silk-border text-xs font-semibold hover:bg-silk-tint shrink-0">
+                + Pelanggan Baru
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold">Rincian Pakaian (Ketik Bebas, Tanpa Master Barang)</span>
+              <button type="button" onclick="addOrderItemRow()" class="min-h-[36px] px-3 py-1 rounded-md border border-silk-border text-xs font-semibold">+ Tambah Item</button>
+            </div>
+            <div class="rounded-md border border-silk-border overflow-hidden">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="bg-silk-bg dark:bg-silk-darkBg border-b border-silk-border">
+                    <th class="p-2.5">Nama Item Pakaian</th>
+                    <th class="p-2.5 w-20">Ukuran</th>
+                    <th class="p-2.5 w-20">Qty</th>
+                    <th class="p-2.5 w-32">Harga (Rp)</th>
+                    <th class="p-2.5 w-32 text-right">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody id="formItemsBody" class="divide-y divide-silk-border">
+                  <tr>
+                    <td class="p-2"><input type="text" value="PDL BCB" required class="f-name w-full min-h-[38px] px-2 rounded border border-silk-border dark:bg-silk-darkBg"></td>
+                    <td class="p-2"><input type="text" value="L" class="f-size w-full min-h-[38px] px-2 rounded border border-silk-border dark:bg-silk-darkBg"></td>
+                    <td class="p-2"><input type="number" value="18" min="1" oninput="recalcOrderForm()" class="f-qty font-num w-full min-h-[38px] px-2 rounded border border-silk-border dark:bg-silk-darkBg"></td>
+                    <td class="p-2"><input type="number" value="250000" min="0" oninput="recalcOrderForm()" class="f-price font-num w-full min-h-[38px] px-2 rounded border border-silk-border dark:bg-silk-darkBg"></td>
+                    <td class="p-2.5 font-num font-semibold text-right f-sub whitespace-nowrap">Rp 4.500.000</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="p-4 rounded-lg bg-silk-bg dark:bg-silk-darkBg border border-silk-border space-y-2">
+              <div class="flex justify-between text-xs font-semibold">
+                <span>Invoice 1: Uang Muka (DP)</span>
+                <span class="font-num">INV-DP-202610-003</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label for="formDpPct" class="block text-[11px] text-charcoal-muted">Persentase DP (%)</label>
+                  <input id="formDpPct" type="number" value="50" min="1" max="99" oninput="recalcOrderForm()" class="font-num w-full min-h-[38px] px-2 rounded border border-silk-border bg-white dark:bg-silk-darkCard text-sm font-semibold">
+                </div>
+                <div>
+                  <label for="formDpDue" class="block text-[11px] text-charcoal-muted">Jatuh Tempo (+14 Hr)</label>
+                  <input id="formDpDue" type="date" value="2026-10-29" class="font-num w-full min-h-[38px] px-2 rounded border border-silk-border bg-white dark:bg-silk-darkCard text-xs">
+                </div>
+              </div>
+              <div class="pt-2 thread-divider flex justify-between text-xs font-semibold">
+                <span>Tagihan DP:</span>
+                <span id="formDpAmount" class="font-num text-sm">Rp 2.250.000</span>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-lg bg-silk-bg dark:bg-silk-darkBg border border-silk-border space-y-2">
+              <div class="flex justify-between text-xs font-semibold">
+                <span>Invoice 2: Pelunasan</span>
+                <span class="font-num">INV-LN-202610-003</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-[11px] text-charcoal-muted">Sisa Proporsi</label>
+                  <input id="formLnPct" type="text" value="50%" readonly class="font-num w-full min-h-[38px] px-2 rounded border border-silk-border bg-silk-tint/40 text-sm">
+                </div>
+                <div>
+                  <label for="formLnDue" class="block text-[11px] text-charcoal-muted">Jatuh Tempo</label>
+                  <input id="formLnDue" type="date" value="2026-11-12" class="font-num w-full min-h-[38px] px-2 rounded border border-silk-border bg-white dark:bg-silk-darkCard text-xs">
+                </div>
+              </div>
+              <div class="pt-2 thread-divider flex justify-between text-xs font-semibold">
+                <span>Tagihan Pelunasan:</span>
+                <span id="formLnAmount" class="font-num text-sm">Rp 2.250.000</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-silk-border flex items-center justify-between">
+            <div>
+              <span class="text-xs text-charcoal-muted block">Total Pesanan</span>
+              <span id="formGrandTotal" class="font-num text-2xl font-semibold">Rp 4.500.000</span>
+            </div>
+            <button type="submit" class="min-h-[44px] px-6 py-2.5 rounded-md bg-orinamia-berry hover:bg-orinamia-berryHover text-white text-sm font-semibold">
+              Simpan & Terbitkan 2 Invoice
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIALOG CATAT PEMBAYARAN -->
+  <div id="dialogPay" role="dialog" aria-modal="true" class="hidden fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 no-print">
+    <div class="bg-silk-card dark:bg-silk-darkCard border border-silk-border rounded-lg max-w-md w-full p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-silk-border pb-3">
+        <h3 class="font-editorial text-xl font-medium">Catat Pembayaran Invoice</h3>
+        <button type="button" onclick="closeDialog('dialogPay')" class="text-xs font-semibold">Tutup</button>
+      </div>
+      <form onsubmit="saveInvoicePayment(event)" class="space-y-3">
+        <input type="hidden" id="payStageInput" value="PELUNASAN">
+        <div>
+          <label class="block text-xs font-semibold mb-1">Nomor Invoice</label>
+          <input id="payInvNo" type="text" readonly class="font-num w-full min-h-[42px] px-3 rounded-md bg-silk-bg border border-silk-border text-sm font-semibold">
+        </div>
+        <div>
+          <label for="payDate" class="block text-xs font-semibold mb-1">Tanggal Bayar</label>
+          <input id="payDate" type="date" value="2026-10-15" required class="font-num w-full min-h-[42px] px-3 rounded-md bg-white border border-silk-border text-sm">
+        </div>
+        <div>
+          <label for="payNominal" class="block text-xs font-semibold mb-1">Jumlah Diterima (Rp)</label>
+          <input id="payNominal" type="number" readonly class="font-num w-full min-h-[42px] px-3 rounded-md bg-silk-bg border border-silk-border text-sm font-semibold">
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeDialog('dialogPay')" class="min-h-[42px] px-4 rounded-md border border-silk-border text-xs font-semibold">Batal</button>
+          <button type="submit" class="min-h-[42px] px-5 rounded-md bg-orinamia-berry text-white text-xs font-semibold">Simpan Pembayaran</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DIALOG + PELANGGAN BARU -->
+  <div id="dialogCustomer" role="dialog" aria-modal="true" class="hidden fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 no-print">
+    <div class="bg-silk-card dark:bg-silk-darkCard border border-silk-border rounded-lg max-w-md w-full p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-silk-border pb-3">
+        <h3 class="font-editorial text-xl font-medium">Tambah Pelanggan Baru (`PL-005`)</h3>
+        <button type="button" onclick="closeDialog('dialogCustomer')" class="text-xs font-semibold">Tutup</button>
+      </div>
+      <form onsubmit="saveQuickCust(event)" class="space-y-3">
+        <input id="custNameInput" type="text" required placeholder="Nama Pelanggan / Instansi" class="w-full min-h-[42px] px-3 rounded-md border border-silk-border text-sm">
+        <input id="custPhoneInput" type="text" required placeholder="Nomor Telepon" class="font-num w-full min-h-[42px] px-3 rounded-md border border-silk-border text-sm">
+        <input id="custAddrInput" type="text" required placeholder="Alamat Pengiriman" class="w-full min-h-[42px] px-3 rounded-md border border-silk-border text-sm">
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="submit" class="min-h-[42px] px-5 rounded-md bg-orinamia-berry text-white text-xs font-semibold">Simpan & Pilih</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DIALOG + SUPPLIER BARU -->
+  <div id="dialogSupplier" role="dialog" aria-modal="true" class="hidden fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 no-print">
+    <div class="bg-silk-card dark:bg-silk-darkCard border border-silk-border rounded-lg max-w-md w-full p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-silk-border pb-3">
+        <h3 class="font-editorial text-xl font-medium">Tambah Supplier Baru (`SP-004`)</h3>
+        <button type="button" onclick="closeDialog('dialogSupplier')" class="text-xs font-semibold">Tutup</button>
+      </div>
+      <form onsubmit="event.preventDefault(); alert('Supplier SP-004 disimpan.'); closeDialog('dialogSupplier');" class="space-y-3">
+        <input type="text" required placeholder="Nama Toko / Supplier Bahan" class="w-full min-h-[42px] px-3 rounded-md border border-silk-border text-sm">
+        <input type="text" required placeholder="Alamat Supplier" class="w-full min-h-[42px] px-3 rounded-md border border-silk-border text-sm">
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="submit" class="min-h-[42px] px-5 rounded-md bg-orinamia-berry text-white text-xs font-semibold">Simpan Supplier</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const salesOrders = [
+      {
+        no_jual: 'PJ-202610-001',
+        tgl_jual: '2026-10-05',
+        pelanggan: 'CV Maju Bersama',
+        kode_pl: 'PL-003',
+        kota: 'Bekasi • 021-8821100',
+        total: 10000000,
+        paid: 5000000,
+        balance_due: 5000000,
+        status: 'DP_LUNAS',
+        items: [
+          { nama: 'Seragam Kantor', ukuran: 'L', qty: 40, harga: 125000, sub: 5000000 },
+          { nama: 'Seragam Kantor', ukuran: 'M', qty: 40, harga: 125000, sub: 5000000 }
+        ],
+        dp: { nomor: 'INV-DP-202610-001', jumlah: 5000000, tempo: '2026-10-19', status: 'LUNAS', note: 'Pembayaran diterima: 2026-10-06' },
+        ln: { nomor: 'INV-LN-202610-001', jumlah: 5000000, tempo: '2026-11-02', status: 'BELUM_BAYAR', note: 'Menunggu pembayaran pelunasan' }
+      },
+      {
+        no_jual: 'PJ-202610-002',
+        tgl_jual: '2026-10-13',
+        pelanggan: 'SMK Negeri 5',
+        kode_pl: 'PL-004',
+        kota: 'Depok • 021-7770456',
+        total: 6000000,
+        paid: 0,
+        balance_due: 6000000,
+        status: 'BELUM_BAYAR',
+        items: [
+          { nama: 'Kaos Olahraga', ukuran: 'S', qty: 20, harga: 150000, sub: 3000000 },
+          { nama: 'Kaos Olahraga', ukuran: 'M', qty: 20, harga: 150000, sub: 3000000 }
+        ],
+        dp: { nomor: 'INV-DP-202610-002', jumlah: 3000000, tempo: '2026-10-27', status: 'BELUM_BAYAR', note: 'Menunggu pembayaran uang muka (DP)' },
+        ln: { nomor: 'INV-LN-202610-002', jumlah: 3000000, tempo: '2026-11-10', status: 'BELUM_BAYAR', note: 'Menunggu pembayaran pelunasan' }
+      },
+      {
+        no_jual: 'PJ-202609-002',
+        tgl_jual: '2026-09-22',
+        pelanggan: 'RS Sari Asih',
+        kode_pl: 'PL-002',
+        kota: 'Tangerang • 021-5551234',
+        total: 7500000,
+        paid: 7500000,
+        balance_due: 0,
+        status: 'LUNAS',
+        items: [
+          { nama: 'Scrub Medis Atasan', ukuran: 'M', qty: 30, harga: 150000, sub: 4500000 },
+          { nama: 'Scrub Medis Bawahan', ukuran: 'M', qty: 30, harga: 100000, sub: 3000000 }
+        ],
+        dp: { nomor: 'INV-DP-202609-002', jumlah: 3750000, tempo: '2026-10-06', status: 'LUNAS', note: 'Pembayaran diterima: 2026-09-23' },
+        ln: { nomor: 'INV-LN-202609-002', jumlah: 3750000, tempo: '2026-10-20', status: 'LUNAS', note: 'Pembayaran diterima: 2026-10-10' }
+      },
+      {
+        no_jual: 'PJ-202609-001',
+        tgl_jual: '2026-09-10',
+        pelanggan: 'PT Berkah Sejahtera',
+        kode_pl: 'PL-001',
+        kota: 'Jakarta Selatan • 021-5556789',
+        total: 12000000,
+        paid: 12000000,
+        balance_due: 0,
+        status: 'TERKIRIM',
+        items: [
+          { nama: 'Kemeja Kerja', ukuran: 'L', qty: 50, harga: 120000, sub: 6000000 },
+          { nama: 'Kemeja Kerja', ukuran: 'M', qty: 50, harga: 120000, sub: 6000000 }
+        ],
+        dp: { nomor: 'INV-DP-202609-001', jumlah: 6000000, tempo: '2026-09-24', status: 'LUNAS', note: 'Pembayaran diterima: 2026-09-11' },
+        ln: { nomor: 'INV-LN-202609-001', jumlah: 6000000, tempo: '2026-10-08', status: 'LUNAS', note: 'Pembayaran diterima: 2026-09-30' }
+      }
+    ];
+
+    let activeOrderNo = 'PJ-202610-001';
+    let statusFilterVal = 'ALL';
+
+    function formatRp(n) {
+      return 'Rp ' + Number(n).toLocaleString('id-ID');
+    }
+
+    function labelStatus(st) {
+      if (st === 'BELUM_BAYAR') return 'Belum Bayar';
+      if (st === 'DP_LUNAS') return 'DP Lunas';
+      if (st === 'LUNAS') return 'Lunas';
+      return 'Terkirim';
+    }
+
+    function badgeClass(st) {
+      if (st === 'BELUM_BAYAR') return 'bg-[#FEE2E2] text-[#7F1D1D]';
+      if (st === 'DP_LUNAS') return 'bg-[#FEF3C7] text-[#78350F]';
+      if (st === 'LUNAS') return 'bg-[#D1FAE5] text-[#064E3B]';
+      return 'bg-[#EDE9FE] text-[#4C1D95]';
+    }
+
+    function renderSalesTable() {
+      const tbody = document.getElementById('salesTableBody');
+      tbody.innerHTML = '';
+
+      const list = statusFilterVal === 'ALL'
+        ? salesOrders
+        : salesOrders.filter(o => o.status === statusFilterVal);
+
+      list.forEach(order => {
+        const isCurrent = order.no_jual === activeOrderNo;
+        const tr = document.createElement('tr');
+        tr.className = `cursor-pointer transition-colors ${isCurrent ? 'bg-silk-tint dark:bg-silk-darkTint font-semibold' : 'hover:bg-silk-bg dark:hover:bg-silk-darkBg/60'}`;
+        tr.onclick = () => selectSalesOrder(order.no_jual);
+
+        tr.innerHTML = `
+          <td class="py-3.5 px-4 font-num text-xs font-semibold whitespace-nowrap">${order.no_jual}</td>
+          <td class="py-3.5 px-3 font-num text-xs text-charcoal-muted dark:text-charcoal-darkMuted whitespace-nowrap">${order.tgl_jual}</td>
+          <td class="py-3.5 px-4">
+            <div class="font-medium">${order.pelanggan}</div>
+            <div class="text-xs text-charcoal-muted dark:text-charcoal-darkMuted">${order.kode_pl}</div>
+          </td>
+          <td class="py-3.5 px-4 font-num text-xs text-right whitespace-nowrap">${formatRp(order.total)}</td>
+          <td class="py-3.5 px-4 font-num text-xs text-right text-[#064E3B] dark:text-emerald-300 whitespace-nowrap">${formatRp(order.paid)}</td>
+          <td class="py-3.5 px-4 font-num text-xs text-right font-semibold ${order.balance_due > 0 ? 'text-[#7F1D1D] dark:text-red-300' : ''} whitespace-nowrap">${formatRp(order.balance_due)}</td>
+          <td class="py-3.5 px-4 whitespace-nowrap">
+            <span class="inline-block px-2.5 py-0.5 rounded-md text-xs font-semibold ${badgeClass(order.status)}">${labelStatus(order.status)}</span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function selectSalesOrder(noJual) {
+      activeOrderNo = noJual;
+      renderSalesTable();
+      const order = salesOrders.find(o => o.no_jual === noJual);
+      if (!order) return;
+
+      document.getElementById('sheetOrderNo').textContent = order.no_jual;
+      document.getElementById('sheetCustomer').textContent = `${order.pelanggan} (${order.kode_pl}) • ${order.kota}`;
+      document.getElementById('sheetDate').textContent = order.tgl_jual;
+
+      const sb = document.getElementById('sheetStatusBadge');
+      sb.textContent = labelStatus(order.status);
+      sb.className = `inline-block px-2.5 py-1 rounded-md text-xs font-semibold ${badgeClass(order.status)}`;
+
+      document.getElementById('sheetItemsBody').innerHTML = order.items.map(it => `
+        <tr>
+          <td class="py-2 px-3 font-medium">${it.nama}</td>
+          <td class="py-2 px-2">${it.ukuran || '-'}</td>
+          <td class="py-2 px-2 font-num text-right">${it.qty}</td>
+          <td class="py-2 px-3 font-num text-right whitespace-nowrap">${formatRp(it.harga)}</td>
+          <td class="py-2 px-3 font-num font-semibold text-right whitespace-nowrap">${formatRp(it.sub)}</td>
+        </tr>
+      `).join('');
+
+      document.getElementById('sheetTotalOrder').textContent = formatRp(order.total);
+
+      // Invoice DP
+      document.getElementById('cardDpNo').textContent = order.dp.nomor;
+      document.getElementById('cardDpAmount').textContent = formatRp(order.dp.jumlah);
+      document.getElementById('cardDpDue').textContent = order.dp.tempo;
+      const dpBadge = document.getElementById('cardDpStatus');
+      dpBadge.textContent = labelStatus(order.dp.status);
+      dpBadge.className = `px-2.5 py-0.5 rounded-md text-xs font-semibold ${badgeClass(order.dp.status)}`;
+      document.getElementById('cardDpNote').textContent = order.dp.note;
+      document.getElementById('btnRecordDp').classList.toggle('hidden', order.dp.status === 'LUNAS');
+
+      // Invoice Pelunasan
+      document.getElementById('cardLnNo').textContent = order.ln.nomor;
+      document.getElementById('cardLnAmount').textContent = formatRp(order.ln.jumlah);
+      document.getElementById('cardLnDue').textContent = order.ln.tempo;
+      const lnBadge = document.getElementById('cardLnStatus');
+      lnBadge.textContent = labelStatus(order.ln.status);
+      lnBadge.className = `px-2.5 py-0.5 rounded-md text-xs font-semibold ${badgeClass(order.ln.status)}`;
+      document.getElementById('cardLnNote').textContent = order.ln.note;
+      document.getElementById('btnRecordLn').classList.toggle('hidden', order.ln.status === 'LUNAS');
+
+      // Shipping Button
+      const shipBtn = document.getElementById('btnMarkDelivered');
+      const shipNote = document.getElementById('shipHelperText');
+      if (order.status === 'LUNAS') {
+        shipBtn.disabled = false;
+        shipBtn.className = 'admin-action-btn min-h-[40px] px-4 py-2 rounded-md bg-orinamia-berry hover:bg-orinamia-berryHover text-white text-xs font-semibold cursor-pointer';
+        shipBtn.textContent = 'Tandai Terkirim';
+        shipNote.textContent = 'Kedua invoice telah lunas. Pesanan siap dikirim.';
+      } else if (order.status === 'TERKIRIM') {
+        shipBtn.disabled = true;
+        shipBtn.className = 'admin-action-btn min-h-[40px] px-4 py-2 rounded-md border border-silk-border text-xs font-semibold opacity-50 cursor-not-allowed';
+        shipBtn.textContent = 'Sudah Terkirim';
+        shipNote.textContent = 'Pesanan telah diterima pelanggan.';
+      } else {
+        shipBtn.disabled = true;
+        shipBtn.className = 'admin-action-btn min-h-[40px] px-4 py-2 rounded-md border border-silk-border text-xs font-semibold opacity-50 cursor-not-allowed';
+        shipBtn.textContent = 'Tandai Terkirim';
+        shipNote.textContent = 'Tombol aktif setelah Invoice DP dan Pelunasan lunas.';
+      }
+    }
+
+    function applyStatusFilter(val) {
+      statusFilterVal = val;
+      renderSalesTable();
+    }
+
+    function openPayModal(stage) {
+      const order = salesOrders.find(o => o.no_jual === activeOrderNo);
+      if (!order) return;
+      document.getElementById('payStageInput').value = stage;
+      const inv = stage === 'DP' ? order.dp : order.ln;
+      document.getElementById('payInvNo').value = inv.nomor;
+      document.getElementById('payNominal').value = inv.jumlah;
+      openDialog('dialogPay');
+    }
+
+    function saveInvoicePayment(e) {
+      e.preventDefault();
+      const order = salesOrders.find(o => o.no_jual === activeOrderNo);
+      const stage = document.getElementById('payStageInput').value;
+      const tgl = document.getElementById('payDate').value;
+
+      if (stage === 'DP') {
+        order.dp.status = 'LUNAS';
+        order.dp.note = `Pembayaran diterima: ${tgl}`;
+      } else {
+        order.ln.status = 'LUNAS';
+        order.ln.note = `Pembayaran diterima: ${tgl}`;
+      }
+
+      const dpPaid = order.dp.status === 'LUNAS' ? order.dp.jumlah : 0;
+      const lnPaid = order.ln.status === 'LUNAS' ? order.ln.jumlah : 0;
+      order.paid = dpPaid + lnPaid;
+      order.balance_due = order.total - order.paid;
+      order.status = order.balance_due <= 0 ? 'LUNAS' : (order.dp.status === 'LUNAS' ? 'DP_LUNAS' : 'BELUM_BAYAR');
+
+      refreshSummaryStrip();
+      selectSalesOrder(order.no_jual);
+      closeDialog('dialogPay');
+    }
+
+    function markAsDelivered() {
+      const order = salesOrders.find(o => o.no_jual === activeOrderNo);
+      if (order && order.status === 'LUNAS') {
+        order.status = 'TERKIRIM';
+        selectSalesOrder(order.no_jual);
+      }
+    }
+
+    function refreshSummaryStrip() {
+      const totalDue = salesOrders.reduce((s, o) => s + o.balance_due, 0);
+      const totalAll = salesOrders.reduce((s, o) => s + o.total, 0);
+      const totalPaid = salesOrders.reduce((s, o) => s + o.paid, 0);
+      const paidPct = Math.round((totalPaid / totalAll) * 100);
+      const unpaidPct = 100 - paidPct;
+
+      document.getElementById('summaryTotalDue').textContent = Number(totalDue).toLocaleString('id-ID');
+      document.getElementById('summaryUnpaidLabel').textContent = `${formatRp(totalDue)} (${unpaidPct}%)`;
+      document.getElementById('progressPaid').style.width = paidPct + '%';
+      document.getElementById('progressUnpaid').style.width = unpaidPct + '%';
+    }
+
+    function showPrintSheet(stage) {
+      const order = salesOrders.find(o => o.no_jual === activeOrderNo) || salesOrders[0];
+      switchTab('laporan');
+      const inv = stage === 'DP' ? order.dp : order.ln;
+
+      document.getElementById('printTitle').textContent = stage === 'DP' ? 'INVOICE DP' : 'INVOICE PELUNASAN';
+      document.getElementById('printNo').textContent = `Invoice # ${inv.nomor}`;
+      document.getElementById('printDate').textContent = order.tgl_jual;
+      document.getElementById('printDue').textContent = inv.tempo;
+      document.getElementById('printCust').textContent = order.pelanggan;
+      document.getElementById('printAddr').textContent = order.kota;
+
+      document.getElementById('printItems').innerHTML = order.items.map((it, i) => `
+        <tr>
+          <td class="py-2.5 px-2">${i + 1}</td>
+          <td class="py-2.5 px-2 font-sans">${it.nama} ${it.ukuran ? '(Ukuran: ' + it.ukuran + ')' : ''}</td>
+          <td class="py-2.5 px-2 text-right">${it.qty}</td>
+          <td class="py-2.5 px-2 text-right">${formatRp(it.harga)},00</td>
+          <td class="py-2.5 px-2 text-right">${formatRp(it.sub)},00</td>
+        </tr>
+      `).join('');
+
+      const paidInv = inv.status === 'LUNAS' ? inv.jumlah : 0;
+      const dueInv = inv.jumlah - paidInv;
+
+      document.getElementById('printSubtotal').textContent = `${formatRp(order.total)},00`;
+      document.getElementById('printStageName').textContent = stage === 'DP' ? 'Tagihan Invoice DP' : 'Tagihan Invoice Pelunasan';
+      document.getElementById('printStageVal').textContent = `${formatRp(inv.jumlah)},00`;
+      document.getElementById('printPaidVal').textContent = `${formatRp(paidInv)},00`;
+      document.getElementById('printDueVal').textContent = `${formatRp(dueInv)},00`;
+    }
+
+    function switchTab(tab) {
+      ['penjualan', 'pembelian', 'master', 'laporan'].forEach(t => {
+        document.getElementById('tab-content-' + t).classList.add('hidden');
+        const nav = document.getElementById('nav-' + t);
+        if (nav) {
+          nav.className = 'nav-pill min-h-[40px] px-4 py-1.5 rounded-md text-sm font-medium text-charcoal-muted dark:text-charcoal-darkMuted hover:text-charcoal dark:hover:text-white';
+        }
+      });
+      document.getElementById('tab-content-' + tab).classList.remove('hidden');
+      const activeNav = document.getElementById('nav-' + tab);
+      if (activeNav) {
+        activeNav.className = 'nav-pill min-h-[40px] px-4 py-1.5 rounded-md text-sm font-semibold bg-silk-card dark:bg-silk-darkCard text-orinamia-berry dark:text-orinamia-darkAccent border border-silk-border dark:border-silk-darkBorder';
+      }
+    }
+
+    function openSlideDrawer(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeSlideDrawer(id) { document.getElementById(id).classList.add('hidden'); }
+    function openDialog(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeDialog(id) { document.getElementById(id).classList.add('hidden'); }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        closeSlideDrawer('drawerOrder');
+        ['dialogPay', 'dialogCustomer', 'dialogSupplier'].forEach(closeDialog);
+      }
+    });
+
+    function addOrderItemRow() {
+      const tbody = document.getElementById('formItemsBody');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="p-2"><input type="text" placeholder="Nama Pakaian" required class="f-name w-full min-h-[38px] px-2 rounded border border-silk-border dark:bg-silk-darkBg"></td>
+        <td class="p-2"><input type="text" placeholder="S/M/L" class="f-size w-full min-h-[38px] px-2 rounded border border-silk-border dark:bg-silk-darkBg"></td>
+        <td class="p-2"><input type="number" value="10" min="1" oninput="recalcOrderForm()" class="f-qty font-num w-full min-h-[38px] px-2 rounded border border-silk-border dark:bg-silk-darkBg"></td>
+        <td class="p-2"><input type="number" value="150000" min="0" oninput="recalcOrderForm()" class="f-price font-num w-full min-h-[38px] px-2 rounded border border-silk-border dark:bg-silk-darkBg"></td>
+        <td class="p-2.5 font-num font-semibold text-right f-sub whitespace-nowrap">Rp 1.500.000</td>
+      `;
+      tbody.appendChild(tr);
+      recalcOrderForm();
+    }
+
+    function recalcOrderForm() {
+      let tot = 0;
+      document.querySelectorAll('#formItemsBody tr').forEach(r => {
+        const q = parseFloat(r.querySelector('.f-qty').value) || 0;
+        const p = parseFloat(r.querySelector('.f-price').value) || 0;
+        const s = q * p;
+        tot += s;
+        r.querySelector('.f-sub').textContent = formatRp(s);
+      });
+      const pct = Math.min(99, Math.max(1, parseFloat(document.getElementById('formDpPct').value) || 50));
+      const dpVal = Math.round(tot * (pct / 100));
+      const lnVal = tot - dpVal;
+
+      document.getElementById('formGrandTotal').textContent = formatRp(tot);
+      document.getElementById('formDpAmount').textContent = formatRp(dpVal);
+      document.getElementById('formLnPct').value = (100 - pct) + '%';
+      document.getElementById('formLnAmount').textContent = formatRp(lnVal);
+    }
+
+    function submitNewOrder(e) {
+      e.preventDefault();
+      let tot = 0;
+      const items = [];
+      document.querySelectorAll('#formItemsBody tr').forEach(r => {
+        const nama = r.querySelector('.f-name').value;
+        const ukuran = r.querySelector('.f-size').value;
+        const qty = parseInt(r.querySelector('.f-qty').value) || 1;
+        const harga = parseFloat(r.querySelector('.f-price').value) || 0;
+        const sub = qty * harga;
+        tot += sub;
+        items.push({ nama, ukuran, qty, harga, sub });
+      });
+      const pct = parseFloat(document.getElementById('formDpPct').value) || 50;
+      const dpVal = Math.round(tot * (pct / 100));
+      const lnVal = tot - dpVal;
+
+      const newOrder = {
+        no_jual: 'PJ-202610-003',
+        tgl_jual: document.getElementById('inputOrderDate').value,
+        pelanggan: document.getElementById('inputCustomer').value,
+        kode_pl: 'PL-NEW',
+        kota: 'Tangerang',
+        total: tot,
+        paid: 0,
+        balance_due: tot,
+        status: 'BELUM_BAYAR',
+        items,
+        dp: { nomor: 'INV-DP-202610-003', jumlah: dpVal, tempo: document.getElementById('formDpDue').value, status: 'BELUM_BAYAR', note: 'Menunggu pembayaran uang muka (DP)' },
+        ln: { nomor: 'INV-LN-202610-003', jumlah: lnVal, tempo: document.getElementById('formLnDue').value, status: 'BELUM_BAYAR', note: 'Menunggu pembayaran pelunasan' }
+      };
+
+      salesOrders.unshift(newOrder);
+      refreshSummaryStrip();
+      selectSalesOrder(newOrder.no_jual);
+      closeSlideDrawer('drawerOrder');
+    }
+
+    function saveQuickCust(e) {
+      e.preventDefault();
+      const name = document.getElementById('custNameInput').value;
+      const sel = document.getElementById('inputCustomer');
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = `PL-005 - ${name}`;
+      opt.selected = true;
+      sel.appendChild(opt);
+      closeDialog('dialogCustomer');
+    }
+
+    function switchUserRole(role) {
+      document.querySelectorAll('.admin-action-btn').forEach(el => {
+        el.classList.toggle('hidden', role === 'owner');
+      });
+    }
+
+    function toggleThemeMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      document.getElementById('themeName').textContent = isDark ? 'Gelap' : 'Terang';
+    }
+
+    function setScreenState(st) {
+      document.getElementById('state-loading').classList.add('hidden');
+      document.getElementById('state-empty').classList.add('hidden');
+      document.getElementById('state-error').classList.add('hidden');
+      document.getElementById('main-workspace').classList.remove('hidden');
+
+      if (st === 'loading') {
+        document.getElementById('main-workspace').classList.add('hidden');
+        document.getElementById('state-loading').classList.remove('hidden');
+      } else if (st === 'empty') {
+        document.getElementById('main-workspace').classList.add('hidden');
+        document.getElementById('state-empty').classList.remove('hidden');
+      } else if (st === 'error') {
+        document.getElementById('state-error').classList.remove('hidden');
+      }
+    }
+
+    renderSalesTable();
+    selectSalesOrder('PJ-202610-001');
+  </script>
+</body>
+</html>
