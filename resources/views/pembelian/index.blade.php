@@ -14,7 +14,7 @@
     <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
       <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
     </svg>
-    + Pembelian Baru
+    Catat Pembelian
   </a>
   @endif
 </div>
@@ -29,7 +29,7 @@
     Catat pembelian bahan baku dari supplier untuk melacak pengeluaran produksi.
   </p>
   @if(auth()->user()->role === 'admin')
-  <a href="{{ route('pembelian.create') }}" class="btn-primary">+ Catat Pembelian Pertama</a>
+  <a href="{{ route('pembelian.create') }}" class="btn-primary">Catat Pembelian Pertama</a>
   @endif
 </div>
 @else

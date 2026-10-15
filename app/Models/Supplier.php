@@ -35,4 +35,14 @@ class Supplier extends Model
     {
         return $this->pembelians()->exists();
     }
+
+    public function getNamaSupplierAttribute(): string
+    {
+        return $this->nama;
+    }
+
+    public function getTelpAttribute(): ?string
+    {
+        return $this->tlp;
+    }
 }

@@ -198,7 +198,7 @@
   <div x-show="showNewPelanggan" x-transition class="modal-overlay" style="display:none;"
        @keydown.escape.window="showNewPelanggan = false" x-cloak role="dialog" aria-modal="true" aria-label="Form Pelanggan Baru">
     <div class="modal-box" @click.stop>
-      <h2 style="font-weight:700;font-size:1.125rem;margin-bottom:16px;">+ Pelanggan Baru</h2>
+      <h2 style="font-weight:700;font-size:1.125rem;margin-bottom:16px;">Tambah Pelanggan Baru</h2>
       <form id="form-quick-pelanggan" @submit.prevent="submitQuickPelanggan()">
         @csrf
         <div style="margin-bottom:12px;">

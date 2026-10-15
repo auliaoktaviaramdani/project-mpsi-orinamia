@@ -141,7 +141,7 @@
   <div x-show="showNewSupplier" x-transition class="modal-overlay" style="display:none;"
        @keydown.escape.window="showNewSupplier = false" role="dialog" aria-modal="true" aria-label="Form Supplier Baru">
     <div class="modal-box" @click.stop>
-      <h2 style="font-weight:700;font-size:1.125rem;margin-bottom:16px;">+ Supplier Baru</h2>
+      <h2 style="font-weight:700;font-size:1.125rem;margin-bottom:16px;">Tambah Supplier Baru</h2>
       <form @submit.prevent="submitQuickSupplier()">
         @csrf
         <div style="margin-bottom:12px;">

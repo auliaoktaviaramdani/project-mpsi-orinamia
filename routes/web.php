@@ -37,7 +37,6 @@ Route::middleware('auth')->group(function () {
     // Penjualan: index & show bisa dibaca semua user, aksi admin only
     // ---------------------------------------------------------------
     Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
-    Route::get('/penjualan/{penjualan}', [PenjualanController::class, 'show'])->name('penjualan.show');
 
     Route::middleware('role:admin')->group(function () {
         Route::get('/penjualan/create', [PenjualanController::class, 'create'])->name('penjualan.create');
@@ -48,6 +47,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/invoice/{invoice}/bayar', [PembayaranController::class, 'store'])->name('pembayaran.store');
     });
 
+    Route::get('/penjualan/{penjualan}', [PenjualanController::class, 'show'])->name('penjualan.show');
+
     // Invoice cetak (semua user bisa cetak)
     Route::get('/invoice/{invoice}/cetak', [InvoiceController::class, 'cetak'])->name('invoice.cetak');
 
@@ -55,13 +56,14 @@ Route::middleware('auth')->group(function () {
     // Pembelian: index & show bisa dibaca semua, create admin only
     // ---------------------------------------------------------------
     Route::get('/pembelian', [PembelianController::class, 'index'])->name('pembelian.index');
-    Route::get('/pembelian/{pembelian}', [PembelianController::class, 'show'])->name('pembelian.show');
-    Route::get('/pembelian/{pembelian}/cetak', [PembelianController::class, 'cetak'])->name('pembelian.cetak');
 
     Route::middleware('role:admin')->group(function () {
         Route::get('/pembelian/create', [PembelianController::class, 'create'])->name('pembelian.create');
         Route::post('/pembelian', [PembelianController::class, 'store'])->name('pembelian.store');
     });
+
+    Route::get('/pembelian/{pembelian}', [PembelianController::class, 'show'])->name('pembelian.show');
+    Route::get('/pembelian/{pembelian}/cetak', [PembelianController::class, 'cetak'])->name('pembelian.cetak');
 
     // ---------------------------------------------------------------
     // Laporan: semua user

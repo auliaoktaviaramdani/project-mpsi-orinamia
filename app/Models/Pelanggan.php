@@ -38,4 +38,14 @@ class Pelanggan extends Model
     {
         return $this->penjualans()->exists();
     }
+
+    public function getNamaPelangganAttribute(): string
+    {
+        return $this->nama;
+    }
+
+    public function getTelpAttribute(): ?string
+    {
+        return $this->tlp;
+    }
 }

@@ -8,14 +8,14 @@
   </div>
   <a href="{{ route('master.bahan.create') }}" class="btn-primary" id="btn-bahan-baru">
     <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-    + Bahan Baru
+    Tambah Bahan
   </a>
 </div>
 
 @if($bahans->isEmpty())
 <div class="panel" style="padding:64px;text-align:center;">
   <p class="font-editorial" style="font-size:1.375rem;font-weight:600;margin-bottom:8px;">Belum Ada Bahan Baku</p>
-  <a href="{{ route('master.bahan.create') }}" class="btn-primary" style="margin-top:12px;">+ Tambah Bahan</a>
+  <a href="{{ route('master.bahan.create') }}" class="btn-primary" style="margin-top:12px;">Tambah Bahan</a>
 </div>
 @else
 <div class="panel" style="overflow-x:auto;">

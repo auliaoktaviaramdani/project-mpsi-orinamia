@@ -14,7 +14,7 @@
     <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
       <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
     </svg>
-    + Pesanan Baru
+    Pesanan Baru
   </a>
   @endif
 </div>
@@ -31,7 +31,7 @@
       Catat pesanan pakaian pelanggan untuk menerbitkan Invoice DP dan Invoice Pelunasan secara otomatis.
     </p>
     @if(auth()->user()->role === 'admin')
-    <a href="{{ route('penjualan.create') }}" class="btn-primary">+ Buat Pesanan Pertama</a>
+    <a href="{{ route('penjualan.create') }}" class="btn-primary">Buat Pesanan Pertama</a>
     @endif
   </div>
   @else

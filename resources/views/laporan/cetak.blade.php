@@ -6,14 +6,14 @@
   $totalSisa = 0;
 
   if ($jenis === 'penjualan') {
-      $totalNominal = $rows->sum('total_harga');
-      $totalBayar = $rows->sum('dp') + $rows->sum('pelunasan');
+      $totalNominal = $rows->sum('total');
+      $totalBayar = $rows->sum('paid');
       $totalSisa = $rows->sum('balance_due');
   } elseif ($jenis === 'pembelian') {
       $totalNominal = $rows->sum('total_beli');
   } elseif ($jenis === 'piutang') {
-      $totalNominal = $rows->sum('total_harga');
-      $totalBayar = $rows->sum('dp') + $rows->sum('pelunasan');
+      $totalNominal = $rows->sum('total');
+      $totalBayar = $rows->sum('paid');
       $totalSisa = $rows->sum('balance_due');
   }
 @endphp

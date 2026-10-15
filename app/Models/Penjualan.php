@@ -119,4 +119,29 @@ class Penjualan extends Model
 
         return $query;
     }
+
+    public function getStatusLabelAttribute(): string
+    {
+        return match ($this->status) {
+            'DP_LUNAS' => 'DP Lunas',
+            'LUNAS' => 'Lunas',
+            'TERKIRIM' => 'Terkirim',
+            default => 'Belum Bayar',
+        };
+    }
+
+    public function getTotalHargaAttribute(): float
+    {
+        return (float) $this->total;
+    }
+
+    public function getDpAttribute(): float
+    {
+        return (float) ($this->invoiceDP?->jumlah ?? 0);
+    }
+
+    public function getPelunasanAttribute(): float
+    {
+        return (float) ($this->invoicePelunasan?->jumlah ?? 0);
+    }
 }
