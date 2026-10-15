@@ -2,11 +2,20 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<div style="margin-bottom:24px;">
-  <h1 class="font-editorial" style="font-size:1.75rem;font-weight:600;color:var(--text);">Dashboard</h1>
-  <p style="font-size:0.8375rem;color:var(--muted);margin-top:4px;">
-    Ringkasan keuangan Orinamia Daily Wear &bull; {{ \App\Support\Fmt::tgl(now()) }}
-  </p>
+<div style="margin-bottom:24px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+  <div>
+    <h1 class="font-editorial" style="font-size:1.75rem;font-weight:600;color:var(--text);">Dashboard</h1>
+    <p style="font-size:0.8375rem;color:var(--muted);margin-top:4px;">
+      Ringkasan keuangan Orinamia Daily Wear &bull; {{ \App\Support\Fmt::tgl(now()) }}
+    </p>
+  </div>
+  <a href="{{ route('home') }}" target="_blank" class="btn-outline" style="font-size:0.8125rem;display:inline-flex;align-items:center;gap:8px;">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10"></circle>
+      <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+    </svg>
+    Lihat Web Profil PT Cahaya Binar Berlian &rarr;
+  </a>
 </div>
   
 <!-- Summary Cards -->

@@ -323,6 +323,15 @@
           Akun
         </a>
         @endif
+        <a href="{{ route('home') }}"
+           class="nav-pill nav-pill-inactive" title="Halaman Depan Profil PT Cahaya Binar Berlian" target="_blank"
+           style="color:var(--accent);border-left:1px dashed var(--border);padding-left:12px;margin-left:4px;display:inline-flex;align-items:center;gap:6px;">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          Web Profil PT
+        </a>
       </nav>
 
       <!-- Right Controls -->
@@ -368,6 +377,7 @@
       <a href="{{ route('akun.index') }}" class="btn-outline" style="font-size:0.75rem;">Akun</a>
       @endif
       <a href="{{ route('laporan.index') }}" class="btn-outline" style="font-size:0.75rem;">Laporan</a>
+      <a href="{{ route('home') }}" class="btn-outline" target="_blank" style="font-size:0.75rem;color:var(--accent);font-weight:700;">🌐 Web Profil PT</a>
     </div>
   </header>
 

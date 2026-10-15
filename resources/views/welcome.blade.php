@@ -225,6 +225,43 @@
       background: rgba(0,0,0,0.03);
     }
 
+    /* [reactbits.dev] Spotlight Card Effect */
+    .spotlight-card {
+      position: relative;
+      overflow: hidden;
+    }
+    .spotlight-card::before {
+      content: '';
+      position: absolute;
+      top: var(--mouse-y, -1000px);
+      left: var(--mouse-x, -1000px);
+      width: 480px;
+      height: 480px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(173, 142, 235, 0.16) 0%, rgba(243, 145, 236, 0.04) 45%, transparent 70%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 250ms ease;
+      z-index: 1;
+    }
+    .spotlight-card:hover::before {
+      opacity: 1;
+    }
+
+    /* [reactbits.dev] Shiny Shimmer Text */
+    .shiny-text {
+      background: linear-gradient(110deg, var(--text) 30%, var(--pink) 50%, var(--lavender) 60%, var(--text) 75%);
+      background-size: 220% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+      animation: shineSweep 5s linear infinite;
+    }
+    @keyframes shineSweep {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
     /* Shimmer Animation */
     @keyframes pulseAura {
       0%, 100% { opacity: 0.7; transform: scale(1); }
@@ -236,6 +273,25 @@
   </style>
 </head>
 <body>
+
+  @auth
+  <!-- Authenticated User Top Bar: Smooth transition between Landing Page and SIMORIN Workspace -->
+  <div style="background:var(--surface-tint);border-bottom:1px solid var(--border);padding:8px 24px;font-size:0.8125rem;">
+    <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10B981;box-shadow:0 0 8px rgba(16,185,129,0.6);"></span>
+        <span style="color:var(--text-muted);">
+          Sesi Aktif: <strong style="color:var(--text);">{{ auth()->user()->name }}</strong> (Peran: <span style="text-transform:capitalize;">{{ auth()->user()->role }}</span>)
+        </span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <a href="{{ route('dashboard') }}" class="btn-brand" style="padding:6px 14px;font-size:0.75rem;box-shadow:none;">
+          Buka Dashboard Internal SIMORIN &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+  @endauth
 
   <!-- Top Gem Ribbon -->
   <div class="brand-ribbon" aria-hidden="true"></div>
@@ -349,9 +405,9 @@
         <span style="font-size:0.75rem;color:var(--text-muted);">Didirikan Agustus 2015</span>
       </div>
 
-      <!-- Headline -->
+      <!-- Headline (Godly.design + ReactBits Shiny text) -->
       <h1 class="font-editorial" style="font-size:clamp(2.4rem, 5.5vw, 4.2rem);line-height:1.12;font-weight:500;color:var(--text);letter-spacing:-0.02em;max-width:960px;margin:0 auto 24px;">
-        Konveksi Seragam Profesional, <i>Atelier</i> Rumah Jahit, & Pakaian Medis Berstandar Tinggi.
+        Konveksi Seragam Profesional, <i class="shiny-text">Atelier</i> Rumah Jahit, & Pakaian Medis Berstandar Tinggi.
       </h1>
 
       <!-- Subtitle -->
@@ -377,39 +433,39 @@
         </a>
       </div>
 
-      <!-- Quick Metrics Strip -->
+      <!-- Quick Metrics Strip [Spotlight Cards & Animated Tickers] -->
       <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:16px;max-width:900px;margin:0 auto;text-align:left;">
         
-        <div class="atelier-card" style="padding:18px 22px;">
+        <div class="atelier-card spotlight-card" style="padding:18px 22px;">
           <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Pengalaman Industri</div>
           <div class="font-num" style="font-size:1.65rem;font-weight:700;color:var(--accent);margin-top:2px;">
-            10+ Tahun
+            <span class="anim-counter" data-val="10">10</span>+ Tahun
           </div>
           <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px;">Berdiri sejak Agustus 2015</div>
         </div>
 
-        <div class="atelier-card" style="padding:18px 22px;">
+        <div class="atelier-card spotlight-card" style="padding:18px 22px;">
           <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Kapasitas Produksi</div>
           <div class="font-num" style="font-size:1.65rem;font-weight:700;color:var(--text);margin-top:2px;">
-            10 s/d 10.000+
+            <span class="anim-counter" data-val="10000">10.000</span>+ Pcs
           </div>
-          <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px;">Pcs per pesanan (Fleksibel)</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px;">Pesanan Fleksibel (Min 10 Pcs)</div>
         </div>
 
-        <div class="atelier-card" style="padding:18px 22px;">
+        <div class="atelier-card spotlight-card" style="padding:18px 22px;">
           <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Varian Seragam Medis</div>
           <div class="font-num" style="font-size:1.65rem;font-weight:700;color:var(--accent);margin-top:2px;">
-            13 Pilihan Warna
+            <span class="anim-counter" data-val="13">13</span> Pilihan Warna
           </div>
           <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px;">Baju OKA & Scrub Bedah</div>
         </div>
 
-        <div class="atelier-card" style="padding:18px 22px;">
+        <div class="atelier-card spotlight-card" style="padding:18px 22px;">
           <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Legalitas Badan Hukum</div>
           <div class="font-num" style="font-size:1.65rem;font-weight:700;color:var(--text);margin-top:2px;">
             AHU & NIB Resmi
           </div>
-          <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px;">SK Kemenkumham RI 2024</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px;">Kemenkumham RI Tahun 2024</div>
         </div>
 
       </div>
@@ -630,6 +686,65 @@
           </div>
         </template>
 
+      </div>
+
+      <!-- [motion-primitives.com & skiper-ui] Interactive Fabric Quality Accordion -->
+      <div x-data="{ openSpec: null }" style="margin-top:48px;max-width:920px;margin-left:auto;margin-right:auto;">
+        <div style="text-align:center;margin-bottom:18px;">
+          <span class="badge-pill" style="font-size:0.75rem;">Standar Material & Tekstil</span>
+          <h3 class="font-editorial" style="font-size:1.35rem;font-weight:600;color:var(--text);margin-top:8px;">
+            Spesifikasi Karakteristik Kain Pilihan Orinamia
+          </h3>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          
+          <!-- Accordion 1 -->
+          <div class="atelier-card" style="overflow:hidden;">
+            <button type="button" @click="openSpec = (openSpec === 1 ? null : 1)"
+                    style="width:100%;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;background:transparent;border:none;cursor:pointer;color:var(--text);font-family:inherit;font-weight:600;font-size:0.95rem;text-align:left;">
+              <span style="display:flex;align-items:center;gap:12px;">
+                <span>🩺</span>
+                <span>Standar Bahan Seragam Medis OKA & Scrub Bedah</span>
+              </span>
+              <span class="font-num" style="color:var(--accent);font-size:1.25rem;transition:transform 200ms;" :style="openSpec === 1 ? 'transform:rotate(45deg)' : ''">+</span>
+            </button>
+            <div x-show="openSpec === 1" x-collapse style="padding:0 22px 22px;border-top:1px solid var(--border-subtle);font-size:0.875rem;color:var(--text-muted);line-height:1.75;">
+              Menggunakan katun Toyobo Fodu atau American Drill grade A dengan kerapatan serat tinggi, sifat bahan breathable (adem), daya serap keringat maksimal, dan warna yang tahan terhadap proses sterilisasi/autoklaf suhu tinggi rumah sakit.
+            </div>
+          </div>
+
+          <!-- Accordion 2 -->
+          <div class="atelier-card" style="overflow:hidden;">
+            <button type="button" @click="openSpec = (openSpec === 2 ? null : 2)"
+                    style="width:100%;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;background:transparent;border:none;cursor:pointer;color:var(--text);font-family:inherit;font-weight:600;font-size:0.95rem;text-align:left;">
+              <span style="display:flex;align-items:center;gap:12px;">
+                <span>👔</span>
+                <span>Standar Bahan Kemeja PDH, Kantor & Jas Almamater</span>
+              </span>
+              <span class="font-num" style="color:var(--accent);font-size:1.25rem;transition:transform 200ms;" :style="openSpec === 2 ? 'transform:rotate(45deg)' : ''">+</span>
+            </button>
+            <div x-show="openSpec === 2" x-collapse style="padding:0 22px 22px;border-top:1px solid var(--border-subtle);font-size:0.875rem;color:var(--text-muted);line-height:1.75;">
+              Pilihan kain Tropical, Nagata Drill, atau Valextra High Twist. Dilengkapi puring dalam lembut untuk blazer, pola kerah kaku simetris, kancing bertulang tebal, serta bordir komputer presisi dengan benang poliester anti rapuh.
+            </div>
+          </div>
+
+          <!-- Accordion 3 -->
+          <div class="atelier-card" style="overflow:hidden;">
+            <button type="button" @click="openSpec = (openSpec === 3 ? null : 3)"
+                    style="width:100%;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;background:transparent;border:none;cursor:pointer;color:var(--text);font-family:inherit;font-weight:600;font-size:0.95rem;text-align:left;">
+              <span style="display:flex;align-items:center;gap:12px;">
+                <span>🦺</span>
+                <span>Standar Safety PDL Tambang & Proyek Lapangan (K3)</span>
+              </span>
+              <span class="font-num" style="color:var(--accent);font-size:1.25rem;transition:transform 200ms;" :style="openSpec === 3 ? 'transform:rotate(45deg)' : ''">+</span>
+            </button>
+            <div x-show="openSpec === 3" x-collapse style="padding:0 22px 22px;border-top:1px solid var(--border-subtle);font-size:0.875rem;color:var(--text-muted);line-height:1.75;">
+              Kain Ripstop bertekstur kotak anti sobek dengan pita reflektif (scotlight 3M) lebar 2 inci pada dada, punggung, dan lingkar lengan. Dikerjakan dengan jahitan rantai tiga baris (triple stitch) dan penguat bar-tack pada setiap sudut saku.
+            </div>
+          </div>
+
+        </div>
       </div>
 
     </div>
@@ -1055,29 +1170,72 @@
     </div>
   </footer>
 
-  <!-- Anime.js Micro-Interactions & Motion Primitives -->
+  <!-- Anime.js Micro-Interactions, ReactBits Spotlight, & Motion Primitives -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // 1. [reactbits.dev] Spotlight Card Cursor Tracking
+      document.querySelectorAll('.spotlight-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          card.style.setProperty('--mouse-x', `${x}px`);
+          card.style.setProperty('--mouse-y', `${y}px`);
+        });
+      });
+
       if (typeof anime !== 'undefined') {
-        // Staggered entrance for atelier cards
+        // 2. [animejs.com] Staggered Entrance
         anime({
           targets: '.atelier-card',
           opacity: [0.85, 1],
-          translateY: [8, 0],
-          delay: anime.stagger(40, { start: 100 }),
-          duration: 700,
+          translateY: [10, 0],
+          delay: anime.stagger(35, { start: 120 }),
+          duration: 750,
           easing: 'easeOutCubic'
         });
 
-        // Breathing ambient light aura
+        // 3. [aura.build] Ambient Atmospheric Glow Breathing
         anime({
           targets: '.aura-spotlight',
           scale: [0.95, 1.05],
-          opacity: [0.7, 1],
-          duration: 6000,
+          opacity: [0.65, 0.95],
+          duration: 6500,
           direction: 'alternate',
           loop: true,
           easing: 'easeInOutSine'
+        });
+
+        // 4. [reactbits.dev & animejs.com] Rolling Counter Tickers
+        document.querySelectorAll('.anim-counter').forEach(counter => {
+          const targetVal = parseInt(counter.getAttribute('data-val'), 10) || 0;
+          anime({
+            targets: counter,
+            innerHTML: [0, targetVal],
+            round: 1,
+            easing: 'easeOutExpo',
+            duration: 2200,
+            update: function(anim) {
+              const current = Math.round(anim.animations[0].currentValue);
+              if (targetVal >= 1000) {
+                counter.innerHTML = current.toLocaleString('id-ID');
+              } else {
+                counter.innerHTML = current;
+              }
+            }
+          });
+        });
+
+        // 5. [animejs.com] OKA Color Swatch Elastic Feedback
+        document.querySelectorAll('.swatch-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            anime({
+              targets: btn,
+              scale: [1, 1.3, 1.15],
+              duration: 450,
+              easing: 'easeOutElastic(1, .6)'
+            });
+          });
         });
       }
     });
