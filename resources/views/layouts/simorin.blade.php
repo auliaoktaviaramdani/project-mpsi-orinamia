@@ -411,10 +411,14 @@
           &bull; <span style="text-transform:capitalize;">{{ auth()->user()->role }}</span>
         </span>
 
-        <!-- Theme toggle -->
-        <button @click="dark = !dark" type="button" class="btn-outline" style="min-height:40px;padding:6px 12px;" title="Ganti tema">
-          <span x-show="!dark">🌙</span>
-          <span x-show="dark">☀️</span>
+        <!-- Theme toggle (shadcn style) -->
+        <button @click="dark = !dark; localStorage.setItem('theme', dark ? 'dark' : 'light')" type="button" class="btn-outline" style="min-height:40px;padding:6px 12px;display:inline-flex;align-items:center;gap:6px;" title="Ganti tema">
+          <svg x-show="!dark" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+          </svg>
+          <svg x-show="dark" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+          </svg>
           <span x-text="dark ? 'Gelap' : 'Terang'" style="font-size:0.75rem;"></span>
         </button>
 
@@ -445,7 +449,12 @@
       <a href="{{ route('akun.index') }}" class="btn-outline" style="font-size:0.75rem;">Akun</a>
       @endif
       <a href="{{ route('laporan.index') }}" class="btn-outline" style="font-size:0.75rem;">Laporan</a>
-      <a href="{{ route('home') }}" class="btn-outline" target="_blank" style="font-size:0.75rem;color:var(--accent);font-weight:700;">🌐 Web Profil PT</a>
+      <a href="{{ route('home') }}" class="btn-outline" target="_blank" style="font-size:0.75rem;color:var(--accent);font-weight:700;display:inline-flex;align-items:center;gap:6px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>
+        </svg>
+        Web Profil PT
+      </a>
     </div>
   </header>
 

@@ -319,17 +319,21 @@
     /* [lafys.com & awwwards.com] Interactive Slicer Component */
     .slicer-container {
       position: relative;
-      height: 560px;
+      height: 640px;
       border-radius: 16px;
       overflow: hidden;
       border: 1px solid var(--border);
       background: var(--surface);
+      background-image: 
+        linear-gradient(to right, rgba(173, 142, 235, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(173, 142, 235, 0.04) 1px, transparent 1px);
+      background-size: 24px 24px;
       box-shadow: var(--card-shadow);
       user-select: none;
       touch-action: pan-y;
     }
     @media (max-width: 820px) {
-      .slicer-container { height: 680px; }
+      .slicer-container { height: 860px; }
     }
     .slicer-layer {
       position: absolute;
@@ -1032,10 +1036,14 @@
       <!-- Right Actions -->
       <div style="display:flex;align-items:center;gap:12px;">
         
-        <!-- Theme Toggle -->
-        <button @click="dark = !dark" type="button" class="btn-ghost" style="padding:8px 12px;min-height:38px;" title="Ganti Tema">
-          <span x-show="!dark">🌙</span>
-          <span x-show="dark">☀️</span>
+        <!-- Theme Toggle (shadcn style) -->
+        <button @click="dark = !dark; localStorage.setItem('theme', dark ? 'dark' : 'light')" type="button" class="btn-ghost" style="padding:8px;min-height:38px;width:38px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;" title="Ganti Tema">
+          <svg x-show="!dark" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+          </svg>
+          <svg x-show="dark" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+          </svg>
         </button>
 
         @auth
@@ -1288,16 +1296,19 @@
           </p>
         </div>
 
-        <!-- Mode Sub-Tabs (Huyml / ReactBits style) -->
-        <div style="display:flex;gap:8px;flex-wrap:wrap;padding:4px;background:var(--surface-tint);border-radius:10px;border:1px solid var(--border);">
-          <button type="button" class="btn-slicing-preset" :class="{ 'active': slicingSubTab === 'slicer' }" @click="slicingSubTab = 'slicer'">
-            ✦ Komparasi Mutu Jahitan
+        <!-- Mode Sub-Tabs (shadcn Tabs style) -->
+        <div style="display:flex;gap:6px;flex-wrap:wrap;padding:4px;background:var(--surface-tint);border-radius:10px;border:1px solid var(--border);">
+          <button type="button" class="btn-slicing-preset" :class="{ 'active': slicingSubTab === 'slicer' }" @click="slicingSubTab = 'slicer'" style="display:inline-flex;align-items:center;gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+            Komparasi Mutu Jahitan
           </button>
-          <button type="button" class="btn-slicing-preset" :class="{ 'active': slicingSubTab === 'macro' }" @click="slicingSubTab = 'macro'">
-            🔬 Pembesaran Serat 10x
+          <button type="button" class="btn-slicing-preset" :class="{ 'active': slicingSubTab === 'macro' }" @click="slicingSubTab = 'macro'" style="display:inline-flex;align-items:center;gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18h8"/><path d="M3 22h18"/><path d="m14 22-4-4"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="m12 6 4-4 3 3-4 4"/><path d="m14 18 1.5 1.5"/></svg>
+            Pembesaran Serat 10x
           </button>
-          <button type="button" class="btn-slicing-preset" :class="{ 'active': slicingSubTab === 'iso' }" @click="slicingSubTab = 'iso'">
-            📐 Klasifikasi ISO 4915
+          <button type="button" class="btn-slicing-preset" :class="{ 'active': slicingSubTab === 'iso' }" @click="slicingSubTab = 'iso'" style="display:inline-flex;align-items:center;gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.3 8.7-5-5a1 1 0 0 0-1.4 0l-12 12a1 1 0 0 0 0 1.4l5 5a1 1 0 0 0 1.4 0l12-12a1 1 0 0 0 0-1.4Z"/><path d="m7.5 10.5 2 2"/><path d="m10.5 7.5 2 2"/><path d="m13.5 4.5 2 2"/><path d="m4.5 13.5 2 2"/></svg>
+            Klasifikasi ISO 4915
           </button>
         </div>
       </div>
@@ -1343,29 +1354,91 @@
               </div>
             </div>
 
+            <!-- Visual Anatomy Blueprint: Pasaran Seam & Pocket Construction -->
+            <div style="width:100%;height:150px;position:relative;margin:12px 0;border-radius:12px;background:radial-gradient(ellipse at 70% 50%, rgba(239,68,68,0.08) 0%, rgba(0,0,0,0.18) 100%);border:1px dashed rgba(239,68,68,0.25);overflow:hidden;display:flex;align-items:center;">
+              <svg width="100%" height="100%" viewBox="0 0 900 150" fill="none" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;">
+                <defs>
+                  <pattern id="pasaran-schematic-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <line x1="0" y1="20" x2="20" y2="20" stroke="rgba(239,68,68,0.06)" stroke-width="1"/>
+                    <line x1="20" y1="0" x2="20" y2="20" stroke="rgba(239,68,68,0.06)" stroke-width="1"/>
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#pasaran-schematic-grid)"/>
+
+                <!-- Garment Panel Baseline -->
+                <path d="M 50 25 L 850 25 L 850 125 L 50 125 Z" fill="rgba(239, 68, 68, 0.03)" stroke="rgba(239, 68, 68, 0.15)" stroke-width="1"/>
+
+                <!-- Pocket Contour (Pasaran) -->
+                <path d="M 450 35 L 750 35 L 750 115 L 450 115 Z" fill="rgba(239, 68, 68, 0.05)" stroke="rgba(239, 68, 68, 0.3)" stroke-width="1.5"/>
+
+                <!-- Loose, Wavy 8 SPI Stitch Lines (Irregular single thread) -->
+                <path d="M 460 48 Q 535 50, 610 47 T 740 49" stroke="#EF4444" stroke-width="2.5" stroke-dasharray="14 10" stroke-linecap="round"/>
+                <path d="M 740 49 L 740 105" stroke="#EF4444" stroke-width="2.5" stroke-dasharray="14 10" stroke-linecap="round"/>
+                <path d="M 460 48 L 460 105" stroke="#EF4444" stroke-width="2.5" stroke-dasharray="14 10" stroke-linecap="round"/>
+
+                <!-- Fraying loose thread tail at corner -->
+                <path d="M 450 35 Q 435 45, 430 70 T 425 85" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.8"/>
+                <path d="M 750 35 Q 765 48, 770 65" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.8"/>
+
+                <!-- Red Warning Stress Rings at Corner (No Bar-Tack!) -->
+                <circle cx="450" cy="35" r="8" stroke="#EF4444" stroke-width="1.5" stroke-dasharray="3 3" fill="rgba(239,68,68,0.2)"/>
+                <circle cx="450" cy="35" r="16" stroke="#EF4444" stroke-width="1" stroke-dasharray="4 4" fill="none" opacity="0.4"/>
+                <circle cx="450" cy="35" r="3" fill="#EF4444"/>
+
+                <!-- Technical Blueprint Annotations on SVG -->
+                <g transform="translate(480, 16)">
+                  <rect width="180" height="22" rx="4" fill="rgba(239,68,68,0.15)" stroke="rgba(239,68,68,0.4)" stroke-width="1"/>
+                  <text x="8" y="15" fill="#EF4444" font-size="10.5" font-family="'JetBrains Mono', monospace" font-weight="700">8 SPI - JAHITAN RENYUT</text>
+                </g>
+
+                <g transform="translate(240, 45)">
+                  <line x1="200" y1="-10" x2="160" y2="10" stroke="#EF4444" stroke-width="1.2" stroke-dasharray="2 2"/>
+                  <rect width="180" height="22" rx="4" fill="rgba(239,68,68,0.15)" stroke="rgba(239,68,68,0.4)" stroke-width="1"/>
+                  <text x="8" y="15" fill="#EF4444" font-size="10" font-family="'JetBrains Mono', monospace" font-weight="700">TITIK ROBEK (NO BAR-TACK)</text>
+                </g>
+
+                <g transform="translate(560, 80)">
+                  <text x="0" y="14" fill="var(--text-muted)" font-size="10" font-family="'JetBrains Mono', monospace">Toleransi Margin: &plusmn;3.5mm</text>
+                  <text x="0" y="28" fill="#EF4444" font-size="10" font-family="'JetBrains Mono', monospace" font-weight="600">Daya Beban Saku: &lt;800 gram</text>
+                </g>
+              </svg>
+            </div>
+
             <!-- Technical Callouts (Right side of canvas for Pasaran) -->
             <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;margin-top:auto;max-width:540px;margin-left:auto;">
-              <div style="padding:12px 14px;background:var(--surface);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+              <div style="padding:12px 14px;background:var(--surface);border-radius:8px;border:1px solid rgba(239,68,68,0.25);box-shadow:0 2px 6px rgba(0,0,0,0.03);">
                 <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#DC2626;">
-                  <span>⚠️</span> 8 SPI (Stitch Per Inch)
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                  8 SPI (Stitch Per Inch)
                 </div>
                 <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Jahitan renggang, benang mudah terurai saat dicuci mesin.</div>
               </div>
-              <div style="padding:12px 14px;background:var(--surface);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+              <div style="padding:12px 14px;background:var(--surface);border-radius:8px;border:1px solid rgba(239,68,68,0.25);box-shadow:0 2px 6px rgba(0,0,0,0.03);">
                 <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#DC2626;">
-                  <span>⚠️</span> Tanpa Bar-Tack
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                  Tanpa Bar-Tack
                 </div>
                 <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Sudut saku robek saat dibebani alat medis atau gawai.</div>
               </div>
-              <div style="padding:12px 14px;background:var(--surface);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+              <div style="padding:12px 14px;background:var(--surface);border-radius:8px;border:1px solid rgba(239,68,68,0.25);box-shadow:0 2px 6px rgba(0,0,0,0.03);">
                 <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#DC2626;">
-                  <span>⚠️</span> Poliester Standar
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                  Poliester Standar
                 </div>
                 <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Panas, gerah, dan mengkerut jika masuk autoklaf.</div>
               </div>
-              <div style="padding:12px 14px;background:var(--surface);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+              <div style="padding:12px 14px;background:var(--surface);border-radius:8px;border:1px solid rgba(239,68,68,0.25);box-shadow:0 2px 6px rgba(0,0,0,0.03);">
                 <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#DC2626;">
-                  <span>⚠️</span> Kerah Lemas
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                  Kerah Lemas
                 </div>
                 <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Tanpa interlining bermutu, kusut setelah dicuci.</div>
               </div>
@@ -1384,29 +1457,105 @@
               </div>
             </div>
 
+            <!-- Visual Anatomy Blueprint: Orinamia Atelier Seam & Pocket Construction -->
+            <div style="width:100%;height:150px;position:relative;margin:12px 0;border-radius:12px;background:radial-gradient(ellipse at 30% 50%, rgba(16,185,129,0.08) 0%, rgba(0,0,0,0.18) 100%);border:1px solid rgba(16,185,129,0.3);overflow:hidden;display:flex;align-items:center;">
+              <svg width="100%" height="100%" viewBox="0 0 900 150" fill="none" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;">
+                <defs>
+                  <pattern id="atelier-schematic-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <line x1="0" y1="20" x2="20" y2="20" stroke="rgba(16,185,129,0.06)" stroke-width="1"/>
+                    <line x1="20" y1="0" x2="20" y2="20" stroke="rgba(16,185,129,0.06)" stroke-width="1"/>
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#atelier-schematic-grid)"/>
+
+                <!-- Garment Panel Baseline -->
+                <path d="M 50 25 L 850 25 L 850 125 L 50 125 Z" fill="rgba(16, 185, 129, 0.04)" stroke="rgba(16, 185, 129, 0.2)" stroke-width="1"/>
+
+                <!-- Pocket Contour (Orinamia) -->
+                <path d="M 450 35 L 750 35 L 750 115 L 450 115 Z" fill="rgba(16, 185, 129, 0.06)" stroke="rgba(16, 185, 129, 0.35)" stroke-width="1.5"/>
+
+                <!-- Triple Chainstitch 14 SPI Lines (Laser straight 3 parallel rows) -->
+                <!-- Row 1 -->
+                <path d="M 458 46 L 742 46" stroke="#10B981" stroke-width="2" stroke-dasharray="5 3" stroke-linecap="round"/>
+                <path d="M 742 46 L 742 108" stroke="#10B981" stroke-width="2" stroke-dasharray="5 3" stroke-linecap="round"/>
+                <path d="M 458 46 L 458 108" stroke="#10B981" stroke-width="2" stroke-dasharray="5 3" stroke-linecap="round"/>
+                <!-- Row 2 -->
+                <path d="M 461 49 L 739 49" stroke="#34D399" stroke-width="1.8" stroke-dasharray="5 3" stroke-linecap="round"/>
+                <path d="M 739 49 L 739 105" stroke="#34D399" stroke-width="1.8" stroke-dasharray="5 3" stroke-linecap="round"/>
+                <path d="M 461 49 L 461 105" stroke="#34D399" stroke-width="1.8" stroke-dasharray="5 3" stroke-linecap="round"/>
+                <!-- Row 3 (Loop interlock effect) -->
+                <path d="M 464 52 L 736 52" stroke="#6EE7B7" stroke-width="1.5" stroke-dasharray="4 2" stroke-linecap="round"/>
+                <path d="M 736 52 L 736 102" stroke="#6EE7B7" stroke-width="1.5" stroke-dasharray="4 2" stroke-linecap="round"/>
+                <path d="M 464 52 L 464 102" stroke="#6EE7B7" stroke-width="1.5" stroke-dasharray="4 2" stroke-linecap="round"/>
+
+                <!-- Double Bar-Tack 42-Tusukan Dense Cross-Hatch Box at Corner -->
+                <g transform="translate(442, 28)">
+                  <rect width="18" height="14" rx="2" fill="rgba(16,185,129,0.3)" stroke="#10B981" stroke-width="2"/>
+                  <!-- 42 tusukan zigzag pattern -->
+                  <path d="M 2 2 L 16 12 M 2 6 L 16 16 M 2 12 L 16 2 M 6 2 L 6 12 M 12 2 L 12 12" stroke="#FFFFFF" stroke-width="1.2"/>
+                  <!-- Pulse indicator -->
+                  <circle cx="9" cy="7" r="14" stroke="#10B981" stroke-width="1" stroke-dasharray="2 2" fill="none" opacity="0.5"/>
+                </g>
+
+                <g transform="translate(740, 28)">
+                  <rect width="18" height="14" rx="2" fill="rgba(16,185,129,0.3)" stroke="#10B981" stroke-width="2"/>
+                  <path d="M 2 2 L 16 12 M 2 6 L 16 16 M 2 12 L 16 2 M 6 2 L 6 12 M 12 2 L 12 12" stroke="#FFFFFF" stroke-width="1.2"/>
+                </g>
+
+                <!-- Technical Blueprint Annotations on SVG -->
+                <g transform="translate(180, 16)">
+                  <rect width="250" height="22" rx="4" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.4)" stroke-width="1"/>
+                  <text x="8" y="15" fill="#10B981" font-size="10.5" font-family="'JetBrains Mono', monospace" font-weight="700">14 SPI TRIPLE CHAINSTITCH (ISO 4915)</text>
+                </g>
+
+                <g transform="translate(180, 48)">
+                  <line x1="255" y1="-15" x2="265" y2="-15" stroke="#10B981" stroke-width="1.2"/>
+                  <rect width="215" height="22" rx="4" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.4)" stroke-width="1"/>
+                  <text x="8" y="15" fill="#10B981" font-size="10" font-family="'JetBrains Mono', monospace" font-weight="700">DOUBLE BAR-TACK 42 TUSUKAN</text>
+                </g>
+
+                <g transform="translate(180, 80)">
+                  <text x="0" y="14" fill="var(--text)" font-size="10" font-family="'JetBrains Mono', monospace" font-weight="600">Presisi Toleransi: &plusmn;0.5mm</text>
+                  <text x="0" y="28" fill="#10B981" font-size="10" font-family="'JetBrains Mono', monospace" font-weight="700">Beban Tarik Saku: &gt;2.5 kg (Lolos Uji)</text>
+                </g>
+              </svg>
+            </div>
+
             <!-- Technical Callouts (Left side of canvas for Orinamia) -->
             <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;margin-top:auto;max-width:540px;">
-              <div style="padding:12px 14px;background:var(--surface-tint);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(110,56,122,0.06);">
+              <div style="padding:12px 14px;background:var(--surface-tint);border-radius:8px;border:1px solid rgba(16,185,129,0.3);box-shadow:0 2px 8px rgba(110,56,122,0.06);">
                 <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#059669;">
-                  <span>✓</span> 12 - 14 SPI Triple Chain
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  12 - 14 SPI Triple Chain
                 </div>
                 <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Jahitan rantai rapat dan lentur, tahan tarikan ekstrem.</div>
               </div>
-              <div style="padding:12px 14px;background:var(--surface-tint);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(110,56,122,0.06);">
+              <div style="padding:12px 14px;background:var(--surface-tint);border-radius:8px;border:1px solid rgba(16,185,129,0.3);box-shadow:0 2px 8px rgba(110,56,122,0.06);">
                 <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#059669;">
-                  <span>✓</span> Double Bar-Tack 42 Tusukan
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  Double Bar-Tack 42 Tusukan
                 </div>
                 <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Kunci silang di setiap sudut saku, sanggup menahan beban 2.5 kg.</div>
               </div>
-              <div style="padding:12px 14px;background:var(--surface-tint);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(110,56,122,0.06);">
+              <div style="padding:12px 14px;background:var(--surface-tint);border-radius:8px;border:1px solid rgba(16,185,129,0.3);box-shadow:0 2px 8px rgba(110,56,122,0.06);">
                 <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#059669;">
-                  <span>✓</span> Toyobo Fodu Grade A
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  Toyobo Fodu Grade A
                 </div>
                 <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Serat katun murni adem, lolos uji autoklaf sterilisasi 121°C.</div>
               </div>
-              <div style="padding:12px 14px;background:var(--surface-tint);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(110,56,122,0.06);">
+              <div style="padding:12px 14px;background:var(--surface-tint);border-radius:8px;border:1px solid rgba(16,185,129,0.3);box-shadow:0 2px 8px rgba(110,56,122,0.06);">
                 <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#059669;">
-                  <span>✓</span> Interlining Fusible Jerman
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  Interlining Fusible Jerman
                 </div>
                 <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Kerah tegak simetris paripurna, awet ratusan kali cuci.</div>
               </div>
@@ -1473,8 +1622,11 @@
           <!-- Card 1: Orinamia Toyobo Fodu Grade A -->
           <div class="atelier-card" style="padding:28px;border:2px solid var(--accent);background:var(--surface);">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-              <span class="badge-pill" style="background:#10B981;color:#FFFFFF;border:none;">
-                🔬 10x Macro: Toyobo Fodu Grade A
+              <span class="badge-pill" style="background:#10B981;color:#FFFFFF;border:none;display:inline-flex;align-items:center;gap:6px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 18h8"/><path d="M3 22h18"/><path d="m14 22-4-4"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="m12 6 4-4 3 3-4 4"/><path d="m14 18 1.5 1.5"/>
+                </svg>
+                10x Macro: Toyobo Fodu Grade A
               </span>
               <span class="font-num" style="font-size:0.8rem;font-weight:700;color:var(--accent);">STANDAR ORINAMIA</span>
             </div>
@@ -1528,8 +1680,11 @@
           <!-- Card 2: Konveksi Pasaran TC -->
           <div class="atelier-card" style="padding:28px;border:1px solid rgba(239,68,68,0.3);background:var(--surface);">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-              <span class="badge-pill" style="background:rgba(239,68,68,0.12);color:#DC2626;border-color:rgba(239,68,68,0.3);">
-                🔬 10x Macro: Kain TC Pasaran
+              <span class="badge-pill" style="background:rgba(239,68,68,0.12);color:#DC2626;border-color:rgba(239,68,68,0.3);display:inline-flex;align-items:center;gap:6px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 18h8"/><path d="M3 22h18"/><path d="m14 22-4-4"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="m12 6 4-4 3 3-4 4"/><path d="m14 18 1.5 1.5"/>
+                </svg>
+                10x Macro: Kain TC Pasaran
               </span>
               <span class="font-num" style="font-size:0.8rem;font-weight:700;color:#DC2626;">PASARAN MASSAL</span>
             </div>
@@ -1728,15 +1883,27 @@
 
         <div style="display:flex;flex-direction:column;gap:12px;padding:20px;background:var(--surface-tint);border-radius:10px;border:1px solid var(--border);">
           <div style="display:flex;align-items:center;gap:10px;">
-            <span style="color:#10B981;font-weight:700;">✓</span>
+            <span style="width:20px;height:20px;border-radius:50%;background:rgba(16,185,129,0.12);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </span>
             <span style="font-size:0.875rem;color:var(--text);"><strong>Standar Mutu Jahitan Halus:</strong> Menggunakan benang jahit premium dan mesin garmen modern.</span>
           </div>
           <div style="display:flex;align-items:center;gap:10px;">
-            <span style="color:#10B981;font-weight:700;">✓</span>
+            <span style="width:20px;height:20px;border-radius:50%;background:rgba(16,185,129,0.12);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </span>
             <span style="font-size:0.875rem;color:var(--text);"><strong>Kemitraan Multisektoral:</strong> Bekerja sama dengan rumah sakit swasta/pemerintah, BUMN, perhotelan, hingga sekolah.</span>
           </div>
           <div style="display:flex;align-items:center;gap:10px;">
-            <span style="color:#10B981;font-weight:700;">✓</span>
+            <span style="width:20px;height:20px;border-radius:50%;background:rgba(16,185,129,0.12);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </span>
             <span style="font-size:0.875rem;color:var(--text);"><strong>Ketepatan Waktu:</strong> Penjadwalan produksi terstruktur dengan pelacakan progres transparan.</span>
           </div>
         </div>
@@ -1800,10 +1967,20 @@
               <button
                 type="button"
                 @click="navigator.clipboard.writeText('7273909413'); copied = true; setTimeout(() => copied = false, 2000)"
-                style="border:none;background:var(--surface-tint);color:var(--accent);font-size:0.75rem;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:all 150ms ease;"
+                style="border:none;background:var(--surface-tint);color:var(--accent);font-size:0.75rem;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all 150ms ease;"
                 title="Salin nomor rekening BSI">
-                <span x-show="!copied">Salin No. Rekening</span>
-                <span x-show="copied" style="color:#10B981;">Tersalin ✓</span>
+                <span x-show="!copied" style="display:inline-flex;align-items:center;gap:4px;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                  </svg>
+                  Salin No. Rekening
+                </span>
+                <span x-show="copied" style="color:#10B981;display:inline-flex;align-items:center;gap:4px;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  Tersalin
+                </span>
               </button>
             </div>
 
@@ -1838,13 +2015,19 @@
           </p>
         </div>
 
-        <!-- View Mode Switcher: Archive List vs Grid -->
-        <div style="display:flex;gap:8px;align-items:center;padding:4px;background:var(--surface);border-radius:10px;border:1px solid var(--border);">
-          <button type="button" class="cat-tab" :class="{ 'active': catalogView === 'archive' }" @click="catalogView = 'archive'">
-            ☰ Arsip Jahitan (Huyml List)
+        <!-- View Mode Switcher: Archive List vs Grid (shadcn segmented control style) -->
+        <div style="display:flex;gap:6px;align-items:center;padding:4px;background:var(--surface);border-radius:10px;border:1px solid var(--border);">
+          <button type="button" class="cat-tab" :class="{ 'active': catalogView === 'archive' }" @click="catalogView = 'archive'" style="display:inline-flex;align-items:center;gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+            </svg>
+            Arsip Jahitan (Huyml List)
           </button>
-          <button type="button" class="cat-tab" :class="{ 'active': catalogView === 'grid' }" @click="catalogView = 'grid'">
-            ⊞ Grid Visual
+          <button type="button" class="cat-tab" :class="{ 'active': catalogView === 'grid' }" @click="catalogView = 'grid'" style="display:inline-flex;align-items:center;gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>
+            </svg>
+            Grid Visual
           </button>
         </div>
       </div>
@@ -1927,9 +2110,14 @@
           </template>
         </div>
 
-        <!-- Micro Instruction Footnote -->
+        <!-- Micro Instruction Footnote (shadcn alert text style) -->
         <div style="margin-top:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:0.75rem;color:var(--text-muted);">
-          <span>💡 <em>Arahkan kursor pada baris untuk preview kartu melayang, atau klik "Bedah &rarr;" untuk membuka lembar spesifikasi teknis lengkap beserta penawaran WhatsApp.</em></span>
+          <span style="display:inline-flex;align-items:center;gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+              <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+            </svg>
+            <em>Arahkan kursor pada baris untuk preview kartu melayang, atau klik "Bedah &rarr;" untuk membuka lembar spesifikasi teknis lengkap beserta penawaran WhatsApp.</em>
+          </span>
           <span class="font-num">Standar Jahitan ISO 4915</span>
         </div>
 
@@ -1937,19 +2125,23 @@
 
       <!-- VIEW 2: VISUAL GRID WITH CATEGORY FILTER TABS -->
       <div x-show="catalogView === 'grid'" x-transition:enter="transition ease-out duration-250">
-        <!-- Category Filter Tabs -->
+        <!-- Category Filter Tabs (shadcn style tabs) -->
         <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:36px;">
-          <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'medis' }" @click="activeCat = 'medis'">
-            🏥 Seragam Medis &amp; OKA
+          <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'medis' }" @click="activeCat = 'medis'" style="display:inline-flex;align-items:center;gap:7px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/></svg>
+            Seragam Medis &amp; OKA
           </button>
-          <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'korporat' }" @click="activeCat = 'korporat'">
-            👔 Kemeja PDH &amp; Kantor
+          <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'korporat' }" @click="activeCat = 'korporat'" style="display:inline-flex;align-items:center;gap:7px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            Kemeja PDH &amp; Kantor
           </button>
-          <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'industri' }" @click="activeCat = 'industri'">
-            🦺 Safety Tambang &amp; PDL
+          <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'industri' }" @click="activeCat = 'industri'" style="display:inline-flex;align-items:center;gap:7px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+            Safety Tambang &amp; PDL
           </button>
-          <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'apparel' }" @click="activeCat = 'apparel'">
-            👕 Jas, Kaos &amp; Komunitas
+          <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'apparel' }" @click="activeCat = 'apparel'" style="display:inline-flex;align-items:center;gap:7px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+            Jas, Kaos &amp; Komunitas
           </button>
         </div>
 
@@ -1965,7 +2157,11 @@
                 <span class="curated-tag">13 Warna</span>
                 <span class="curated-tag">Min 10 Pcs</span>
               </div>
-              <div style="font-size:1.8rem;margin-bottom:10px;">🥼</div>
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--surface-tint);border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:14px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/>
+                </svg>
+              </div>
               <h3 style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:6px;">Baju OKA Kamar Bedah</h3>
               <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:14px;">
                 Dirancang khusus untuk dokter dan nakes bedah. Bahan adem, higienis, jahitan kuat, dan tidak tembus pandang.
@@ -1991,7 +2187,11 @@
                 <span class="curated-tag">V-Neck Lis</span>
                 <span class="curated-tag">Lengan Pendek / Panjang</span>
               </div>
-              <div style="font-size:1.8rem;margin-bottom:10px;">🩺</div>
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--surface-tint);border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:14px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/>
+                </svg>
+              </div>
               <h3 style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:6px;">Scrub Medis &amp; Perawat</h3>
               <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:14px;">
                 Atasan v-neck ergonomis dengan saku fungsional dan celana pinggang serut elastis. Nyaman untuk shift panjang.
@@ -2017,7 +2217,11 @@
                 <span class="curated-tag">Puring Sutra Halus</span>
                 <span class="curated-tag">Standar IDI &amp; RS</span>
               </div>
-              <div style="font-size:1.8rem;margin-bottom:10px;">🧥</div>
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--surface-tint);border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:14px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="M9 12h6"/><path d="M12 9v6"/>
+                </svg>
+              </div>
               <h3 style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:6px;">Jas Dokter &amp; Jas Laboratorium</h3>
               <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:14px;">
                 Bahan bertekstur rapi, potongan jatuh anggun, kancing bertulang tebal, dan tahan cuci berkali-kali.
@@ -2048,7 +2252,11 @@
                 <span class="curated-tag">Interlining Jerman</span>
                 <span class="curated-tag">Min 10 Pcs</span>
               </div>
-              <div style="font-size:1.8rem;margin-bottom:10px;">👔</div>
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--surface-tint);border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:14px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                </svg>
+              </div>
               <h3 style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:6px;">Kemeja Kerja &amp; Kantor</h3>
               <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:14px;">
                 Kemeja eksekutif pria dan wanita dengan bordir komputer presisi. Tampilan elegan, adem, dan mudah disetrika.
@@ -2073,7 +2281,11 @@
                 <span class="curated-tag">Regulasi Dinas Resmi</span>
                 <span class="curated-tag">Pangkat Bahu</span>
               </div>
-              <div style="font-size:1.8rem;margin-bottom:10px;">🏛️</div>
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--surface-tint);border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:14px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="2" x2="22" y1="22" y2="22"/><line x1="4" x2="4" y1="10" y2="10"/><line x1="20" x2="20" y1="10" y2="10"/><path d="M12 2 2 7h20L12 2z"/><path d="M8 10v8"/><path d="M12 10v8"/><path d="M16 10v8"/>
+                </svg>
+              </div>
               <h3 style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:6px;">Pakaian Dinas Harian (PDH)</h3>
               <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:14px;">
                 Standar resmi instansi kementerian, BUMN, perbankan, dan swasta. Dilengkapi pangkat bahu dan saku lipit.
@@ -2098,7 +2310,11 @@
                 <span class="curated-tag">Desain Hospitality</span>
                 <span class="curated-tag">Novotel Verified</span>
               </div>
-              <div style="font-size:1.8rem;margin-bottom:10px;">🏨</div>
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--surface-tint);border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:14px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10 22v-6.57"/><path d="M12 11h.01"/><path d="M12 7h.01"/><path d="M14 15.43V22"/><path d="M15 11h.01"/><path d="M15 7h.01"/><path d="M16 16h.01"/><path d="M18 22v-6.57"/><path d="M18 7h.01"/><path d="M18 11h.01"/><path d="M4 22V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v18Z"/><path d="M9 11h.01"/><path d="M9 7h.01"/>
+                </svg>
+              </div>
               <h3 style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:6px;">Seragam Hospitality &amp; Hotel</h3>
               <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:14px;">
                 Seragam resepsionis, front office, housekeeping, dan banquet dengan sentuhan mewah estetis.
@@ -2128,7 +2344,11 @@
                 <span class="curated-tag">Scotlight 3M Lebar 2"</span>
                 <span class="curated-tag">K3 Tambang</span>
               </div>
-              <div style="font-size:1.8rem;margin-bottom:10px;">🦺</div>
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--surface-tint);border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:14px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>
+                </svg>
+              </div>
               <h3 style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:6px;">Kemeja Safety Tambang &amp; Proyek</h3>
               <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:14px;">
                 Dilengkapi reflector pita 3M bercahaya tinggi, saku ganda dengan slot pulpen, dan ventilasi udara jaring punggung.
@@ -2153,7 +2373,11 @@
                 <span class="curated-tag">Lengan Lipat</span>
                 <span class="curated-tag">Outdoor Ready</span>
               </div>
-              <div style="font-size:1.8rem;margin-bottom:10px;">🏕️</div>
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--surface-tint);border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:14px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+                </svg>
+              </div>
               <h3 style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:6px;">Pakaian Dinas Lapangan (PDL)</h3>
               <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:14px;">
                 Kain ripstop atau drill anti sobek, lengan bisa digulung dengan kancing pengait, fleksibel di berbagai medan.
@@ -2178,7 +2402,11 @@
                 <span class="curated-tag">Warna Kontras</span>
                 <span class="curated-tag">Kapasitas Skala Pabrik</span>
               </div>
-              <div style="font-size:1.8rem;margin-bottom:10px;">🏭</div>
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--surface-tint);border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:14px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M17 18h1"/><path d="M12 18h1"/><path d="M7 18h1"/>
+                </svg>
+              </div>
               <h3 style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:6px;">Kemeja Pabrik &amp; Manufaktur</h3>
               <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:14px;">
                 Seragam operator pabrik yang tahan gesekan mekanis, adem, mudah dicuci, dan tidak mudah menyerap oli.
@@ -2208,7 +2436,11 @@
                 <span class="curated-tag">Busa Bahu Simetris</span>
                 <span class="curated-tag">Full Puring Asahi</span>
               </div>
-              <div style="font-size:1.8rem;margin-bottom:10px;">🧥</div>
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--surface-tint);border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:14px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>
+                </svg>
+              </div>
               <h3 style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:6px;">Jas Almamater &amp; Blazer</h3>
               <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:14px;">
                 Jas universitas, sekolah kedinasan, dan blazer organisasi lengkap dengan puring dalam serta bordir lambang.
@@ -2233,7 +2465,11 @@
                 <span class="curated-tag">Lacoste Pique</span>
                 <span class="curated-tag">Sablon DTF / Bordir</span>
               </div>
-              <div style="font-size:1.8rem;margin-bottom:10px;">👕</div>
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--surface-tint);border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:14px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/>
+                </svg>
+              </div>
               <h3 style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:6px;">Kaos Polos, Polo &amp; T-Shirt Event</h3>
               <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:14px;">
                 Cotton combed reaktif 100%, polo shirt lacoste pique untuk gathering instansi dan seragam santai staf kantor.
@@ -2258,7 +2494,11 @@
                 <span class="curated-tag">Resleting YKK Asli</span>
                 <span class="curated-tag">Desain Custom Pola</span>
               </div>
-              <div style="font-size:1.8rem;margin-bottom:10px;">👗</div>
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--surface-tint);border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:14px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/>
+                </svg>
+              </div>
               <h3 style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:6px;">Jaket Komunitas &amp; Gamis Seragam</h3>
               <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:14px;">
                 Jaket bomber, jaket parasut windproof, seragam pengajian, gamis institusi, dan seragam sekolah terpadu.
@@ -2298,8 +2538,10 @@
             <button type="button" @click="openSpec = (openSpec === 1 ? null : 1)"
                     style="width:100%;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;background:transparent;border:none;cursor:pointer;color:var(--text);font-family:inherit;font-weight:600;font-size:0.95rem;text-align:left;">
               <span style="display:flex;align-items:center;gap:12px;">
-                <span>🩺</span>
-                <span>Standar Bahan Seragam Medis OKA & Scrub Bedah</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent);">
+                  <path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/>
+                </svg>
+                <span>Standar Bahan Seragam Medis OKA &amp; Scrub Bedah</span>
               </span>
               <span class="font-num" style="color:var(--accent);font-size:1.25rem;transition:transform 200ms;" :style="openSpec === 1 ? 'transform:rotate(45deg)' : ''">+</span>
             </button>
@@ -2313,8 +2555,10 @@
             <button type="button" @click="openSpec = (openSpec === 2 ? null : 2)"
                     style="width:100%;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;background:transparent;border:none;cursor:pointer;color:var(--text);font-family:inherit;font-weight:600;font-size:0.95rem;text-align:left;">
               <span style="display:flex;align-items:center;gap:12px;">
-                <span>👔</span>
-                <span>Standar Bahan Kemeja PDH, Kantor & Jas Almamater</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent);">
+                  <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                </svg>
+                <span>Standar Bahan Kemeja PDH, Kantor &amp; Jas Almamater</span>
               </span>
               <span class="font-num" style="color:var(--accent);font-size:1.25rem;transition:transform 200ms;" :style="openSpec === 2 ? 'transform:rotate(45deg)' : ''">+</span>
             </button>
@@ -2328,8 +2572,10 @@
             <button type="button" @click="openSpec = (openSpec === 3 ? null : 3)"
                     style="width:100%;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;background:transparent;border:none;cursor:pointer;color:var(--text);font-family:inherit;font-weight:600;font-size:0.95rem;text-align:left;">
               <span style="display:flex;align-items:center;gap:12px;">
-                <span>🦺</span>
-                <span>Standar Safety PDL Tambang & Proyek Lapangan (K3)</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent);">
+                  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>
+                </svg>
+                <span>Standar Safety PDL Tambang &amp; Proyek Lapangan (K3)</span>
               </span>
               <span class="font-num" style="color:var(--accent);font-size:1.25rem;transition:transform 200ms;" :style="openSpec === 3 ? 'transform:rotate(45deg)' : ''">+</span>
             </button>
@@ -2377,10 +2623,14 @@
               Lengan Panjang (Hijab)
             </button>
 
-            <button type="button" class="btn-ghost" style="padding:6px 12px;font-size:0.75rem;border-radius:6px;"
+            <button type="button" class="btn-ghost" style="padding:6px 12px;font-size:0.75rem;border-radius:6px;display:inline-flex;align-items:center;gap:6px;"
                     :style="showEmbroidery ? 'background:var(--accent-light);color:var(--accent);border-color:var(--accent);' : ''"
                     @click="showEmbroidery = !showEmbroidery">
-              <span x-text="showEmbroidery ? '✓ Bordir Aktif' : '+ Bordir Nama & RS'"></span>
+              <span x-show="showEmbroidery" style="display:inline-flex;align-items:center;gap:4px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Bordir Aktif
+              </span>
+              <span x-show="!showEmbroidery">+ Bordir Nama &amp; RS</span>
             </button>
           </div>
 
@@ -3009,7 +3259,10 @@
           <!-- Section 1: Konstruksi Pola & Potongan -->
           <div style="padding:18px 20px;background:var(--surface-tint);border-radius:10px;border:1px solid var(--border);">
             <div style="display:flex;align-items:center;gap:8px;font-size:0.8rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">
-              <span>📐</span> Konstruksi Pola &amp; Ergonomi
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m21.3 8.7-5-5a1 1 0 0 0-1.4 0l-12 12a1 1 0 0 0 0 1.4l5 5a1 1 0 0 0 1.4 0l12-12a1 1 0 0 0 0-1.4Z"/><path d="m7.5 10.5 2 2"/><path d="m10.5 7.5 2 2"/><path d="m13.5 4.5 2 2"/><path d="m4.5 13.5 2 2"/>
+              </svg>
+              <span>Konstruksi Pola &amp; Ergonomi</span>
             </div>
             <p style="font-size:0.85rem;color:var(--text);line-height:1.65;" x-text="activeDossier.patternNotes"></p>
             <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.78rem;">
@@ -3027,7 +3280,10 @@
           <!-- Section 2: Spesifikasi Jahitan ISO 4915 -->
           <div>
             <div style="display:flex;align-items:center;gap:8px;font-size:0.8rem;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">
-              <span>🧵</span> Standar Mesin &amp; Klasifikasi ISO 4915
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent);">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
+              </svg>
+              <span>Standar Mesin &amp; Klasifikasi ISO 4915</span>
             </div>
             
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
@@ -3060,25 +3316,34 @@
           <!-- Section 3: Uji Ketahanan & Laboratorium -->
           <div style="padding:18px 20px;background:var(--surface-tint);border-radius:10px;border:1px solid var(--border);">
             <div style="display:flex;align-items:center;gap:8px;font-size:0.8rem;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">
-              <span>🔬</span> Pengujian Tekstil &amp; Rumah Sakit
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent);">
+                <path d="M6 18h8"/><path d="M3 22h18"/><path d="m14 22-4-4"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="m12 6 4-4 3 3-4 4"/><path d="m14 18 1.5 1.5"/>
+              </svg>
+              <span>Pengujian Tekstil &amp; Rumah Sakit</span>
             </div>
             <div style="display:flex;flex-direction:column;gap:8px;font-size:0.8rem;">
               <div style="display:flex;align-items:flex-start;gap:8px;">
-                <span style="color:#059669;font-weight:700;">✓</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
                 <div>
                   <strong>Uji Suhu Autoklaf:</strong>
                   <span style="color:var(--text-muted);" x-text="activeDossier.autoclave"></span>
                 </div>
               </div>
               <div style="display:flex;align-items:flex-start;gap:8px;">
-                <span style="color:#059669;font-weight:700;">✓</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
                 <div>
                   <strong>Ketahanan Beban Saku:</strong>
                   <span style="color:var(--text-muted);" x-text="activeDossier.pocketLoad"></span>
                 </div>
               </div>
               <div style="display:flex;align-items:flex-start;gap:8px;">
-                <span style="color:#059669;font-weight:700;">✓</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
                 <div>
                   <strong>Luntur &amp; Klorin:</strong>
                   <span style="color:var(--text-muted);" x-text="activeDossier.colorfastness"></span>
