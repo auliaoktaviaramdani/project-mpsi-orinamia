@@ -462,7 +462,7 @@
     </div>
   </div>
   @endif
-
+  
   @if(session('error'))
   <div class="no-print" style="max-width:1520px;margin:0 auto;padding:16px 24px 0;"
        x-data="{ show: true }" x-show="show" x-transition>
