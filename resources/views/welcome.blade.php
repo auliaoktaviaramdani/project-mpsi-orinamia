@@ -493,9 +493,123 @@
       overflow: hidden;
       transition: max-height 350ms cubic-bezier(0.16, 1, 0.3, 1), opacity 300ms ease;
     }
-    .curated-card:hover .curated-spec-reveal {
-      max-height: 220px;
+    /* [huyml.co] Interactive Floating Cursor Preview Card */
+    .cursor-preview-card {
+      position: fixed;
+      pointer-events: none;
+      z-index: 99999;
+      width: 300px;
+      padding: 16px 18px;
+      border-radius: 12px;
+      background: rgba(250, 249, 252, 0.96);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border);
+      box-shadow: 0 24px 50px -10px rgba(110, 56, 122, 0.28);
+      opacity: 0;
+      transform: translate3d(-50%, -50%, 0) scale(0.92);
+      transition: opacity 180ms ease, transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .dark .cursor-preview-card {
+      background: rgba(27, 25, 33, 0.96);
+      box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.75);
+    }
+    .cursor-preview-card.visible {
       opacity: 1;
+      transform: translate3d(-50%, -50%, 0) scale(1);
+    }
+
+    /* [huyml.co] Archive Table Rows */
+    .archive-table {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .archive-header {
+      display: grid;
+      grid-template-columns: 56px 2.2fr 1.6fr 1.6fr 1.1fr 110px;
+      padding: 14px 20px;
+      background: var(--surface-tint);
+      border-bottom: 1px solid var(--border);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .archive-row {
+      display: grid;
+      grid-template-columns: 56px 2.2fr 1.6fr 1.6fr 1.1fr 110px;
+      align-items: center;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 180ms ease;
+    }
+    .archive-row:last-child { border-bottom: none; }
+    .archive-row:hover {
+      background: var(--surface-tint);
+      padding-left: 28px;
+    }
+    .archive-row:hover .archive-arrow {
+      transform: translateX(4px);
+      color: var(--accent);
+    }
+    @media (max-width: 960px) {
+      .archive-header, .archive-row {
+        grid-template-columns: 44px 1.8fr 1.2fr 90px;
+      }
+      .archive-hide-tablet { display: none !important; }
+    }
+    @media (max-width: 640px) {
+      .archive-header, .archive-row {
+        grid-template-columns: 36px 1fr 80px;
+      }
+      .archive-hide-mobile { display: none !important; }
+    }
+
+    /* [huyml.co] Slide-over Craftsmanship Dossier */
+    .dossier-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 10000;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .dossier-panel {
+      width: 100%;
+      max-width: 620px;
+      height: 100vh;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.35);
+      overflow-y: auto;
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      position: relative;
+    }
+    @media (max-width: 640px) {
+      .dossier-panel { padding: 24px 20px; }
+    }
+
+    /* Sub-Header Live Atelier Ticker (Huyml style) */
+    .huyml-meta-strip {
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-tint);
+      padding: 8px 24px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
     }
   </style>
 </head>
@@ -613,6 +727,36 @@
       </a>
     </div>
   </header>
+
+  <!-- [huyml.co] SUB-HEADER LIVE ATELIER META STRIP -->
+  <div class="huyml-meta-strip">
+    <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      
+      <!-- Studio Location & Live Time (Huyml signature) -->
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="font-weight:700;color:var(--text);letter-spacing:0.04em;">ATELIER KARAWACI, ID</span>
+        <span style="color:var(--border);">&bull;</span>
+        <span class="font-num" style="font-weight:600;color:var(--accent);" x-text="liveTime || '08:00:00 WIB'">08:00:00 WIB</span>
+        <span style="color:var(--border);">&bull;</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;color:#10B981;font-weight:600;">
+          <span style="width:6px;height:6px;border-radius:50%;background:#10B981;"></span>
+          Melayani Order Produksi &amp; Tender 2026
+        </span>
+      </div>
+
+      <!-- Legal & Capacity Meta -->
+      <div style="display:flex;align-items:center;gap:16px;" class="archive-hide-mobile">
+        <span>Kapasitas: <strong class="font-num" style="color:var(--text);">10.000+ Pcs/Bln</strong></span>
+        <span style="color:var(--border);">&bull;</span>
+        <span>Akuntabilitas: <strong style="color:var(--text);">SK Kemenkumham RI 2024</strong></span>
+        <span style="color:var(--border);">&bull;</span>
+        <a href="#arsip" style="color:var(--accent);text-decoration:none;font-weight:700;">
+          Lihat Arsip Jahitan &darr;
+        </a>
+      </div>
+
+    </div>
+  </div>
 
   <style>
     @media (min-width: 900px) {
@@ -775,22 +919,38 @@
     <div style="max-width:1160px;margin:0 auto;">
       
       <!-- Slicing Section Header -->
-      <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:20px;margin-bottom:32px;">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:20px;margin-bottom:28px;">
         <div style="max-width:680px;">
           <div style="display:inline-flex;align-items:center;gap:8px;padding:4px 14px;background:var(--surface);border:1px solid var(--border);border-radius:999px;margin-bottom:12px;">
             <span style="width:7px;height:7px;border-radius:50%;background:#AD8EEB;"></span>
-            <span style="font-size:0.75rem;font-weight:700;letter-spacing:0.08em;color:var(--accent);text-transform:uppercase;">Interactive Slicing Studio</span>
+            <span style="font-size:0.75rem;font-weight:700;letter-spacing:0.08em;color:var(--accent);text-transform:uppercase;">Interactive Slicing Studio &bull; Huyml &amp; Lafys Inspired</span>
           </div>
           <h2 class="font-editorial" style="font-size:clamp(1.9rem, 3.4vw, 2.8rem);font-weight:500;line-height:1.2;color:var(--text);margin-bottom:10px;">
             Anatomi Kualitas: Slicing Komparasi Presisi Jahitan
           </h2>
           <p style="color:var(--text-muted);font-size:0.95rem;line-height:1.65;">
-            Tarik slider horizontal di bawah untuk membelah dan membedah langsung perbedaan spesifikasi antara konveksi pasaran vs standar jahitan halus atelier PT Cahaya Binar Berlian.
+            Bandingkan langsung standar jahitan atelier PT Cahaya Binar Berlian dengan konveksi pasaran melalui 3 instrumen: Slider Slicing, Uji Pembesaran Serat 10x, dan Klasifikasi Standar ISO 4915.
           </p>
         </div>
 
+        <!-- Mode Sub-Tabs (Huyml / ReactBits style) -->
+        <div style="display:flex;gap:8px;flex-wrap:wrap;padding:4px;background:var(--surface-tint);border-radius:10px;border:1px solid var(--border);">
+          <button type="button" class="btn-slicing-preset" :class="{ 'active': slicingSubTab === 'slicer' }" @click="slicingSubTab = 'slicer'">
+            ✦ Slicing Komparasi
+          </button>
+          <button type="button" class="btn-slicing-preset" :class="{ 'active': slicingSubTab === 'macro' }" @click="slicingSubTab = 'macro'">
+            🔬 Pembesaran Serat 10x
+          </button>
+          <button type="button" class="btn-slicing-preset" :class="{ 'active': slicingSubTab === 'iso' }" @click="slicingSubTab = 'iso'">
+            📐 Klasifikasi ISO 4915
+          </button>
+        </div>
+      </div>
+
+      <!-- SUB-TAB 1: SLICING COMPARISON SLIDER -->
+      <div x-show="slicingSubTab === 'slicer'" x-transition:enter="transition ease-out duration-250">
         <!-- Interactive Presets (Awwwards / ReactBits style) -->
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;justify-content:flex-end;">
           <button type="button" class="btn-slicing-preset" :class="{ 'active': activePreset === '50' }" @click="setPreset(50, '50')">
             50 : 50 Komparasi
           </button>
@@ -807,150 +967,386 @@
             Fokus: Jahitan Rantai
           </button>
         </div>
+
+        <!-- Slicing Stage Container -->
+        <div class="slicer-container"
+             id="slicer-canvas"
+             @mousemove="onMouseMove($event)"
+             @touchmove="onTouchMove($event)"
+             @mousedown="isDragging = true"
+             @mouseup="isDragging = false">
+
+          <!-- LAYER 1: BASE LAYER (STANDAR PASARAN) -->
+          <div class="slicer-layer slicer-base">
+            <div style="display:flex;justify-content:flex-end;">
+              <div style="text-align:right;max-width:380px;">
+                <span class="badge-pill" style="background:rgba(239,68,68,0.12);color:#DC2626;border-color:rgba(239,68,68,0.3);margin-bottom:8px;">
+                  Standar Konveksi Pasaran
+                </span>
+                <div style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:4px;">Pengerjaan Massal Konvensional</div>
+                <p style="font-size:0.8125rem;color:var(--text-muted);line-height:1.5;">Fokus pada kecepatan kuantitas dengan kompromi pada kerapatan benang dan kekuatan sambungan saku.</p>
+              </div>
+            </div>
+
+            <!-- Technical Callouts (Right side of canvas for Pasaran) -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;margin-top:auto;max-width:540px;margin-left:auto;">
+              <div style="padding:12px 14px;background:var(--surface);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+                <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#DC2626;">
+                  <span>⚠️</span> 8 SPI (Stitch Per Inch)
+                </div>
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Jahitan renggang, benang mudah terurai saat dicuci mesin.</div>
+              </div>
+              <div style="padding:12px 14px;background:var(--surface);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+                <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#DC2626;">
+                  <span>⚠️</span> Tanpa Bar-Tack
+                </div>
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Sudut saku robek saat dibebani alat medis atau gawai.</div>
+              </div>
+              <div style="padding:12px 14px;background:var(--surface);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+                <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#DC2626;">
+                  <span>⚠️</span> Poliester Standar
+                </div>
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Panas, gerah, dan mengkerut jika masuk autoklaf.</div>
+              </div>
+              <div style="padding:12px 14px;background:var(--surface);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+                <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#DC2626;">
+                  <span>⚠️</span> Kerah Lemas
+                </div>
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Tanpa interlining bermutu, kusut setelah dicuci.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- LAYER 2: CLIPPED OVERLAY LAYER (STANDAR ATELIER ORINAMIA) -->
+          <div class="slicer-layer slicer-overlay" :style="'clip-path: polygon(0 0, ' + split + '% 0, ' + split + '% 100%, 0 100%)'">
+            <div style="display:flex;justify-content:flex-start;">
+              <div style="text-align:left;max-width:380px;">
+                <span class="badge-pill" style="background:rgba(16,185,129,0.12);color:#059669;border-color:rgba(16,185,129,0.3);margin-bottom:8px;">
+                  Standar Atelier Orinamia &bull; PT Cahaya Binar Berlian
+                </span>
+                <div style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:4px;">Presisi Rumah Jahit Bersertifikat</div>
+                <p style="font-size:0.8125rem;color:var(--text-muted);line-height:1.5;">Ketelitian perawat bedah yang diterapkan pada setiap helai benang, sudut saku, dan kenyamanan pemakaian nakes.</p>
+              </div>
+            </div>
+
+            <!-- Technical Callouts (Left side of canvas for Orinamia) -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;margin-top:auto;max-width:540px;">
+              <div style="padding:12px 14px;background:var(--surface-tint);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(110,56,122,0.06);">
+                <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#059669;">
+                  <span>✓</span> 12 - 14 SPI Triple Chain
+                </div>
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Jahitan rantai rapat dan lentur, tahan tarikan ekstrem.</div>
+              </div>
+              <div style="padding:12px 14px;background:var(--surface-tint);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(110,56,122,0.06);">
+                <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#059669;">
+                  <span>✓</span> Double Bar-Tack 42 Tusukan
+                </div>
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Kunci silang di setiap sudut saku, sanggup menahan beban 2.5 kg.</div>
+              </div>
+              <div style="padding:12px 14px;background:var(--surface-tint);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(110,56,122,0.06);">
+                <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#059669;">
+                  <span>✓</span> Toyobo Fodu Grade A
+                </div>
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Serat katun murni adem, lolos uji autoklaf sterilisasi 121°C.</div>
+              </div>
+              <div style="padding:12px 14px;background:var(--surface-tint);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(110,56,122,0.06);">
+                <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#059669;">
+                  <span>✓</span> Interlining Fusible Jerman
+                </div>
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Kerah tegak simetris paripurna, awet ratusan kali cuci.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SLICER HANDLE (The Divider Line + Draggable Pill) -->
+          <div class="slicer-handle" :style="'left: ' + split + '%'">
+            <div class="slicer-pill" title="Tarik untuk membandingkan spesifikasi">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+              <span class="font-num" style="font-size:0.75rem;font-weight:700;" x-text="Math.round(split) + '% : ' + (100 - Math.round(split)) + '%'"></span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </div>
+
+          <!-- ACCESSIBILITY RANGE INPUT (Touch / Mouse / Keyboard Accessible) -->
+          <input type="range" min="0" max="100" step="1" x-model.number="split" @input="activePreset = 'custom'" class="slicer-range-input" aria-label="Slider Komparasi Slicing Kualitas Jahitan">
+        </div>
+
+        <!-- Interactive Hotspot Drilldowns (Curated.design / Lafys style) -->
+        <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:16px;">
+          <div class="atelier-card" style="padding:20px;cursor:pointer;" @click="setPreset(60, 'kerah')">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+              <div style="width:28px;height:28px;border-radius:6px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700;font-size:0.8rem;">01</div>
+              <div style="font-weight:700;font-size:0.95rem;color:var(--text);">Kerah &amp; Interlining Jerman</div>
+            </div>
+            <p style="font-size:0.8125rem;color:var(--text-muted);line-height:1.6;">Menggunakan bahan pengeras fusible berkualitas impor yang tidak bergelembung saat disetrika panas tinggi.</p>
+          </div>
+
+          <div class="atelier-card" style="padding:20px;cursor:pointer;" @click="setPreset(75, 'bartack')">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+              <div style="width:28px;height:28px;border-radius:6px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700;font-size:0.8rem;">02</div>
+              <div style="font-weight:700;font-size:0.95rem;color:var(--text);">Double Bar-Tack Sudut Saku</div>
+            </div>
+            <p style="font-size:0.8125rem;color:var(--text-muted);line-height:1.6;">Kunci jahitan bar-tack 42 tusukan otomatis mesin digital, mencegah kantong sobek akibat tarikan alat medis.</p>
+          </div>
+
+          <div class="atelier-card" style="padding:20px;cursor:pointer;" @click="setPreset(30, 'seam')">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+              <div style="width:28px;height:28px;border-radius:6px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700;font-size:0.8rem;">03</div>
+              <div style="font-weight:700;font-size:0.95rem;color:var(--text);">Triple Chainstitch 14 SPI</div>
+            </div>
+            <p style="font-size:0.8125rem;color:var(--text-muted);line-height:1.6;">Jahitan rantai 3 jarum terintegrasi di keliman sisi, elastis saat pengguna membungkuk dan bergerak aktif.</p>
+          </div>
+
+          <div class="atelier-card" style="padding:20px;cursor:pointer;" @click="setPreset(50, '50')">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+              <div style="width:28px;height:28px;border-radius:6px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700;font-size:0.8rem;">04</div>
+              <div style="font-weight:700;font-size:0.95rem;color:var(--text);">Katun Toyobo Fodu Grade A</div>
+            </div>
+            <p style="font-size:0.8125rem;color:var(--text-muted);line-height:1.6;">Daya serap keringat tinggi, tidak mudah kusut, serat halus nyaman di kulit, dan lolos uji autoklaf rumah sakit.</p>
+          </div>
+        </div>
       </div>
 
-      <!-- Slicing Stage Container -->
-      <div class="slicer-container"
-           id="slicer-canvas"
-           @mousemove="onMouseMove($event)"
-           @touchmove="onTouchMove($event)"
-           @mousedown="isDragging = true"
-           @mouseup="isDragging = false">
-
-        <!-- LAYER 1: BASE LAYER (STANDAR PASARAN) -->
-        <div class="slicer-layer slicer-base">
-          <div style="display:flex;justify-content:flex-end;">
-            <div style="text-align:right;max-width:380px;">
-              <span class="badge-pill" style="background:rgba(239,68,68,0.12);color:#DC2626;border-color:rgba(239,68,68,0.3);margin-bottom:8px;">
-                Standar Konveksi Pasaran
+      <!-- SUB-TAB 2: 10X MACRO LENS FIBER INSPECTION -->
+      <div x-show="slicingSubTab === 'macro'" x-transition:enter="transition ease-out duration-250">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:24px;">
+          
+          <!-- Card 1: Orinamia Toyobo Fodu Grade A -->
+          <div class="atelier-card" style="padding:28px;border:2px solid var(--accent);background:var(--surface);">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+              <span class="badge-pill" style="background:#10B981;color:#FFFFFF;border:none;">
+                🔬 10x Macro: Toyobo Fodu Grade A
               </span>
-              <div style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:4px;">Pengerjaan Massal Konvensional</div>
-              <p style="font-size:0.8125rem;color:var(--text-muted);line-height:1.5;">Fokus pada kecepatan kuantitas dengan kompromi pada kerapatan benang dan kekuatan sambungan saku.</p>
+              <span class="font-num" style="font-size:0.8rem;font-weight:700;color:var(--accent);">STANDAR ORINAMIA</span>
+            </div>
+
+            <!-- Microscopic SVG Fiber Simulation -->
+            <div style="width:100%;height:180px;border-radius:10px;background:radial-gradient(circle at center, #231C28 0%, #15131B 100%);border:1px solid var(--border);position:relative;overflow:hidden;margin-bottom:18px;">
+              <svg width="100%" height="100%" viewBox="0 0 400 180" fill="none">
+                <!-- Dense parallel woven grid -->
+                <defs>
+                  <pattern id="fodu-grid" width="16" height="16" patternUnits="userSpaceOnUse">
+                    <line x1="0" y1="8" x2="16" y2="8" stroke="#AD8EEB" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                    <line x1="8" y1="0" x2="8" y2="16" stroke="#F391EC" stroke-width="2.2" stroke-linecap="round" opacity="0.85"/>
+                    <circle cx="8" cy="8" r="2.5" fill="#FFFFFF" opacity="0.6"/>
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#fodu-grid)"/>
+                <!-- Macro Lens Overlay Ring -->
+                <circle cx="200" cy="90" r="70" stroke="#10B981" stroke-width="2" stroke-dasharray="4 4" fill="none" opacity="0.7"/>
+                <text x="200" y="94" text-anchor="middle" fill="#FFFFFF" font-size="11" font-family="'JetBrains Mono', monospace" font-weight="600">DENSITAS TINGGI 133x72</text>
+              </svg>
+              <div style="position:absolute;bottom:8px;left:12px;font-size:0.65rem;color:#A9A3B5;font-family:'JetBrains Mono',monospace;">
+                SERAT COMBED 40s/2 &bull; ZERO FIBER SHEDDING
+              </div>
+            </div>
+
+            <h3 style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:8px;">Katun Murni Serat Panjang Sisir (Combed)</h3>
+            <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:16px;">
+              Dipintal dari serat kapas panjang pilihan melalui proses combing (penyisiran) ganda untuk membuang serat pendek. Hasil tenunan menghasilkan permukaan licin, adem di kulit perawat/dokter, dan tidak menghasilkan serbuk debu kain (lint-free) yang berbahaya di ruang operasi.
+            </p>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.75rem;">
+              <div style="padding:10px;background:var(--surface-tint);border-radius:6px;border:1px solid var(--border);">
+                <div style="color:var(--text-muted);">Daya Serap Air:</div>
+                <div style="font-weight:700;color:#059669;margin-top:2px;">&lt; 2 Detik (Instan)</div>
+              </div>
+              <div style="padding:10px;background:var(--surface-tint);border-radius:6px;border:1px solid var(--border);">
+                <div style="color:var(--text-muted);">Ketahanan Autoklaf:</div>
+                <div style="font-weight:700;color:#059669;margin-top:2px;">Lolos 121°C (0% Susut)</div>
+              </div>
+              <div style="padding:10px;background:var(--surface-tint);border-radius:6px;border:1px solid var(--border);">
+                <div style="color:var(--text-muted);">Ketahanan Pilling:</div>
+                <div style="font-weight:700;color:#059669;margin-top:2px;">Skala 4.5 / 5 (Tidak Berbulu)</div>
+              </div>
+              <div style="padding:10px;background:var(--surface-tint);border-radius:6px;border:1px solid var(--border);">
+                <div style="color:var(--text-muted);">Uji Toksisitas:</div>
+                <div style="font-weight:700;color:#059669;margin-top:2px;">Bebas Formalin &amp; Logam Berat</div>
+              </div>
             </div>
           </div>
 
-          <!-- Technical Callouts (Right side of canvas for Pasaran) -->
-          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;margin-top:auto;max-width:540px;margin-left:auto;">
-            <div style="padding:12px 14px;background:var(--surface);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 6px rgba(0,0,0,0.03);">
-              <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#DC2626;">
-                <span>⚠️</span> 8 SPI (Stitch Per Inch)
-              </div>
-              <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Jahitan renggang, benang mudah terurai saat dicuci mesin.</div>
-            </div>
-            <div style="padding:12px 14px;background:var(--surface);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 6px rgba(0,0,0,0.03);">
-              <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#DC2626;">
-                <span>⚠️</span> Tanpa Bar-Tack
-              </div>
-              <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Sudut saku robek saat dibebani alat medis atau gawai.</div>
-            </div>
-            <div style="padding:12px 14px;background:var(--surface);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 6px rgba(0,0,0,0.03);">
-              <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#DC2626;">
-                <span>⚠️</span> Poliester Standar
-              </div>
-              <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Panas, gerah, dan mengkerut jika masuk autoklaf.</div>
-            </div>
-            <div style="padding:12px 14px;background:var(--surface);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 6px rgba(0,0,0,0.03);">
-              <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#DC2626;">
-                <span>⚠️</span> Kerah Lemas
-              </div>
-              <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Tanpa interlining bermutu, kusut setelah dicuci.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- LAYER 2: CLIPPED OVERLAY LAYER (STANDAR ATELIER ORINAMIA) -->
-        <div class="slicer-layer slicer-overlay" :style="'clip-path: polygon(0 0, ' + split + '% 0, ' + split + '% 100%, 0 100%)'">
-          <div style="display:flex;justify-content:flex-start;">
-            <div style="text-align:left;max-width:380px;">
-              <span class="badge-pill" style="background:rgba(16,185,129,0.12);color:#059669;border-color:rgba(16,185,129,0.3);margin-bottom:8px;">
-                Standar Atelier Orinamia &bull; PT Cahaya Binar Berlian
+          <!-- Card 2: Konveksi Pasaran TC -->
+          <div class="atelier-card" style="padding:28px;border:1px solid rgba(239,68,68,0.3);background:var(--surface);">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+              <span class="badge-pill" style="background:rgba(239,68,68,0.12);color:#DC2626;border-color:rgba(239,68,68,0.3);">
+                🔬 10x Macro: Kain TC Pasaran
               </span>
-              <div style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:4px;">Presisi Rumah Jahit Bersertifikat</div>
-              <p style="font-size:0.8125rem;color:var(--text-muted);line-height:1.5;">Ketelitian perawat bedah yang diterapkan pada setiap helai benang, sudut saku, dan kenyamanan pemakaian nakes.</p>
+              <span class="font-num" style="font-size:0.8rem;font-weight:700;color:#DC2626;">PASARAN MASSAL</span>
+            </div>
+
+            <!-- Microscopic SVG Fiber Simulation (Fuzzy / Loose) -->
+            <div style="width:100%;height:180px;border-radius:10px;background:radial-gradient(circle at center, #2B1D20 0%, #171113 100%);border:1px solid var(--border);position:relative;overflow:hidden;margin-bottom:18px;">
+              <svg width="100%" height="100%" viewBox="0 0 400 180" fill="none">
+                <defs>
+                  <pattern id="pasaran-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+                    <line x1="0" y1="14" x2="28" y2="14" stroke="#DC2626" stroke-width="1.4" opacity="0.4"/>
+                    <line x1="14" y1="0" x2="14" y2="28" stroke="#DC2626" stroke-width="1.2" opacity="0.35"/>
+                    <!-- Fuzzy fibers sticking out -->
+                    <path d="M7 7 Q 12 2, 16 9" stroke="#E57373" stroke-width="1" fill="none" opacity="0.6"/>
+                    <path d="M20 20 Q 25 15, 23 26" stroke="#E57373" stroke-width="1.2" fill="none" opacity="0.5"/>
+                    <circle cx="14" cy="14" r="3" fill="#DC2626" opacity="0.3"/>
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#pasaran-grid)"/>
+                <circle cx="200" cy="90" r="70" stroke="#DC2626" stroke-width="2" stroke-dasharray="4 4" fill="none" opacity="0.6"/>
+                <text x="200" y="94" text-anchor="middle" fill="#FF8A80" font-size="11" font-family="'JetBrains Mono', monospace" font-weight="600">RENGGANG 80x56 &bull; BULU KAIN</text>
+              </svg>
+              <div style="position:absolute;bottom:8px;left:12px;font-size:0.65rem;color:#E57373;font-family:'JetBrains Mono',monospace;">
+                CAMPURAN SINTETIK 20s &bull; SERAT KASAR
+              </div>
+            </div>
+
+            <h3 style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:8px;">Kain TC Campuran Poliester Kasar</h3>
+            <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:16px;">
+              Menggunakan benang carded pendek dengan campuran poliester daur ulang. Serat tidak beraturan mudah terlepas membentuk bulu (pilling balls), menjebak hawa panas tubuh, serta menyusut dan meleleh saat melewati proses sterilisasi autoklaf rumah sakit.
+            </p>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.75rem;">
+              <div style="padding:10px;background:var(--surface-tint);border-radius:6px;border:1px solid var(--border);">
+                <div style="color:var(--text-muted);">Daya Serap Air:</div>
+                <div style="font-weight:700;color:#DC2626;margin-top:2px;">&gt; 15 Detik (Gerah/Panas)</div>
+              </div>
+              <div style="padding:10px;background:var(--surface-tint);border-radius:6px;border:1px solid var(--border);">
+                <div style="color:var(--text-muted);">Ketahanan Autoklaf:</div>
+                <div style="font-weight:700;color:#DC2626;margin-top:2px;">Mengkerut &amp; Berbau Sangit</div>
+              </div>
+              <div style="padding:10px;background:var(--surface-tint);border-radius:6px;border:1px solid var(--border);">
+                <div style="color:var(--text-muted);">Ketahanan Pilling:</div>
+                <div style="font-weight:700;color:#DC2626;margin-top:2px;">Skala 2.0 / 5 (Cepat Berbulu)</div>
+              </div>
+              <div style="padding:10px;background:var(--surface-tint);border-radius:6px;border:1px solid var(--border);">
+                <div style="color:var(--text-muted);">Dampak Klinis:</div>
+                <div style="font-weight:700;color:#DC2626;margin-top:2px;">Rontokan Serat Berbahaya di OKA</div>
+              </div>
             </div>
           </div>
 
-          <!-- Technical Callouts (Left side of canvas for Orinamia) -->
-          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;margin-top:auto;max-width:540px;">
-            <div style="padding:12px 14px;background:var(--surface-tint);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(110,56,122,0.06);">
-              <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#059669;">
-                <span>✓</span> 12 - 14 SPI Triple Chain
-              </div>
-              <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Jahitan rantai rapat dan lentur, tahan tarikan ekstrem.</div>
-            </div>
-            <div style="padding:12px 14px;background:var(--surface-tint);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(110,56,122,0.06);">
-              <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#059669;">
-                <span>✓</span> Double Bar-Tack 42 Tusukan
-              </div>
-              <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Kunci silang di setiap sudut saku, sanggup menahan beban 2.5 kg.</div>
-            </div>
-            <div style="padding:12px 14px;background:var(--surface-tint);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(110,56,122,0.06);">
-              <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#059669;">
-                <span>✓</span> Toyobo Fodu Grade A
-              </div>
-              <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Serat katun murni adem, lolos uji autoklaf sterilisasi 121°C.</div>
-            </div>
-            <div style="padding:12px 14px;background:var(--surface-tint);border-radius:8px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(110,56,122,0.06);">
-              <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#059669;">
-                <span>✓</span> Interlining Fusible Jerman
-              </div>
-              <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Kerah tegak simetris paripurna, awet ratusan kali cuci.</div>
-            </div>
-          </div>
         </div>
-
-        <!-- SLICER HANDLE (The Divider Line + Draggable Pill) -->
-        <div class="slicer-handle" :style="'left: ' + split + '%'">
-          <div class="slicer-pill" title="Tarik untuk membandingkan spesifikasi">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-            <span class="font-num" style="font-size:0.75rem;font-weight:700;" x-text="Math.round(split) + '% : ' + (100 - Math.round(split)) + '%'"></span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-          </div>
-        </div>
-
-        <!-- ACCESSIBILITY RANGE INPUT (Touch / Mouse / Keyboard Accessible) -->
-        <input type="range" min="0" max="100" step="1" x-model.number="split" @input="activePreset = 'custom'" class="slicer-range-input" aria-label="Slider Komparasi Slicing Kualitas Jahitan">
       </div>
 
-      <!-- Interactive Hotspot Drilldowns (Curated.design / Lafys style) -->
-      <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:16px;">
-        
-        <div class="atelier-card" style="padding:20px;cursor:pointer;" @click="setPreset(60, 'kerah')">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <div style="width:28px;height:28px;border-radius:6px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700;font-size:0.8rem;">01</div>
-            <div style="font-weight:700;font-size:0.95rem;color:var(--text);">Kerah &amp; Interlining Jerman</div>
-          </div>
-          <p style="font-size:0.8125rem;color:var(--text-muted);line-height:1.6;">Menggunakan bahan pengeras fusible berkualitas impor yang tidak bergelembung saat disetrika panas tinggi.</p>
-        </div>
+      <!-- SUB-TAB 3: ISO 4915 STITCH CLASSIFICATION BLUEPRINT -->
+      <div x-show="slicingSubTab === 'iso'" x-transition:enter="transition ease-out duration-250">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:20px;">
+          
+          <!-- ISO 301 -->
+          <div class="atelier-card" style="padding:24px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <span class="badge-pill" style="font-size:0.75rem;">ISO 4915 &bull; CLASS 301</span>
+              <span class="font-num" style="font-size:0.75rem;font-weight:700;color:var(--accent);">LOCKSTITCH</span>
+            </div>
+            
+            <div style="width:100%;height:80px;background:var(--surface-tint);border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:14px;">
+              <svg width="220" height="40" viewBox="0 0 220 40" fill="none">
+                <!-- Lockstitch Graphic -->
+                <line x1="10" y1="20" x2="210" y2="20" stroke="var(--border)" stroke-width="4"/>
+                <g stroke="#6E387A" stroke-width="3" stroke-linecap="round">
+                  <line x1="20" y1="20" x2="45" y2="20"/>
+                  <line x1="55" y1="20" x2="80" y2="20"/>
+                  <line x1="90" y1="20" x2="115" y2="20"/>
+                  <line x1="125" y1="20" x2="150" y2="20"/>
+                  <line x1="160" y1="20" x2="185" y2="20"/>
+                  <line x1="195" y1="20" x2="205" y2="20"/>
+                </g>
+                <!-- Lock intersections -->
+                <circle cx="50" cy="20" r="3.5" fill="#AD8EEB"/>
+                <circle cx="85" cy="20" r="3.5" fill="#AD8EEB"/>
+                <circle cx="120" cy="20" r="3.5" fill="#AD8EEB"/>
+                <circle cx="155" cy="20" r="3.5" fill="#AD8EEB"/>
+                <circle cx="190" cy="20" r="3.5" fill="#AD8EEB"/>
+              </svg>
+            </div>
 
-        <div class="atelier-card" style="padding:20px;cursor:pointer;" @click="setPreset(75, 'bartack')">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <div style="width:28px;height:28px;border-radius:6px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700;font-size:0.8rem;">02</div>
-            <div style="font-weight:700;font-size:0.95rem;color:var(--text);">Double Bar-Tack Sudut Saku</div>
+            <h4 style="font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:6px;">Jahitan Kunci Sejajar (Lockstitch)</h4>
+            <p style="font-size:0.8125rem;color:var(--text-muted);line-height:1.6;margin-bottom:14px;">
+              Dibentuk oleh benang jarum atas yang mengait dengan benang sekoci bawah tepat di poros tengah lipatan kain. Standar Orinamia: <strong>12 - 14 SPI</strong>.
+            </p>
+            <div style="font-size:0.75rem;padding:8px 10px;background:var(--surface-tint);border-radius:6px;color:var(--text);">
+              <strong>Implementasi:</strong> Kerah snelli dokter, placket kancing PDH, badan jas almamater.
+            </div>
           </div>
-          <p style="font-size:0.8125rem;color:var(--text-muted);line-height:1.6;">Kunci jahitan bar-tack 42 tusukan otomatis mesin digital, mencegah kantong sobek akibat tarikan alat medis.</p>
-        </div>
 
-        <div class="atelier-card" style="padding:20px;cursor:pointer;" @click="setPreset(30, 'seam')">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <div style="width:28px;height:28px;border-radius:6px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700;font-size:0.8rem;">03</div>
-            <div style="font-weight:700;font-size:0.95rem;color:var(--text);">Triple Chainstitch 14 SPI</div>
+          <!-- ISO 401 -->
+          <div class="atelier-card" style="padding:24px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <span class="badge-pill" style="font-size:0.75rem;">ISO 4915 &bull; CLASS 401</span>
+              <span class="font-num" style="font-size:0.75rem;font-weight:700;color:var(--accent);">CHAINSTITCH</span>
+            </div>
+
+            <div style="width:100%;height:80px;background:var(--surface-tint);border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:14px;">
+              <svg width="220" height="40" viewBox="0 0 220 40" fill="none">
+                <!-- Chainstitch Graphic -->
+                <path d="M 20 20 C 30 10, 40 30, 55 20 C 65 10, 75 30, 90 20 C 100 10, 110 30, 125 20 C 135 10, 145 30, 160 20 C 170 10, 180 30, 195 20" stroke="#AD8EEB" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <circle cx="55" cy="20" r="3" fill="#6E387A"/>
+                <circle cx="90" cy="20" r="3" fill="#6E387A"/>
+                <circle cx="125" cy="20" r="3" fill="#6E387A"/>
+                <circle cx="160" cy="20" r="3" fill="#6E387A"/>
+                <circle cx="195" cy="20" r="3" fill="#6E387A"/>
+              </svg>
+            </div>
+
+            <h4 style="font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:6px;">Jahitan Rantai Multi-Benang</h4>
+            <p style="font-size:0.8125rem;color:var(--text-muted);line-height:1.6;margin-bottom:14px;">
+              Benang bawah membentuk anyaman jeratan rantai yang fleksibel. Memberikan daya lentur maksimal hingga 30% tanpa benang putus saat nakes membungkuk aktif.
+            </p>
+            <div style="font-size:0.75rem;padding:8px 10px;background:var(--surface-tint);border-radius:6px;color:var(--text);">
+              <strong>Implementasi:</strong> Keliman samping baju OKA, selangkangan celana scrub nakes.
+            </div>
           </div>
-          <p style="font-size:0.8125rem;color:var(--text-muted);line-height:1.6;">Jahitan rantai 3 jarum terintegrasi di keliman sisi, elastis saat pengguna membungkuk dan bergerak aktif.</p>
-        </div>
 
-        <div class="atelier-card" style="padding:20px;cursor:pointer;" @click="setPreset(50, '50')">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <div style="width:28px;height:28px;border-radius:6px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700;font-size:0.8rem;">04</div>
-            <div style="font-weight:700;font-size:0.95rem;color:var(--text);">Katun Toyobo Fodu Grade A</div>
+          <!-- ISO 504 -->
+          <div class="atelier-card" style="padding:24px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <span class="badge-pill" style="font-size:0.75rem;">ISO 4915 &bull; CLASS 504</span>
+              <span class="font-num" style="font-size:0.75rem;font-weight:700;color:var(--accent);">OVERLOCK</span>
+            </div>
+
+            <div style="width:100%;height:80px;background:var(--surface-tint);border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:14px;">
+              <svg width="220" height="40" viewBox="0 0 220 40" fill="none">
+                <!-- Overlock Graphic -->
+                <line x1="20" y1="28" x2="200" y2="28" stroke="var(--border)" stroke-width="3"/>
+                <path d="M 25 28 L 35 12 L 45 28 L 55 12 L 65 28 L 75 12 L 85 28 L 95 12 L 105 28 L 115 12 L 125 28 L 135 12 L 145 28 L 155 12 L 165 28 L 175 12 L 185 28 L 195 12" stroke="#F391EC" stroke-width="2.5" fill="none"/>
+              </svg>
+            </div>
+
+            <h4 style="font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:6px;">Obras Tiga &amp; Empat Benang</h4>
+            <p style="font-size:0.8125rem;color:var(--text-muted);line-height:1.6;margin-bottom:14px;">
+              Memotong sekaligus merajut tepi kain agar serat benang tidak bertiras atau terburai. Menggunakan pisau pemotong garmen presisi tajam.
+            </p>
+            <div style="font-size:0.75rem;padding:8px 10px;background:var(--surface-tint);border-radius:6px;color:var(--text);">
+              <strong>Implementasi:</strong> Tepian kampuh dalam seluruh kemeja, snelli, dan celana.
+            </div>
           </div>
-          <p style="font-size:0.8125rem;color:var(--text-muted);line-height:1.6;">Daya serap keringat tinggi, tidak mudah kusut, serat halus nyaman di kulit, dan lolos uji autoklaf rumah sakit.</p>
-        </div>
 
+          <!-- Digital Bar-Tack -->
+          <div class="atelier-card" style="padding:24px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <span class="badge-pill" style="font-size:0.75rem;background:#10B981;color:#FFFFFF;border:none;">MESIN KOMPUTER</span>
+              <span class="font-num" style="font-size:0.75rem;font-weight:700;color:#059669;">42 BAR-TACK</span>
+            </div>
+
+            <div style="width:100%;height:80px;background:var(--surface-tint);border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:14px;">
+              <svg width="220" height="40" viewBox="0 0 220 40" fill="none">
+                <!-- Bar-Tack Graphic -->
+                <rect x="50" y="14" width="120" height="12" rx="3" fill="#10B981" opacity="0.2"/>
+                <path d="M 52 14 L 56 26 M 60 14 L 64 26 M 68 14 L 72 26 M 76 14 L 80 26 M 84 14 L 88 26 M 92 14 L 96 26 M 100 14 L 104 26 M 108 14 L 112 26 M 116 14 L 120 26 M 124 14 L 128 26 M 132 14 L 136 26 M 140 14 L 144 26 M 148 14 L 152 26 M 156 14 L 160 26 M 164 14 L 168 26" stroke="#059669" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+
+            <h4 style="font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:6px;">Bar-Tack Pengunci 42 Tusukan</h4>
+            <p style="font-size:0.8125rem;color:var(--text-muted);line-height:1.6;margin-bottom:14px;">
+              Jahitan kunci silang padat otomatis dengan kerapatan mikro. Menahan beban tarikan hingga 2.5 kg tanpa robek saat saku diisi gawai medis berat.
+            </p>
+            <div style="font-size:0.75rem;padding:8px 10px;background:var(--surface-tint);border-radius:6px;color:var(--text);">
+              <strong>Implementasi:</strong> 4 sudut saku baju OKA, pangkal tali pinggang serut, saku kargo safety.
+            </div>
+          </div>
+
+        </div>
       </div>
 
     </div>
@@ -1032,38 +1428,143 @@
     </div>
   </section>
 
-  <!-- SECTION 2: KOLEKSI & LAYANAN PRODUKSI -->
+  <!-- SECTION 2: KOLEKSI & LAYANAN PRODUKSI (HUYML SELECTED WORKS ARCHIVE) -->
   <section id="layanan" style="padding:90px 24px;border-bottom:1px solid var(--border);background:var(--surface-tint);">
+    <div id="arsip"></div>
     <div style="max-width:1160px;margin:0 auto;">
       
-      <div style="text-align:center;max-width:720px;margin:0 auto 40px;">
-        <span class="badge-pill" style="margin-bottom:12px;">Portofolio & Layanan Konveksi</span>
-        <h2 class="font-editorial" style="font-size:clamp(1.8rem, 3vw, 2.5rem);font-weight:500;color:var(--text);">
-          Spesialisasi Busana Kerja & Pakaian Dinas
-        </h2>
-        <p style="color:var(--text-muted);margin-top:10px;">
-          Katalog komprehensif mulai dari pakaian dinas korporat hingga baju ruang operasi rumah sakit.
-        </p>
+      <!-- Huyml-Inspired Section Toolbar & Switcher -->
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:20px;margin-bottom:32px;">
+        <div style="max-width:680px;">
+          <div style="display:inline-flex;align-items:center;gap:8px;padding:4px 14px;background:var(--surface);border:1px solid var(--border);border-radius:999px;margin-bottom:12px;">
+            <span style="width:7px;height:7px;border-radius:50%;background:#F391EC;"></span>
+            <span style="font-size:0.75rem;font-weight:700;letter-spacing:0.08em;color:var(--accent);text-transform:uppercase;">SELECTED WORKS 2015 - 2026 &bull; ATELIER ARCHIVE</span>
+          </div>
+          <h2 class="font-editorial" style="font-size:clamp(1.9rem, 3.4vw, 2.8rem);font-weight:500;line-height:1.2;color:var(--text);margin-bottom:10px;">
+            Arsip Karya &amp; Portofolio Rekayasa Busana Kerja
+          </h2>
+          <p style="color:var(--text-muted);font-size:0.95rem;line-height:1.65;">
+            Dokumentasi teknis spesifikasi pakaian dinas, busana medis OKA, dan pakaian kerja berstandar laboratorium PT Cahaya Binar Berlian. Arahkan kursor pada baris untuk preview melayang atau klik untuk membedah mutu jahitan.
+          </p>
+        </div>
+
+        <!-- View Mode Switcher: Archive List vs Grid -->
+        <div style="display:flex;gap:8px;align-items:center;padding:4px;background:var(--surface);border-radius:10px;border:1px solid var(--border);">
+          <button type="button" class="cat-tab" :class="{ 'active': catalogView === 'archive' }" @click="catalogView = 'archive'">
+            ☰ Arsip Jahitan (Huyml List)
+          </button>
+          <button type="button" class="cat-tab" :class="{ 'active': catalogView === 'grid' }" @click="catalogView = 'grid'">
+            ⊞ Grid Visual
+          </button>
+        </div>
       </div>
 
-      <!-- Category Filter Tabs -->
-      <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:36px;">
-        <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'medis' }" @click="activeCat = 'medis'">
-          🏥 Seragam Medis & OKA
-        </button>
-        <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'korporat' }" @click="activeCat = 'korporat'">
-          👔 Kemeja PDH & Kantor
-        </button>
-        <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'industri' }" @click="activeCat = 'industri'">
-          🦺 Safety Tambang & PDL
-        </button>
-        <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'apparel' }" @click="activeCat = 'apparel'">
-          👕 Jas, Kaos & Komunitas
-        </button>
+      <!-- VIEW 1: HUYML SELECTED WORKS ARCHIVE TABLE -->
+      <div x-show="catalogView === 'archive'" x-transition:enter="transition ease-out duration-250">
+        
+        <!-- Volume Filter Switcher -->
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button type="button" class="btn-slicing-preset" :class="{ 'active': archiveVol === 'all' }" @click="archiveVol = 'all'">
+              Semua Arsip (06)
+            </button>
+            <button type="button" class="btn-slicing-preset" :class="{ 'active': archiveVol === 'medis' }" @click="archiveVol = 'medis'">
+              Vol. 01: Medis &amp; Rumah Sakit (03)
+            </button>
+            <button type="button" class="btn-slicing-preset" :class="{ 'active': archiveVol === 'korporat' }" @click="archiveVol = 'korporat'">
+              Vol. 02: Korporat, Safety K3 &amp; Apparel (03)
+            </button>
+          </div>
+
+          <div style="font-size:0.75rem;color:var(--text-muted);">
+            Menampilkan: <strong class="font-num" style="color:var(--text);" x-text="filteredArchiveItems.length"></strong> Model Terdaftar
+          </div>
+        </div>
+
+        <!-- Interactive Huyml Table -->
+        <div class="archive-table">
+          <div class="archive-header">
+            <div>NO.</div>
+            <div>MODEL &amp; SPESIFIKASI ATELIER</div>
+            <div class="archive-hide-mobile">TEKSTIL &amp; GRAMASI</div>
+            <div class="archive-hide-tablet">KONSTRUKSI JAHITAN (ISO 4915)</div>
+            <div class="archive-hide-mobile">LEAD TIME</div>
+            <div style="text-align:right;">BEDAH MUTU</div>
+          </div>
+
+          <template x-for="(item, idx) in filteredArchiveItems" :key="item.code">
+            <div class="archive-row"
+                 @mouseenter="onArchiveHover(item, $event)"
+                 @mousemove="onArchiveMouseMove($event)"
+                 @mouseleave="onArchiveLeave()"
+                 @click="openDossier(item)">
+              
+              <!-- Col 1: Zero Padded Code -->
+              <div class="font-num" style="font-weight:700;color:var(--accent);font-size:0.85rem;" x-text="item.code"></div>
+
+              <!-- Col 2: Title & Badge -->
+              <div style="display:flex;flex-direction:column;gap:4px;padding-right:12px;">
+                <div style="font-weight:700;font-size:0.95rem;color:var(--text);line-height:1.3;" x-text="item.title"></div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+                  <span class="curated-tag" style="font-size:0.65rem;" x-text="item.categoryBadge"></span>
+                  <span style="font-size:0.72rem;color:var(--text-muted);" x-text="item.minOrder + ' MOQ'"></span>
+                </div>
+              </div>
+
+              <!-- Col 3: Material -->
+              <div class="archive-hide-mobile" style="display:flex;flex-direction:column;gap:2px;font-size:0.8rem;">
+                <span style="font-weight:600;color:var(--text);" x-text="item.material"></span>
+                <span style="font-size:0.72rem;color:var(--text-muted);" x-text="item.weave"></span>
+              </div>
+
+              <!-- Col 4: ISO Construction -->
+              <div class="archive-hide-tablet" style="display:flex;flex-direction:column;gap:2px;font-size:0.8rem;">
+                <span class="font-num" style="font-weight:700;color:var(--accent);" x-text="item.isoStitch + ' (' + item.spi + ')'"></span>
+                <span style="font-size:0.72rem;color:#059669;font-weight:600;" x-text="item.reinforcement"></span>
+              </div>
+
+              <!-- Col 5: Lead Time -->
+              <div class="archive-hide-mobile font-num" style="font-size:0.8rem;color:var(--text-muted);font-weight:600;" x-text="item.leadTime"></div>
+
+              <!-- Col 6: Action -->
+              <div style="text-align:right;">
+                <span class="archive-arrow" style="display:inline-flex;align-items:center;gap:4px;font-size:0.8rem;font-weight:700;color:var(--accent);transition:transform 180ms ease;">
+                  Bedah &rarr;
+                </span>
+              </div>
+
+            </div>
+          </template>
+        </div>
+
+        <!-- Micro Instruction Footnote -->
+        <div style="margin-top:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:0.75rem;color:var(--text-muted);">
+          <span>💡 <em>Arahkan kursor pada baris untuk preview kartu melayang, atau klik "Bedah &rarr;" untuk membuka lembar spesifikasi teknis lengkap beserta penawaran WhatsApp.</em></span>
+          <span class="font-num">Standar Jahitan ISO 4915</span>
+        </div>
+
       </div>
 
-      <!-- Dynamic Catalog Grid -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:24px;">
+      <!-- VIEW 2: VISUAL GRID WITH CATEGORY FILTER TABS -->
+      <div x-show="catalogView === 'grid'" x-transition:enter="transition ease-out duration-250">
+        <!-- Category Filter Tabs -->
+        <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:36px;">
+          <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'medis' }" @click="activeCat = 'medis'">
+            🏥 Seragam Medis &amp; OKA
+          </button>
+          <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'korporat' }" @click="activeCat = 'korporat'">
+            👔 Kemeja PDH &amp; Kantor
+          </button>
+          <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'industri' }" @click="activeCat = 'industri'">
+            🦺 Safety Tambang &amp; PDL
+          </button>
+          <button type="button" class="cat-tab" :class="{ 'active': activeCat === 'apparel' }" @click="activeCat = 'apparel'">
+            👕 Jas, Kaos &amp; Komunitas
+          </button>
+        </div>
+
+        <!-- Dynamic Catalog Grid -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:24px;">
         
         <!-- Tab: Medis (Curated.design style) -->
         <template x-if="activeCat === 'medis'">
@@ -1090,7 +1591,7 @@
               </div>
 
               <div class="font-num" style="font-size:0.75rem;font-weight:600;color:var(--accent);">
-                Lead Time: 7 &ndash; 10 Hari Kerja
+                Lead Time: 7 - 10 Hari Kerja
               </div>
             </div>
 
@@ -1388,6 +1889,7 @@
           </div>
         </template>
 
+        </div>
       </div>
 
       <!-- [motion-primitives.com & skiper-ui] Interactive Fabric Quality Accordion -->
@@ -2014,7 +2516,7 @@
         <h4 style="font-size:0.9rem;font-weight:700;color:var(--text);margin-bottom:12px;">Kontak & Layanan</h4>
         <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.7;">
           Hotline / WhatsApp: <strong class="font-num" style="color:var(--text);">0857 1610 7394</strong><br>
-          Operasional: Senin &ndash; Sabtu (08.00 &ndash; 17.00 WIB)<br>
+          Operasional: Senin - Sabtu (08.00 - 17.00 WIB)<br>
           Sistem Informasi: SIMORIN (Sistem Informasi Manajemen Orinamia)
         </p>
       </div>
@@ -2022,12 +2524,218 @@
     </div>
 
     <div style="max-width:1160px;margin:0 auto;border-top:1px solid var(--border);padding-top:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:0.8rem;color:var(--text-muted);">
-      <div>&copy; 2015 &ndash; {{ date('Y') }} PT CAHAYA BINAR BERLIAN &bull; ORINAMIA Daily Wear & Konveksi. Seluruh hak cipta dilindungi.</div>
+      <div>&copy; 2015 - {{ date('Y') }} PT CAHAYA BINAR BERLIAN &bull; ORINAMIA Daily Wear &amp; Konveksi. Seluruh hak cipta dilindungi.</div>
       <div style="display:flex;gap:16px;">
-        <a href="{{ route('login') }}" style="color:var(--accent);text-decoration:none;font-weight:600;">Login Staf & Owner</a>
+        <a href="{{ route('login') }}" style="color:var(--accent);text-decoration:none;font-weight:600;">Login Staf &amp; Owner</a>
       </div>
     </div>
   </footer>
+
+  <!-- [huyml.co] FLOATING CURSOR PREVIEW CARD -->
+  <div class="cursor-preview-card"
+       :class="{ 'visible': cursorPreview.visible && cursorPreview.item }"
+       :style="'left: ' + cursorPreview.x + 'px; top: ' + cursorPreview.y + 'px;'"
+       role="tooltip"
+       aria-hidden="true"
+       x-cloak>
+    <template x-if="cursorPreview.item">
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <span class="font-num" style="font-size:0.7rem;font-weight:700;color:var(--accent);" x-text="'ARCHIVE #' + cursorPreview.item.code"></span>
+          <span class="curated-tag" style="font-size:0.65rem;" x-text="cursorPreview.item.categoryBadge"></span>
+        </div>
+        <div style="font-size:1rem;font-weight:700;color:var(--text);line-height:1.25;margin-bottom:6px;" x-text="cursorPreview.item.title"></div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:10px;" x-text="cursorPreview.item.material"></div>
+
+        <div style="border-top:1px dashed var(--border);padding-top:8px;display:flex;flex-direction:column;gap:4px;font-size:0.72rem;">
+          <div style="display:flex;justify-content:space-between;">
+            <span style="color:var(--text-muted);">Jahitan ISO:</span>
+            <span class="font-num" style="font-weight:600;color:var(--text);" x-text="cursorPreview.item.isoStitch"></span>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span style="color:var(--text-muted);">Kekuatan:</span>
+            <span style="font-weight:600;color:#059669;" x-text="cursorPreview.item.strength"></span>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span style="color:var(--text-muted);">Sterilisasi:</span>
+            <span style="font-weight:600;color:var(--accent);" x-text="cursorPreview.item.autoclave"></span>
+          </div>
+        </div>
+
+        <div style="margin-top:10px;padding-top:6px;border-top:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:space-between;font-size:0.7rem;color:var(--accent);font-weight:700;">
+          <span>Buka Bedah Kualitas</span>
+          <span>&rarr;</span>
+        </div>
+      </div>
+    </template>
+  </div>
+
+  <!-- [huyml.co] CRAFTSMANSHIP DOSSIER SLIDE-OVER DRAWER -->
+  <div class="dossier-backdrop"
+       x-show="activeDossier !== null"
+       x-transition:enter="transition ease-out duration-300"
+       x-transition:enter-start="opacity-0"
+       x-transition:enter-end="opacity-100"
+       x-transition:leave="transition ease-in duration-200"
+       x-transition:leave-start="opacity-100"
+       x-transition:leave-end="opacity-0"
+       @click.self="closeDossier()"
+       @keydown.escape.window="closeDossier()"
+       style="display:none;"
+       x-cloak>
+    
+    <div class="dossier-panel"
+         x-show="activeDossier !== null"
+         x-transition:enter="transition ease-out duration-300 transform"
+         x-transition:enter-start="translate-x-full"
+         x-transition:enter-end="translate-x-0"
+         x-transition:leave="transition ease-in duration-200 transform"
+         x-transition:leave-start="translate-x-0"
+         x-transition:leave-end="translate-x-full">
+
+      <template x-if="activeDossier">
+        <div style="display:flex;flex-direction:column;gap:24px;">
+
+          <!-- Drawer Sticky Top Bar -->
+          <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:16px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span class="badge-pill" style="font-size:0.75rem;padding:4px 10px;" x-text="'DOSSIER #' + activeDossier.code"></span>
+              <span class="curated-tag" x-text="activeDossier.categoryBadge"></span>
+            </div>
+            <button type="button" @click="closeDossier()" class="btn-ghost" style="padding:6px 12px;font-size:0.8rem;border-radius:6px;" title="Tutup Dossier (Esc)">
+              Tutup &times; [Esc]
+            </button>
+          </div>
+
+          <!-- Headline & Editorial Intro -->
+          <div>
+            <div style="font-size:0.75rem;font-weight:700;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">
+              LEMBAR BEDAH KUALITAS JAHITAN &bull; PT CAHAYA BINAR BERLIAN
+            </div>
+            <h3 class="font-editorial" style="font-size:1.85rem;line-height:1.2;font-weight:500;color:var(--text);margin-bottom:10px;" x-text="activeDossier.title"></h3>
+            <p style="font-size:0.9rem;color:var(--text-muted);line-height:1.65;" x-text="activeDossier.lead"></p>
+          </div>
+
+          <!-- Section 1: Konstruksi Pola & Potongan -->
+          <div style="padding:18px 20px;background:var(--surface-tint);border-radius:10px;border:1px solid var(--border);">
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.8rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">
+              <span>📐</span> Konstruksi Pola &amp; Ergonomi
+            </div>
+            <p style="font-size:0.85rem;color:var(--text);line-height:1.65;" x-text="activeDossier.patternNotes"></p>
+            <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.78rem;">
+              <div style="padding:8px 10px;background:var(--surface);border-radius:6px;border:1px solid var(--border);">
+                <div style="color:var(--text-muted);">Kampuh (Seam Allowance):</div>
+                <div style="font-weight:700;color:var(--text);margin-top:2px;" x-text="activeDossier.seamAllowance"></div>
+              </div>
+              <div style="padding:8px 10px;background:var(--surface);border-radius:6px;border:1px solid var(--border);">
+                <div style="color:var(--text-muted);">Bahan Interlining:</div>
+                <div style="font-weight:700;color:var(--text);margin-top:2px;" x-text="activeDossier.interlining"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Spesifikasi Jahitan ISO 4915 -->
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.8rem;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">
+              <span>🧵</span> Standar Mesin &amp; Klasifikasi ISO 4915
+            </div>
+            
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div class="atelier-card" style="padding:14px;">
+                <div style="font-size:0.7rem;color:var(--text-muted);font-weight:600;">Kelas Jahitan ISO</div>
+                <div class="font-num" style="font-size:0.95rem;font-weight:700;color:var(--accent);margin-top:2px;" x-text="activeDossier.isoStitch"></div>
+                <div style="font-size:0.72rem;color:var(--text-muted);margin-top:4px;" x-text="activeDossier.isoDetail"></div>
+              </div>
+
+              <div class="atelier-card" style="padding:14px;">
+                <div style="font-size:0.7rem;color:var(--text-muted);font-weight:600;">Kerapatan SPI</div>
+                <div class="font-num" style="font-size:0.95rem;font-weight:700;color:var(--text);margin-top:2px;" x-text="activeDossier.spi"></div>
+                <div style="font-size:0.72rem;color:var(--text-muted);margin-top:4px;">Stitches Per Inch presisi komputer</div>
+              </div>
+
+              <div class="atelier-card" style="padding:14px;">
+                <div style="font-size:0.7rem;color:var(--text-muted);font-weight:600;">Spesifikasi Benang</div>
+                <div style="font-size:0.825rem;font-weight:700;color:var(--text);margin-top:2px;" x-text="activeDossier.thread"></div>
+                <div style="font-size:0.72rem;color:var(--text-muted);margin-top:4px;">Tahan tarikan gesek &amp; panas mesin</div>
+              </div>
+
+              <div class="atelier-card" style="padding:14px;">
+                <div style="font-size:0.7rem;color:var(--text-muted);font-weight:600;">Kunci Titik Beban</div>
+                <div style="font-size:0.825rem;font-weight:700;color:#059669;margin-top:2px;" x-text="activeDossier.reinforcement"></div>
+                <div style="font-size:0.72rem;color:var(--text-muted);margin-top:4px;">Kunci silang komputer di sudut saku</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Uji Ketahanan & Laboratorium -->
+          <div style="padding:18px 20px;background:var(--surface-tint);border-radius:10px;border:1px solid var(--border);">
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.8rem;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">
+              <span>🔬</span> Pengujian Tekstil &amp; Rumah Sakit
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:0.8rem;">
+              <div style="display:flex;align-items:flex-start;gap:8px;">
+                <span style="color:#059669;font-weight:700;">✓</span>
+                <div>
+                  <strong>Uji Suhu Autoklaf:</strong>
+                  <span style="color:var(--text-muted);" x-text="activeDossier.autoclave"></span>
+                </div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:8px;">
+                <span style="color:#059669;font-weight:700;">✓</span>
+                <div>
+                  <strong>Ketahanan Beban Saku:</strong>
+                  <span style="color:var(--text-muted);" x-text="activeDossier.pocketLoad"></span>
+                </div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:8px;">
+                <span style="color:#059669;font-weight:700;">✓</span>
+                <div>
+                  <strong>Luntur &amp; Klorin:</strong>
+                  <span style="color:var(--text-muted);" x-text="activeDossier.colorfastness"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 4: Verified Clients -->
+          <div>
+            <div style="font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">
+              INSTANSI &amp; KLIEN PENGGUNA TERVERIFIKASI
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <template x-for="(client, cIdx) in activeDossier.clients" :key="cIdx">
+                <span class="curated-tag" style="padding:5px 10px;font-size:0.75rem;color:var(--text);" x-text="client"></span>
+              </template>
+            </div>
+          </div>
+
+          <!-- Section 5: Order Specs & WhatsApp Quote Generator -->
+          <div style="margin-top:auto;padding-top:16px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.825rem;">
+              <span style="color:var(--text-muted);">Lead Time Produksi:</span>
+              <strong class="font-num" style="color:var(--text);" x-text="activeDossier.leadTime"></strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.825rem;">
+              <span style="color:var(--text-muted);">Minimal Pemesanan (MOQ):</span>
+              <strong class="font-num" style="color:var(--accent);" x-text="activeDossier.minOrder"></strong>
+            </div>
+
+            <a :href="'https://wa.me/6285716107394?text=' + encodeURIComponent('Halo Tim Atelier PT Cahaya Binar Berlian, saya ingin konsultasi penawaran produksi untuk: ' + activeDossier.title + ' (Kain: ' + activeDossier.material + ', Standar: ' + activeDossier.isoStitch + '). Mohon kirimkan surat penawaran resmi.')"
+               target="_blank"
+               class="btn-brand"
+               style="justify-content:center;padding:12px;font-size:0.9rem;">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.174.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.174.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.824z"/>
+              </svg>
+              Minta Surat Penawaran &amp; Sampel Bahan
+            </a>
+          </div>
+
+        </div>
+      </template>
+
+    </div>
+  </div>
 
   <!-- [onepagelove.com] FLOATING ATELIER CONCIERGE CAPSULE -->
   <div class="floating-concierge" role="complementary" aria-label="Concierge Layanan Orinamia">
@@ -2035,7 +2743,7 @@
       <span class="pulse-dot" title="Workshop Tangerang Aktif"></span>
       <div style="line-height:1.2;">
         <div style="font-size:0.75rem;font-weight:700;color:var(--text);">Atelier Karawaci Aktif</div>
-        <div style="font-size:0.65rem;color:var(--text-muted);">08.00 &ndash; 17.00 WIB</div>
+        <div style="font-size:0.65rem;color:var(--text-muted);">08.00 - 17.00 WIB</div>
       </div>
     </div>
 
@@ -2059,7 +2767,209 @@
     function globalLandingTracker() {
       return {
         scrollPercent: 0,
+        liveTime: '',
+        catalogView: 'archive',
+        archiveVol: 'all',
+        cursorPreview: {
+          visible: false,
+          x: 0,
+          y: 0,
+          item: null
+        },
+        activeDossier: null,
+        archiveItems: [
+          {
+            code: '01',
+            title: 'Baju OKA Kamar Bedah Mayor & ICU',
+            category: 'medis',
+            volume: '01',
+            categoryBadge: 'Medis & OKA',
+            material: 'Katun Toyobo Fodu Grade A (210 GSM)',
+            weave: 'Plain high-density 133x72 count, mercerized combed cotton 40s/2',
+            isoStitch: 'ISO 301 & ISO 401',
+            isoDetail: 'Lockstitch 14 SPI + Chainstitch Keliman Lentur',
+            spi: '12 - 14 SPI',
+            thread: 'Core-Spun Poly 40/2 Panas Autoklaf',
+            reinforcement: 'Double Bar-Tack 42 Tusukan Komputer',
+            strength: 'Uji Tarik Beban Saku 2.5 kg',
+            autoclave: 'Lolos Sterilisasi 121°C Tekanan 1.2 Bar',
+            pocketLoad: '2.5 kg (Stetoskop, Tensimeter & Tablet Medis)',
+            colorfastness: 'Skala 4.5/5 (Tahan Pencucian Klorin RS)',
+            seamAllowance: '1.5 cm Kampuh Balik Tertutup',
+            interlining: 'Fusible Interlining Kerah Jerman',
+            lead: 'Dirancang spesifik untuk dokter spesialis bedah dan tim perawat kamar operasi. Menggunakan katun Toyobo Fodu Grade A dengan sirkulasi udara mikro dan jahitan berdaya tahan autoklaf tinggi.',
+            patternNotes: 'Pola ergonomis raglan/set-in dengan toleransi kelonggaran gerak 6 cm pada lingkar dada. Sambungan kampuh balik tertutup (flat-felled) mencegah gesekan pada kulit saat prosedur bedah berlangsung berjam-jam.',
+            clients: ['RS Sari Asih Karawaci', 'RS An-Nisa Tangerang', 'RSIA Bunda Sejati', 'Klinik Pratama Banten'],
+            leadTime: '7 - 10 Hari Kerja',
+            minOrder: '10 Pcs'
+          },
+          {
+            code: '02',
+            title: 'Scrub Medis Ergonomis Nakes & Jaga Malam',
+            category: 'medis',
+            volume: '01',
+            categoryBadge: 'Medis & OKA',
+            material: 'Poly-Viscose Cotton Twill (195 GSM)',
+            weave: 'Twill 3/1 elastisitas mekanis 4-way comfort tanpa spandeks getas',
+            isoStitch: 'ISO 514 Mock Safety',
+            isoDetail: 'Obras 4 Benang + Jarum Ganda Samping',
+            spi: '12 SPI',
+            thread: 'Polyester Filament High-Tenacity',
+            reinforcement: 'Bar-Tack Segitiga 28 Tusukan',
+            strength: 'Elastisitas Tarik Gerak Aktif',
+            autoclave: 'Tahan Cuci Suhu 75°C Cairan Antiseptik',
+            pocketLoad: '2.0 kg (Saku Dada + 2 Saku Bawah + Saku Celana)',
+            colorfastness: 'Skala 4.5/5 Standar ISO 105-C06',
+            seamAllowance: '1.2 cm Jahitan 4 Benang Terpadu',
+            interlining: 'Lis Leher V-Neck Anti Melar',
+            lead: 'Solusi seragam jaga malam dan poliklinik dengan potongan kontur tubuh modern. Memadukan kemudahan bergerak nakes dengan penataan 5 saku fungsional.',
+            patternNotes: 'Celana model jogger/straight dengan pinggang serut elastis ganda dan tali pengencang internal. Dilengkapi ventilasi tersembunyi pada belahan samping atasan.',
+            clients: ['RS Hermina Tangerang', 'Puskesmas Cibodas', 'RS Bhakti Asih', 'Klinik Kecantikan Karawaci'],
+            leadTime: '7 - 10 Hari Kerja',
+            minOrder: '10 Pcs'
+          },
+          {
+            code: '03',
+            title: 'Snelli Jas Dokter & Laboratorium Eksekutif',
+            category: 'medis',
+            volume: '01',
+            categoryBadge: 'Jas Medis',
+            material: 'American Drill 1919 Super + Puring Asahi',
+            weave: 'Diagonal twill 2/1 rapat, serat katun tebal tidak tembus pandang',
+            isoStitch: 'ISO 301 & ISO 504',
+            isoDetail: 'Lockstitch Kerah Rebah + Obras 5 Benang Bersih',
+            spi: '13 SPI',
+            thread: 'Spun Polyester Glace Finish',
+            reinforcement: 'Jahitan Silang Kancing Bertulang 4 Lubang',
+            strength: 'Struktur Kerah Kaku Seumur Pakai',
+            autoclave: 'Tahan Setrika Panas & Dry Clean Berulang',
+            pocketLoad: '1.8 kg (Saku Dada Snelli & Kantong Lapisan Dalam)',
+            colorfastness: 'Putih Medis Tahan Oksidasi Kekuningan',
+            seamAllowance: '1.5 cm Jahitan Kamso Rapi Bersih',
+            interlining: 'Fusible Canvas Jerman Press Suhu 140°C',
+            lead: 'Jas dokter prestisius untuk konsulen, dokter spesialis, dan peneliti laboratorium. Potongan jatuh elegan dengan kerah notch lapel simetris standar IDI.',
+            patternNotes: 'Pola tailor jas pria dan wanita terpisah. Kerah dipress dengan mesin fusi pneumatik bertekanan tinggi sehingga tidak akan menggelembung atau melepuh saat disetrika panas.',
+            clients: ['Ikatan Dokter Indonesia (IDI) Cabang', 'Residen RSUD Banten', 'Laboratorium Medis Tangerang'],
+            leadTime: '10 - 14 Hari Kerja',
+            minOrder: '10 Pcs'
+          },
+          {
+            code: '04',
+            title: 'Kemeja PDH Eksekutif & Dinas Korporat',
+            category: 'korporat',
+            volume: '02',
+            categoryBadge: 'Korporat & Dinas',
+            material: 'Katun Nagata Drill / Tropical (225 GSM)',
+            weave: 'Konstruksi tenun padat anti kusut, sirkulasi udara micro-porous',
+            isoStitch: 'Twin-Needle ISO 301',
+            isoDetail: 'Jahitan Jarum Ganda Rapi Jarak 1/4 Inci',
+            spi: '12 - 14 SPI',
+            thread: 'Coats Poly 40/2 Tahan Gesekan',
+            reinforcement: 'Bar-Tack Sudut Penutup Saku & Manset',
+            strength: 'Kuat Tarik Benang >40 N/cm²',
+            autoclave: 'Tahan Cuci Mesin Industri 50+ Siklus',
+            pocketLoad: '1.5 kg (2 Saku Dada Lipit Bertutup Kancing)',
+            colorfastness: 'Skala 4.0/5 Standar Pakaian Dinas',
+            seamAllowance: '1.5 cm Kamso Obras 5 Benang',
+            interlining: 'Interlining Kerah Kaku & Manset Lengan',
+            lead: 'Pakaian Dinas Harian (PDH) resmi untuk kementerian, BUMN, perbankan, dan swasta. Dilengkapi pangkat pundak (epaulette) dan saku lipit berstandar regulasi.',
+            patternNotes: 'Pola regular fit dan slim fit dengan keliman bahu jarum ganda simetris. Penempatan bordir komputer Tajima 12 warna pada dada dan lengan dengan resolusi stik rapat tanpa kusut.',
+            clients: ['PT DNP Indonesia', 'Bank Syariah Indonesia (BSI) Cabang', 'Dinas Pemkot Tangerang', 'KORPRI Unit'],
+            leadTime: '10 - 14 Hari Kerja',
+            minOrder: '12 Pcs'
+          },
+          {
+            code: '05',
+            title: 'Kemeja Safety K3 Tambang, Migas & Lapangan',
+            category: 'industri',
+            volume: '02',
+            categoryBadge: 'Safety K3 & PDL',
+            material: 'Ripstop Heavy Grid 240 GSM + 3M Scotchlite',
+            weave: 'Anyaman kotak ripstop 5x5 mm penahan rambatan sobek mekanis',
+            isoStitch: 'Triple Chainstitch ISO 401',
+            isoDetail: 'Tiga Jalur Rantai Paralel Kekuatan Tarik >600 N',
+            spi: '11 - 12 SPI',
+            thread: 'Heavy Nylon Thread Bonded No. 30',
+            reinforcement: 'Double Bar-Tack 42 Tusukan di Seluruh Titik Beban',
+            strength: 'Uji Tarik Sobek >600 Newton (Heavy Duty)',
+            autoclave: 'Tahan Suhu Lapangan & Pencucian Industri Berat',
+            pocketLoad: '3.0 kg (Saku Kargo Ganda + Slot Pulpen & HT)',
+            colorfastness: 'Hi-Vis Fluorescent Tahan Sinar UV Matahari',
+            seamAllowance: '1.8 cm Kampuh Pipih Jarum Tiga',
+            interlining: 'Reflektor 3M ANSI/ISEA 107-2020 Level 2',
+            lead: 'Kemeja kerja lapangan berstandar keselamatan K3 nasional untuk area tambang, migas, dermaga, dan konstruksi. Menggunakan reflector 3M Scotchlite dengan pantulan cahaya tinggi.',
+            patternNotes: 'Dilengkapi ventilasi aerasi jaring di bagian punggung (yoke venting) untuk melepaskan hawa panas tubuh. Lengan berkancing penahan gulungan saat beraktivitas lapangan.',
+            clients: ['Kontraktor Migas Banten', 'Relawan Kemanusiaan BAZNAS', 'Surveyor Geologi & Tambang'],
+            leadTime: '12 - 16 Hari Kerja',
+            minOrder: '20 Pcs'
+          },
+          {
+            code: '06',
+            title: 'Jas Almamater Kampus & Blazer Komunitas',
+            category: 'apparel',
+            volume: '02',
+            categoryBadge: 'Almamater & Blazer',
+            material: 'Valextra High Twist Woolen Feel (280 GSM)',
+            weave: 'High-twist yarn woven, jatuh anggun, anti kusut otomatis meregang',
+            isoStitch: 'ISO 301 & Blindstitch',
+            isoDetail: 'Jahitan Sum Keliman Rahasia Tanpa Benang Luar',
+            spi: '12 SPI',
+            thread: 'Silk-Poly Thread Match Tone',
+            reinforcement: 'Busa Bahu Felting Simetris Kiri Kanan',
+            strength: 'Presisi Potongan Siluet Tegap',
+            autoclave: 'Khusus Dry Clean & Steam Press',
+            pocketLoad: '1.2 kg (Saku Tempel Lambang & Saku Bobok Paspol)',
+            colorfastness: 'Warna Tajam Tidak Pudar Terpapar Keringat',
+            seamAllowance: '1.5 cm Full Puring Sutra Asahi',
+            interlining: 'Kain Keras Dada & Pundak Standar Tailor',
+            lead: 'Jas almamater universitas, institut kedinasan, dan blazer pengurus organisasi. Pengerjaan menggunakan busa bahu simetris dan jahitan sum keliman rahasia standar tailor rumah jahit.',
+            patternNotes: 'Pola jas berfuring penuh (full lining) dengan saku paspol dalam untuk penyimpanan gawai. Patch lambang kampus dibordir timbul 3D dengan detail emblem tajam.',
+            clients: ['Universitas Swasta Jabodetabek', 'Sekolah Tinggi Ilmu Kesehatan', 'Organisasi Kepemudaan Banten'],
+            leadTime: '14 - 21 Hari Kerja',
+            minOrder: '20 Pcs'
+          }
+        ],
+        get filteredArchiveItems() {
+          if (this.archiveVol === 'all') return this.archiveItems;
+          if (this.archiveVol === 'medis') return this.archiveItems.filter(i => i.volume === '01');
+          if (this.archiveVol === 'korporat') return this.archiveItems.filter(i => i.volume === '02');
+          return this.archiveItems;
+        },
+        onArchiveHover(item, e) {
+          this.cursorPreview.item = item;
+          this.cursorPreview.visible = true;
+          this.cursorPreview.x = e.clientX + 20;
+          this.cursorPreview.y = e.clientY + 20;
+        },
+        onArchiveMouseMove(e) {
+          if (!this.cursorPreview.visible) return;
+          this.cursorPreview.x = e.clientX + 20;
+          this.cursorPreview.y = e.clientY + 20;
+        },
+        onArchiveLeave() {
+          this.cursorPreview.visible = false;
+          this.cursorPreview.item = null;
+        },
+        openDossier(item) {
+          this.cursorPreview.visible = false;
+          this.activeDossier = item;
+        },
+        closeDossier() {
+          this.activeDossier = null;
+        },
+        updateClock() {
+          const now = new Date();
+          const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+          const wib = new Date(utc + (7 * 3600000));
+          const hh = String(wib.getHours()).padStart(2, '0');
+          const mm = String(wib.getMinutes()).padStart(2, '0');
+          const ss = String(wib.getSeconds()).padStart(2, '0');
+          this.liveTime = `${hh}:${mm}:${ss} WIB`;
+        },
         initTracker() {
+          this.updateClock();
+          setInterval(() => this.updateClock(), 1000);
+
           const updateScroll = () => {
             const scrollTop = window.scrollY || document.documentElement.scrollTop;
             const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -2073,6 +2983,7 @@
 
     function interactiveSlicer() {
       return {
+        slicingSubTab: 'slicer',
         split: 50,
         activePreset: '50',
         isDragging: false,
