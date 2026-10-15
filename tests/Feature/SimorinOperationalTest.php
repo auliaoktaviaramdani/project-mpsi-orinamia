@@ -6,10 +6,13 @@ use App\Models\BahanBaku;
 use App\Models\Pelanggan;
 use App\Models\Supplier;
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class SimorinOperationalTest extends TestCase
 {
+    use DatabaseTransactions;
+
     public function test_guest_is_redirected_to_login_when_accessing_dashboard(): void
     {
         $response = $this->get('/dashboard');
