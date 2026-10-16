@@ -9,7 +9,8 @@ class Supplier extends Model
 {
     use HasAutoNumber;
 
-    protected $table    = 'supplier';
+    protected $table = 'supplier';
+
     protected $fillable = ['no_supplier', 'nama', 'alamat', 'tlp', 'is_active'];
 
     protected function casts(): array
@@ -33,5 +34,15 @@ class Supplier extends Model
     public function digunakan(): bool
     {
         return $this->pembelians()->exists();
+    }
+
+    public function getNamaSupplierAttribute(): string
+    {
+        return $this->nama;
+    }
+
+    public function getTelpAttribute(): ?string
+    {
+        return $this->tlp;
     }
 }

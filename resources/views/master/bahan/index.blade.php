@@ -3,22 +3,22 @@
 @section('content')
 <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
   <div>
-    <h1 class="font-editorial" style="font-size:1.75rem;font-weight:600;">Katalog Bahan Baku</h1>
+    <h1 class="font-editorial" style="font-size:1.75rem;font-weight:600;">Katalog Bahan <span class="shiny-text">Baku</span></h1>
     <p style="font-size:0.8375rem;color:var(--muted);margin-top:4px;">Katalog bahan tanpa stok. Harga adalah harga acuan, disimpan snapshot saat pembelian.</p>
   </div>
   <a href="{{ route('master.bahan.create') }}" class="btn-primary" id="btn-bahan-baru">
     <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-    + Bahan Baru
+    Tambah Bahan
   </a>
 </div>
 
 @if($bahans->isEmpty())
-<div class="panel" style="padding:64px;text-align:center;">
+<div class="panel spotlight-card" style="padding:64px;text-align:center;">
   <p class="font-editorial" style="font-size:1.375rem;font-weight:600;margin-bottom:8px;">Belum Ada Bahan Baku</p>
-  <a href="{{ route('master.bahan.create') }}" class="btn-primary" style="margin-top:12px;">+ Tambah Bahan</a>
+  <a href="{{ route('master.bahan.create') }}" class="btn-primary" style="margin-top:12px;">Tambah Bahan</a>
 </div>
 @else
-<div class="panel" style="overflow-x:auto;">
+<div class="panel spotlight-card" style="overflow-x:auto;">
   <table class="tbl" style="width:100%;border-collapse:collapse;">
     <thead>
       <tr>

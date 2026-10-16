@@ -15,5 +15,11 @@ class ExampleTest extends TestCase
         $response = $this->get('/');
 
         $response->assertStatus(200);
+        $response->assertSee('PT Cahaya Binar Berlian');
+        $response->assertSee('ORINAMIA');
+
+        $loginResponse = $this->get('/login');
+
+        $loginResponse->assertStatus(200);
     }
 }

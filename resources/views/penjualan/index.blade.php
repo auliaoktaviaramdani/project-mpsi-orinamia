@@ -4,7 +4,7 @@
 @section('content')
 <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
   <div>
-    <h1 class="font-editorial" style="font-size:1.75rem;font-weight:600;">Meja Kerja Penjualan</h1>
+    <h1 class="font-editorial" style="font-size:1.75rem;font-weight:600;">Meja Kerja <span class="shiny-text">Penjualan</span></h1>
     <p style="font-size:0.8375rem;color:var(--muted);margin-top:4px;">
       Daftar pesanan dan lembar rincian invoice. Pilih baris untuk melihat detail.
     </p>
@@ -14,7 +14,7 @@
     <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
       <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
     </svg>
-    + Pesanan Baru
+    Pesanan Baru
   </a>
   @endif
 </div>
@@ -22,7 +22,7 @@
 <div style="display:grid;grid-template-columns:1fr;gap:20px;">
   @if($penjualans->isEmpty())
   <!-- Empty State -->
-  <div class="panel" style="padding:64px 32px;text-align:center;" id="empty-state">
+  <div class="panel spotlight-card" style="padding:64px 32px;text-align:center;" id="empty-state">
     <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="var(--muted)" stroke-width="1" style="margin:0 auto 16px;">
       <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
     </svg>
@@ -31,7 +31,7 @@
       Catat pesanan pakaian pelanggan untuk menerbitkan Invoice DP dan Invoice Pelunasan secara otomatis.
     </p>
     @if(auth()->user()->role === 'admin')
-    <a href="{{ route('penjualan.create') }}" class="btn-primary">+ Buat Pesanan Pertama</a>
+    <a href="{{ route('penjualan.create') }}" class="btn-primary">Buat Pesanan Pertama</a>
     @endif
   </div>
   @else
@@ -42,17 +42,17 @@
     @foreach(['ALL' => 'Semua', 'BELUM_BAYAR' => 'Belum Bayar', 'DP_LUNAS' => 'DP Lunas', 'LUNAS' => 'Lunas', 'TERKIRIM' => 'Terkirim'] as $val => $label)
     <a href="{{ route('penjualan.index', ['status' => $val]) }}"
        class="btn-outline"
-       style="font-size:0.75rem;min-height:34px;padding:4px 12px;{{ $status === $val ? 'background:var(--accent);color:#fff;border-color:var(--accent);' : '' }}">
+       style="font-size:0.75rem;min-height:34px;padding:4px 12px;border-radius:999px;{{ $status === $val ? 'background:var(--accent);color:#fff;border-color:var(--accent);' : '' }}">
       {{ $label }}
     </a>
     @endforeach
     <span style="font-size:0.75rem;color:var(--muted);margin-left:4px;">
-      {{ $penjualans->total() }} pesanan
+      <strong class="font-num anim-counter" data-val="{{ $penjualans->total() }}">{{ $penjualans->total() }}</strong> pesanan
     </span>
   </div>
 
   <!-- Table -->
-  <div class="panel" style="overflow-x:auto;" id="tabel-penjualan">
+  <div class="panel spotlight-card" style="overflow-x:auto;" id="tabel-penjualan">
     <table class="tbl" style="width:100%;border-collapse:collapse;">
       <thead>
         <tr>

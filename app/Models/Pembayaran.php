@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pembayaran extends Model
 {
-    protected $table    = 'pembayaran';
+    protected $table = 'pembayaran';
+
     protected $fillable = ['invoice_id', 'tanggal', 'jumlah', 'user_id'];
 
     protected function casts(): array
     {
         return [
             'tanggal' => 'date',
-            'jumlah'  => 'decimal:2',
+            'jumlah' => 'decimal:2',
         ];
     }
 

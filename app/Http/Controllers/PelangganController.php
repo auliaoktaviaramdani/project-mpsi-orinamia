@@ -13,25 +13,27 @@ class PelangganController extends Controller
     public function index()
     {
         $pelanggans = Pelanggan::orderBy('no_pelanggan')->paginate(25);
+
         return view('master.pelanggan.index', compact('pelanggans'));
     }
 
     public function create()
     {
         $noPelanggan = Pelanggan::nextNoPelanggan();
+
         return view('master.pelanggan.create', compact('noPelanggan'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama'   => ['required', 'string', 'max:100'],
-            'tlp'    => ['nullable', 'string', 'max:30'],
+            'nama' => ['required', 'string', 'max:100'],
+            'tlp' => ['nullable', 'string', 'max:30'],
             'alamat' => ['nullable', 'string'],
         ]);
 
         $validated['no_pelanggan'] = Pelanggan::nextNoPelanggan();
-        $validated['is_active']    = true;
+        $validated['is_active'] = true;
 
         Pelanggan::create($validated);
 
@@ -47,9 +49,9 @@ class PelangganController extends Controller
     public function update(Request $request, Pelanggan $pelanggan)
     {
         $validated = $request->validate([
-            'nama'      => ['required', 'string', 'max:100'],
-            'tlp'       => ['nullable', 'string', 'max:30'],
-            'alamat'    => ['nullable', 'string'],
+            'nama' => ['required', 'string', 'max:100'],
+            'tlp' => ['nullable', 'string', 'max:30'],
+            'alamat' => ['nullable', 'string'],
             'is_active' => ['nullable', 'boolean'],
         ]);
 
@@ -78,18 +80,18 @@ class PelangganController extends Controller
     public function quickStore(Request $request)
     {
         $validated = $request->validate([
-            'nama'   => ['required', 'string', 'max:100'],
-            'tlp'    => ['nullable', 'string', 'max:30'],
+            'nama' => ['required', 'string', 'max:100'],
+            'tlp' => ['nullable', 'string', 'max:30'],
             'alamat' => ['nullable', 'string'],
         ]);
 
         $validated['no_pelanggan'] = Pelanggan::nextNoPelanggan();
-        $validated['is_active']    = true;
+        $validated['is_active'] = true;
 
         $pelanggan = Pelanggan::create($validated);
 
         return response()->json([
-            'success'   => true,
+            'success' => true,
             'pelanggan' => $pelanggan,
         ]);
     }

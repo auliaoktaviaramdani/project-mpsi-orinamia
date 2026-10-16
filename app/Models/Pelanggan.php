@@ -9,7 +9,8 @@ class Pelanggan extends Model
 {
     use HasAutoNumber;
 
-    protected $table    = 'pelanggan';
+    protected $table = 'pelanggan';
+
     protected $fillable = ['no_pelanggan', 'nama', 'tlp', 'alamat', 'is_active'];
 
     protected function casts(): array
@@ -36,5 +37,15 @@ class Pelanggan extends Model
     public function digunakan(): bool
     {
         return $this->penjualans()->exists();
+    }
+
+    public function getNamaPelangganAttribute(): string
+    {
+        return $this->nama;
+    }
+
+    public function getTelpAttribute(): ?string
+    {
+        return $this->tlp;
     }
 }

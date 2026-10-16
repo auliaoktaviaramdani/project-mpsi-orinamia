@@ -164,7 +164,7 @@
         <button type="button" class="btn-primary" style="font-size:0.75rem;min-height:38px;padding:6px 12px;"
                 @click="openPay('DP', {{ $invoiceDP->id }}, {{ $invoiceDP->sisaTagihan() }}, '{{ route('pembayaran.store', $invoiceDP) }}')"
                 id="btn-bayar-dp">
-          + Catat Bayar DP
+          Catat Bayar DP
         </button>
         @endif
         <a href="{{ route('invoice.cetak', $invoiceDP) }}" class="btn-outline" style="font-size:0.75rem;min-height:38px;padding:6px 12px;" target="_blank">
@@ -227,7 +227,7 @@
         <button type="button" class="btn-primary" style="font-size:0.75rem;min-height:38px;padding:6px 12px;"
                 @click="openPay('PELUNASAN', {{ $invoiceLN->id }}, {{ $invoiceLN->sisaTagihan() }}, '{{ route('pembayaran.store', $invoiceLN) }}')"
                 id="btn-bayar-ln">
-          + Catat Pelunasan
+          Catat Pelunasan
         </button>
         @endif
         <a href="{{ route('invoice.cetak', $invoiceLN) }}" class="btn-outline" style="font-size:0.75rem;min-height:38px;padding:6px 12px;" target="_blank">

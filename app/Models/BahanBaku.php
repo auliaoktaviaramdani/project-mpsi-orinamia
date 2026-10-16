@@ -9,14 +9,15 @@ class BahanBaku extends Model
 {
     use HasAutoNumber;
 
-    protected $table    = 'bahan_baku';
+    protected $table = 'bahan_baku';
+
     protected $fillable = ['no_bahan', 'nama_bahan', 'satuan', 'harga_beli', 'is_active'];
 
     protected function casts(): array
     {
         return [
             'harga_beli' => 'decimal:2',
-            'is_active'  => 'boolean',
+            'is_active' => 'boolean',
         ];
     }
 

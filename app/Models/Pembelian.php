@@ -9,13 +9,14 @@ class Pembelian extends Model
 {
     use HasAutoNumber;
 
-    protected $table    = 'pembelian';
+    protected $table = 'pembelian';
+
     protected $fillable = ['no_beli', 'supplier_id', 'user_id', 'no_faktur', 'tgl_beli', 'total_beli'];
 
     protected function casts(): array
     {
         return [
-            'tgl_beli'   => 'date',
+            'tgl_beli' => 'date',
             'total_beli' => 'decimal:2',
         ];
     }

@@ -2,18 +2,27 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<div style="margin-bottom:24px;">
-  <h1 class="font-editorial" style="font-size:1.75rem;font-weight:600;color:var(--text);">Dashboard</h1>
-  <p style="font-size:0.8375rem;color:var(--muted);margin-top:4px;">
-    Ringkasan keuangan Orinamia Daily Wear &bull; {{ \App\Support\Fmt::tgl(now()) }}
-  </p>
+<div style="margin-bottom:24px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+  <div>
+    <h1 class="font-editorial" style="font-size:1.75rem;font-weight:600;color:var(--text);">Dashboard</h1>
+    <p style="font-size:0.8375rem;color:var(--muted);margin-top:4px;">
+      Ringkasan keuangan Orinamia Daily Wear &bull; {{ \App\Support\Fmt::tgl(now()) }}
+    </p>
+  </div>
+  <a href="{{ route('home') }}" target="_blank" class="btn-outline" style="font-size:0.8125rem;display:inline-flex;align-items:center;gap:8px;">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10"></circle>
+      <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+    </svg>
+    Lihat Web Profil PT Cahaya Binar Berlian &rarr;
+  </a>
 </div>
-
+  
 <!-- Summary Cards -->
 <section style="display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-bottom:24px;" aria-label="Ringkasan Keuangan">
 
-  <!-- Focal Card: Total Piutang Aktif -->
-  <div class="panel" style="grid-column:span 12;" id="card-piutang">
+  <!-- Focal Card: Total Piutang Aktif [ReactBits Spotlight + Bento Architecture] -->
+  <div class="panel spotlight-card" style="grid-column:span 12;" id="card-piutang">
     <div style="display:grid;grid-template-columns:1fr auto;gap:16px;padding:24px;">
       <div>
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
@@ -22,7 +31,7 @@
           </span>
           @if($invoiceMenunggu > 0)
           <span style="padding:3px 10px;border-radius:6px;font-size:0.7rem;font-weight:700;background:#FEE2E2;color:#7F1D1D;">
-            {{ $invoiceMenunggu }} Invoice Menunggu
+            <span class="anim-counter" data-val="{{ $invoiceMenunggu }}">{{ $invoiceMenunggu }}</span> Invoice Menunggu
           </span>
           @else
           <span style="padding:3px 10px;border-radius:6px;font-size:0.7rem;font-weight:700;background:#D1FAE5;color:#064E3B;">
@@ -30,12 +39,12 @@
           </span>
           @endif
         </div>
-        <h2 class="font-editorial" style="font-size:1.25rem;font-weight:600;margin-bottom:16px;">
-          Tagihan Pelanggan Belum Lunas
+        <h2 class="font-editorial" style="font-size:1.35rem;font-weight:600;margin-bottom:16px;">
+          Tagihan Pelanggan <span class="shiny-text">Belum Lunas</span>
         </h2>
         <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:16px;">
           <span style="font-size:0.875rem;font-weight:600;color:var(--muted);">Rp</span>
-          <span class="font-num" style="font-size:2.5rem;font-weight:700;letter-spacing:-0.02em;color:var(--text);">
+          <span class="font-num anim-counter" data-val="{{ $totalPiutang }}" style="font-size:2.5rem;font-weight:700;letter-spacing:-0.02em;color:var(--text);">
             {{ number_format($totalPiutang, 0, ',', '.') }}
           </span>
           <span style="font-size:0.8rem;color:var(--muted);margin-left:6px;">
@@ -75,37 +84,39 @@
     </div>
   </div>
 
-  <!-- Card Penjualan -->
-  <div class="panel" style="grid-column:span 12;" id="card-penjualan">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+  <!-- Card Penjualan & Pembelian Bento Grid -->
+  <div class="panel spotlight-card" style="grid-column:span 12;" id="card-penjualan">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:0;">
 
       <!-- Penjualan -->
-      <div style="padding:20px;border-right:1px solid var(--border);">
-        <span style="font-size:0.75rem;color:var(--muted);">Total Penjualan</span>
-        <h3 class="font-editorial" style="font-size:1.125rem;font-weight:600;margin:4px 0 12px;">Pesanan Make-to-Order</h3>
+      <div style="padding:22px;border-right:1px solid var(--border);">
+        <span style="font-size:0.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.04em;">Total Penjualan</span>
+        <h3 class="font-editorial" style="font-size:1.15rem;font-weight:600;margin:4px 0 12px;">Pesanan Make-to-Order</h3>
         <div style="margin-bottom:12px;">
-          <span class="font-num" style="font-size:1.625rem;font-weight:700;">
-            Rp {{ number_format($totalPenjualan, 0, ',', '.') }}
+          <span style="font-size:0.875rem;font-weight:600;color:var(--muted);">Rp </span>
+          <span class="font-num anim-counter" data-val="{{ $totalPenjualan }}" style="font-size:1.75rem;font-weight:700;color:var(--text);">
+            {{ number_format($totalPenjualan, 0, ',', '.') }}
           </span>
         </div>
         <div style="border-top:1.5px dashed #D5CEE2;padding-top:12px;display:flex;justify-content:space-between;font-size:0.75rem;color:var(--muted);">
-          <span>{{ $jumlahPesanan }} Pesanan</span>
-          <span>Tanpa Master Stok</span>
+          <span><strong class="font-num anim-counter" data-val="{{ $jumlahPesanan }}">{{ $jumlahPesanan }}</strong> Pesanan Aktif</span>
+          <span>Spesifikasi Custom</span>
         </div>
       </div>
 
       <!-- Pembelian -->
-      <div style="padding:20px;">
-        <span style="font-size:0.75rem;color:var(--muted);">Pembelian Bahan Baku</span>
-        <h3 class="font-editorial" style="font-size:1.125rem;font-weight:600;margin:4px 0 12px;">Belanja Kain &amp; Aksesoris</h3>
+      <div style="padding:22px;">
+        <span style="font-size:0.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.04em;">Pembelian Bahan Baku</span>
+        <h3 class="font-editorial" style="font-size:1.15rem;font-weight:600;margin:4px 0 12px;">Belanja Kain &amp; Aksesoris</h3>
         <div style="margin-bottom:12px;">
-          <span class="font-num" style="font-size:1.625rem;font-weight:700;">
-            Rp {{ number_format($totalPembelian, 0, ',', '.') }}
+          <span style="font-size:0.875rem;font-weight:600;color:var(--muted);">Rp </span>
+          <span class="font-num anim-counter" data-val="{{ $totalPembelian }}" style="font-size:1.75rem;font-weight:700;color:var(--text);">
+            {{ number_format($totalPembelian, 0, ',', '.') }}
           </span>
         </div>
         <div style="border-top:1.5px dashed #D5CEE2;padding-top:12px;display:flex;justify-content:space-between;font-size:0.75rem;color:var(--muted);">
-          <span>{{ $jumlahFaktur }} Faktur Supplier</span>
-          <span>Harga Snapshot</span>
+          <span><strong class="font-num anim-counter" data-val="{{ $jumlahFaktur }}">{{ $jumlahFaktur }}</strong> Faktur Supplier</span>
+          <span>Snapshot Harga HPP</span>
         </div>
       </div>
     </div>

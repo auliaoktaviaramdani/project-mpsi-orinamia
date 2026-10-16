@@ -9,7 +9,8 @@ class Penjualan extends Model
 {
     use HasAutoNumber;
 
-    protected $table    = 'penjualan';
+    protected $table = 'penjualan';
+
     protected $fillable = [
         'no_jual', 'pelanggan_id', 'user_id',
         'tgl_jual', 'total', 'paid', 'balance_due', 'status',
@@ -18,9 +19,9 @@ class Penjualan extends Model
     protected function casts(): array
     {
         return [
-            'tgl_jual'    => 'date',
-            'total'       => 'decimal:2',
-            'paid'        => 'decimal:2',
+            'tgl_jual' => 'date',
+            'total' => 'decimal:2',
+            'paid' => 'decimal:2',
             'balance_due' => 'decimal:2',
         ];
     }
@@ -86,7 +87,7 @@ class Penjualan extends Model
             $totalPaid += $invPaid;
         }
 
-        $this->paid        = $totalPaid;
+        $this->paid = $totalPaid;
         $this->balance_due = max(0, $this->total - $totalPaid);
 
         // Tentukan status penjualan (jangan turunkan dari TERKIRIM)
@@ -115,6 +116,32 @@ class Penjualan extends Model
         if ($status && $status !== 'ALL') {
             return $query->where('status', $status);
         }
+
         return $query;
+    }
+
+    public function getStatusLabelAttribute(): string
+    {
+        return match ($this->status) {
+            'DP_LUNAS' => 'DP Lunas',
+            'LUNAS' => 'Lunas',
+            'TERKIRIM' => 'Terkirim',
+            default => 'Belum Bayar',
+        };
+    }
+
+    public function getTotalHargaAttribute(): float
+    {
+        return (float) $this->total;
+    }
+
+    public function getDpAttribute(): float
+    {
+        return (float) ($this->invoiceDP?->jumlah ?? 0);
+    }
+
+    public function getPelunasanAttribute(): float
+    {
+        return (float) ($this->invoicePelunasan?->jumlah ?? 0);
     }
 }
